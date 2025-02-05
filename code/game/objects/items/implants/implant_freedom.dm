@@ -22,7 +22,6 @@
 		return
 
 	uses--
-
 	carbon_imp_in.uncuff()
 	var/obj/item/clothing/shoes/shoes = carbon_imp_in.shoes
 	if(istype(shoes) && shoes.tied == SHOES_KNOTTED)
@@ -31,9 +30,16 @@
 	if(!uses)
 		addtimer(CALLBACK(carbon_imp_in, TYPE_PROC_REF(/atom, balloon_alert), carbon_imp_in, "implant degraded!"), 1 SECONDS)
 		qdel(src)
+		// if being tased, removes the status on use, and detaches the electrode.
+
+	carbon_imp_in.remove_status_effect(/datum/status_effect/tased)
+
 
 /obj/item/implant/freedom/proc/can_trigger(mob/living/carbon/implanted_in)
 	if(implanted_in.handcuffed || implanted_in.legcuffed)
+		return TRUE
+
+	if(implanted_in.has_status_effect(/datum/status_effect/tased))
 		return TRUE
 
 	var/obj/item/clothing/shoes/shoes = implanted_in.shoes

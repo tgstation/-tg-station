@@ -181,6 +181,12 @@
 	access_view = ACCESS_ARMORY
 	crate_type = /obj/structure/closet/crate/secure/weapon
 
+/datum/supply_pack/security/armory/tasers
+	name = "Taser Crate"
+	desc = "Contains two Nanotrasen approved Tasers. Good for stopping resisting criminals."
+	cost = CARGO_CRATE_VALUE * 30
+	contains = list(/obj/item/gun/energy/taser = 2)
+	crate_name = "taser crate"
 /datum/supply_pack/security/armory/bulletarmor
 	name = "Bulletproof Armor Crate"
 	desc = "Contains three sets of bulletproof armor. Guaranteed to reduce a bullet's \
