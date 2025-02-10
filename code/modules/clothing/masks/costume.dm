@@ -2,6 +2,7 @@
 	name = "emotion mask"
 	desc = "Express your happiness or hide your sorrows with this cultured cutout."
 	icon_state = "joy"
+	base_icon_state = "joy"
 	clothing_flags = MASKINTERNALS
 	flags_inv = HIDESNOUT
 	obj_flags = parent_type::obj_flags | INFINITE_RESKIN
