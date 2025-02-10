@@ -69,7 +69,7 @@
 
 	var/changed = FALSE
 
-	if(isnull(held_item) && has_sensor == HAS_SENSORS)
+	if((isnull(held_item) || held_item == src) && has_sensor == HAS_SENSORS)
 		context[SCREENTIP_CONTEXT_RMB] = "Toggle suit sensors"
 		context[SCREENTIP_CONTEXT_CTRL_LMB] = "Set suit sensors to tracking"
 		changed = TRUE
@@ -115,6 +115,14 @@
 	return ..()
 
 /obj/item/clothing/under/attack_hand_secondary(mob/user, params)
+	. = ..()
+	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
+		return
+
+	toggle()
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+
+/obj/item/clothing/under/attack_self_secondary(mob/user, modifiers)
 	. = ..()
 	if(. == SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN)
 		return
