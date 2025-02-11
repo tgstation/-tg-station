@@ -25,7 +25,10 @@
 	var/data = "<b>Showing last [length(GLOB.lawchanges)] law changes.</b><hr>"
 	for(var/entry in GLOB.lawchanges)
 		data += "[entry]<BR>"
-	usr << browse(data, "window=lawchanges;size=800x500")
+
+	var/datum/browser/browser = new(usr, "lawchanges", "Law Changes", 800, 500)
+	browser.set_content(data)
+	browser.open()
 
 /datum/admins/proc/list_dna()
 	var/data = "<b>Showing DNA from blood.</b><hr>"
@@ -35,7 +38,10 @@
 		if(subject.ckey)
 			data += "<tr><td>[subject]</td><td>[subject.dna.unique_enzymes]</td><td>[subject.dna.blood_type]</td></tr>"
 	data += "</table>"
-	usr << browse(data, "window=DNA;size=440x410")
+
+	var/datum/browser/browser = new(usr, "DNA", "DNA Log", 440, 410)
+	browser.set_content(data)
+	browser.open()
 
 /datum/admins/proc/list_fingerprints() //kid named fingerprints
 	var/data = "<b>Showing Fingerprints.</b><hr>"
@@ -45,7 +51,10 @@
 		if(subject.ckey)
 			data += "<tr><td>[subject]</td><td>[md5(subject.dna.unique_identity)]</td></tr>"
 	data += "</table>"
-	usr << browse(data, "window=fingerprints;size=440x410")
+
+	var/datum/browser/browser = new(usr, "fingerprints", "Fingerprint Log", 440, 410)
+	browser.set_content(data)
+	browser.open()
 
 /datum/admins/proc/show_manifest()
 	if(!SSticker.HasRoundStarted())

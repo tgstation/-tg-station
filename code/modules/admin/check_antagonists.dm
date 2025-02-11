@@ -181,4 +181,6 @@
 	dat += build_antag_listing()
 
 	dat += "</body></html>"
-	usr << browse(dat.Join(), "window=roundstatus;size=500x500")
+	var/datum/browser/browser = new(usr, "roundstatus", "Round Status", 500, 500)
+	browser.set_content(dat.Join())
+	browser.open()
