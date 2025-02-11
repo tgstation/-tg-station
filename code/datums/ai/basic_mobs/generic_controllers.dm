@@ -24,3 +24,10 @@
 		/datum/ai_planning_subtree/attack_obstacle_in_path,
 		/datum/ai_planning_subtree/basic_melee_attack_subtree,
 	)
+
+/// Literally does nothing except random speedh
+/datum/ai_controller/basic_controller/talk
+	idle_behavior = null
+	planning_subtrees = list(
+		/datum/ai_planning_subtree/random_speech/blackboard,
+	)

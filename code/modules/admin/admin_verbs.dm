@@ -664,3 +664,103 @@ ADMIN_VERB(create_mob_worm, R_FUN, "Create Mob Worm", "Attach a linked list of m
 		QDEL_NULL(segment.ai_controller)
 		segment.AddComponent(/datum/component/mob_chain, front = previous)
 		previous = segment
+
+ADMIN_VERB(give_ai_speech, R_FUN, "Give Random AI Speech", ADMIN_VERB_NO_DESCRIPTION, ADMIN_CATEGORY_HIDDEN, mob/living/my_guy)
+	if (isnull(my_guy.ai_controller))
+		var/create_controller = tgui_alert(user, "Target has no AI controller, add one?", "Give AI?", list("Yes", "No")) == "Yes"
+		if (!create_controller)
+			return
+		var/run_with_mind = tgui_alert(user, "Run AI controller while the target has a client?", "Override Client?", list("Yes", "No"))
+		if (isnull(run_with_mind))
+			return
+		if (QDELETED(my_guy))
+			to_chat(user, span_warning("Target ceased to exist."))
+			return
+		my_guy.ai_controller = new /datum/ai_controller/basic_controller/talk(my_guy)
+		if (run_with_mind == "Yes")
+			var/datum/ai_controller/guy_controller = my_guy.ai_controller
+			guy_controller.continue_processing_when_client = TRUE
+			guy_controller.reset_ai_status()
+
+	var/speech_chance
+	var/list/spoken_lines
+	var/list/audible_emotes
+	var/list/visible_emotes
+	var/list/sounds
+
+	speech_chance = tgui_input_number(user, "Enter chance per second to say something", "Speech Chance", default = 2, min_value = 0, max_value = 100, round_value = FALSE)
+	if (isnull(speech_chance))
+		return
+
+	var/add_another
+	var/next_line
+
+	add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] spoken line?", "Spoken Lines", list("Yes", "No"))
+	while (add_another  == "Yes")
+		next_line = tgui_input_text(user, "Enter [length(spoken_lines) ? "another" : "a"] thing spoken out loud.", "Spoken Lines")
+		if (isnull(next_line))
+			return
+		LAZYADD(spoken_lines, next_line)
+		add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] spoken line?", "Spoken Lines", list("Yes", "No"))
+	if (isnull(add_another))
+		return
+
+	add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] emote which people can hear?", "Audible Emotes", list("Yes", "No"))
+	while (add_another == "Yes")
+		next_line = tgui_input_text(user, "Enter [length(spoken_lines) ? "another" : "an"] emote which people can hear.", "Audible Emotes")
+		if (isnull(next_line))
+			return
+		LAZYADD(audible_emotes, next_line)
+		add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] emote which people can hear?", "Audible Emotes", list("Yes", "No"))
+	if (isnull(add_another))
+		return
+
+	add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] emote which people can see?", "Visible Emotes", list("Yes", "No"))
+	while (add_another == "Yes")
+		next_line = tgui_input_text(user, "Enter [length(spoken_lines) ? "another" : "an"] emote which people can see.", "Visible Emotes")
+		if (isnull(next_line))
+			return
+		LAZYADD(visible_emotes, next_line)
+		add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] emote which people can see?", "Visible Emotes", list("Yes", "No"))
+	if (isnull(add_another))
+		return
+
+	if (!length(spoken_lines) && !length(audible_emotes) && !length(visible_emotes))
+		return // Well you didn't tell it to say anything...
+
+	if (length(spoken_lines) || length(audible_emotes))
+		add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] sound to play when doing something audible?", "Sounds", list("Yes", "No"))
+		while (add_another == "Yes")
+			next_line = input("", "Select sound",) as null|sound
+			if (isnull(next_line))
+				return
+			LAZYADD(sounds, next_line)
+			add_another = tgui_alert(user, "Add [length(spoken_lines) ? "another" : "a"] sound to play when doing something audible?", "Sounds", list("Yes", "No"))
+		if (isnull(add_another))
+			return
+
+	if (QDELETED(my_guy))
+		to_chat(user, span_warning("Target stopped existing."))
+		return
+
+	var/datum/ai_controller/our_controller = my_guy.ai_controller
+	if (length(spoken_lines))
+		spoken_lines = string_list(spoken_lines)
+	if (length(audible_emotes))
+		audible_emotes = string_list(audible_emotes)
+	if (length(visible_emotes))
+		visible_emotes = string_list(visible_emotes)
+
+	var/list/emotes = list(
+		BB_EMOTE_SAY = spoken_lines,
+		BB_EMOTE_HEAR = audible_emotes,
+		BB_EMOTE_SEE = visible_emotes,
+		BB_EMOTE_SOUND = sounds,
+		BB_SPEAK_CHANCE = speech_chance,
+	)
+	our_controller.set_blackboard_key(BB_BASIC_MOB_SPEAK_LINES, emotes)
+
+	var/behaviour_exists = !!(locate(/datum/ai_planning_subtree/random_speech/blackboard) in our_controller.planning_subtrees)
+	if (behaviour_exists)
+		return
+	our_controller.planning_subtrees = list(GLOB.ai_subtrees[/datum/ai_planning_subtree/random_speech/blackboard]) + our_controller.planning_subtrees

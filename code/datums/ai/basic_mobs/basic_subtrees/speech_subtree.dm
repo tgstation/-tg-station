@@ -34,6 +34,9 @@
 
 	var/total_choices_length = audible_emotes_length + non_audible_emotes_length + speak_lines_length
 
+	if (total_choices_length == 0)
+		return
+
 	var/random_number_in_range = rand(1, total_choices_length)
 	var/sound_to_play = length(sound) > 0 ? pick(sound) : null
 
