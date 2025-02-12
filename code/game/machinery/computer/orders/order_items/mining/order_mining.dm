@@ -46,6 +46,10 @@
 	purchase_path = /obj/item/crusher_trophy/retool_kit/dagger
 	cost_per_order = 150
 
+/datum/orderable_item/mining/crusher_retool_kit_glaive
+	purchase_path = /obj/item/crusher_trophy/retool_kit/glaive
+	cost_per_order = 150
+
 /datum/orderable_item/mining/resonator
 	purchase_path = /obj/item/resonator
 	cost_per_order = 710
