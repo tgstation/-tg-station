@@ -306,16 +306,24 @@
 	switch(action)
 		//Lists of decals and designs
 		if("select decal")
-			var/selected_decal = params["decal"]
-			var/selected_dir = text2num(params["dir"])
-			stored_decal = selected_decal
-			stored_dir = selected_dir
+			. = TRUE
+			for(var/decal_set in decal_list)
+				if(decal_set[2] == params["decal"])
+					stored_decal = params["decal"]
+					break
+			for(var/dir_set in dir_list)
+				if(dir_set[2] == text2num(params["dir"]))
+					stored_dir = text2num(params["dir"])
+					break
+
 		if("select color")
-			var/selected_color = params["color"]
-			stored_color = selected_color
+			. = TRUE
+			stored_color = params["color"]
+
 		if("pick custom color")
 			if(supports_custom_color)
 				pick_painting_tool_color(usr, stored_custom_color)
+
 	update_decal_path()
 	. = TRUE
 

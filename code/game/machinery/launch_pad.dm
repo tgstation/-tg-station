@@ -429,11 +429,13 @@
 		if("set_pos")
 			var/new_x = text2num(params["x"])
 			var/new_y = text2num(params["y"])
+			// sanitizes our ranges for us
 			our_pad.set_offset(new_x, new_y)
 			. = TRUE
 		if("move_pos")
 			var/plus_x = text2num(params["x"])
 			var/plus_y = text2num(params["y"])
+			// sanitizes our ranges for us
 			our_pad.set_offset(
 				x = our_pad.x_offset + plus_x,
 				y = our_pad.y_offset + plus_y
@@ -441,7 +443,7 @@
 			. = TRUE
 		if("rename")
 			. = TRUE
-			var/new_name = params["name"]
+			var/new_name = reject_bad_name(params["name"], allow_numbers = TRUE, max_length = MAX_NAME_LEN, cap_after_symbols = FALSE)
 			if(!new_name)
 				return
 			our_pad.display_name = new_name

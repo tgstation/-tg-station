@@ -347,7 +347,7 @@
 
 			var/selection = params["selection"]
 			for(var/path in card_trims)
-				if(!(card_trims[path] == selection))
+				if(card_trims[path] != selection)
 					continue
 
 				if(SSid_access.apply_trim_to_card(stored_id_card, path, copy_access = FALSE))

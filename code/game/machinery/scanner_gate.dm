@@ -39,7 +39,7 @@
 	///Base false positive/negative chance
 	var/base_false_beep = 5
 	///List of species that can be scanned by the gate. Supports adding more species' IDs during in-game.
-	var/list/available_species = list(
+	var/static/list/available_species = list(
 		SPECIES_HUMAN,
 		SPECIES_LIZARD,
 		SPECIES_FLYPERSON,
@@ -50,6 +50,31 @@
 		SPECIES_PODPERSON,
 		SPECIES_GOLEM,
 		SPECIES_ZOMBIE,
+	)
+	/// All scan modes available to the scanner
+	var/static/list/all_modes = list(
+		SCANGATE_NONE,
+		SCANGATE_MINDSHIELD,
+		SCANGATE_DISEASE,
+		SCANGATE_GUNS,
+		SCANGATE_WANTED,
+		SCANGATE_SPECIES,
+		SCANGATE_NUTRITION,
+	)
+	/// All disease severity thresholds available to the scanner
+	var/static/list/all_disease_thresholds = list(
+		DISEASE_SEVERITY_POSITIVE,
+		DISEASE_SEVERITY_NONTHREAT,
+		DISEASE_SEVERITY_MINOR,
+		DISEASE_SEVERITY_MEDIUM,
+		DISEASE_SEVERITY_HARMFUL,
+		DISEASE_SEVERITY_DANGEROUS,
+		DISEASE_SEVERITY_BIOHAZARD,
+	)
+	/// All nutrition levels available to the scanner
+	var/static/list/nutrition_modes = list(
+		"Starving",
+		"Obese",
 	)
 	/// Overlay object we're using for scanlines
 	var/obj/effect/overlay/scanline = null
@@ -292,6 +317,8 @@
 	switch(action)
 		if("set_mode")
 			var/new_mode = params["new_mode"]
+			if(!new_mode || !(new_mode in all_modes))
+				return
 			scangate_mode = new_mode
 			. = TRUE
 		if("toggle_reverse")
@@ -303,26 +330,25 @@
 			. = TRUE
 		if("set_disease_threshold")
 			var/new_threshold = params["new_threshold"]
+			if(!new_threshold || !(new_threshold in all_disease_thresholds))
+				return
 			disease_threshold = new_threshold
 			. = TRUE
 		if("set_target_species")
 			var/new_specie_id = params["new_species_id"]
-			if(!(new_specie_id in available_species))
+			if(!new_specie_id || !(new_specie_id in available_species))
 				return
 			detect_species_id = new_specie_id
 			. = TRUE
 		if("set_target_nutrition")
 			var/new_nutrition = params["new_nutrition"]
-			var/nutrition_list = list(
-				"Starving",
-				"Obese"
-			)
-			if(new_nutrition && (new_nutrition in nutrition_list))
-				switch(new_nutrition)
-					if("Starving")
-						detect_nutrition = NUTRITION_LEVEL_STARVING
-					if("Obese")
-						detect_nutrition = NUTRITION_LEVEL_FAT
+			if(!new_nutrition || !(new_nutrition in nutrition_modes))
+				return
+			switch(new_nutrition)
+				if("Starving")
+					detect_nutrition = NUTRITION_LEVEL_STARVING
+				if("Obese")
+					detect_nutrition = NUTRITION_LEVEL_FAT
 			. = TRUE
 
 /obj/machinery/scanner_gate/preset_guns

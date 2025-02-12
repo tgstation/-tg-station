@@ -188,7 +188,10 @@
 			var/ref = params["ref"]
 			playsound(src, SFX_TERMINAL_TYPE, 50, FALSE)
 			var/obj/machinery/power/apc/remote_target = locate(ref) in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc)
+			if(!remote_target || !check_apc(remote_target))
+				return
 			connect_apc(remote_target, user)
+			return TRUE
 		if("check-logs")
 			log_activity("Checked Logs")
 		if("check-apcs")
@@ -198,13 +201,19 @@
 			var/type = params["type"]
 			var/value = params["value"]
 			var/obj/machinery/power/apc/target = locate(ref) in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc)
-			if(!target)
+			if(!target || !check_apc(target))
 				return
 
 			value = target.setsubsystem(text2num(value))
 			switch(type) // Sanity check
-				if("equipment", "lighting", "environ")
-					target.vars[type] = value
+				if("equipment")
+					target.equipment = value
+				if("lighting")
+					target.lighting = value
+				if("environ")
+					target.environ = value
+				if(null)
+					return
 				else
 					message_admins("Warning: possible href exploit by [key_name(user)] - attempted to set [html_encode(type)] on [target] to [html_encode(value)]")
 					user.log_message("possibly trying to href exploit - attempted to set [html_encode(type)] on [target] to [html_encode(value)]", LOG_ADMIN)
@@ -227,9 +236,12 @@
 		if("breaker")
 			var/ref = params["ref"]
 			var/obj/machinery/power/apc/breaker_target = locate(ref) in SSmachines.get_machines_by_type_and_subtypes(/obj/machinery/power/apc)
+			if(!breaker_target || !check_apc(breaker_target))
+				return
 			breaker_target.toggle_breaker(user)
 			var/setTo = breaker_target.operating ? "On" : "Off"
 			log_activity("Turned APC [breaker_target.area.name]'s breaker [setTo]")
+			return TRUE
 
 /obj/machinery/computer/apc_control/ui_close(mob/user)
 	. = ..()

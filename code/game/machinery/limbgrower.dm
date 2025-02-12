@@ -166,7 +166,12 @@
 
 		if("make_limb")
 			var/design_id = params["design_id"]
-			if(!stored_research.researched_designs.Find(design_id) && !stored_research.hacked_designs.Find(design_id) && !imported_designs.Find(design_id))
+			var/temp_category = params["active_tab"]
+			if(!stored_research.researched_designs[design_id] && !stored_research.hacked_designs[design_id] && !imported_designs[design_id])
+				return
+			if(!(obj_flags & EMAGGED) && stored_research.hacked_designs.Find(design_id))
+				return
+			if(!(temp_category in categories))
 				return
 			being_built = SSresearch.techweb_design_by_id(design_id)
 			// All the reagents we're using to make our organ.
@@ -187,9 +192,6 @@
 			use_energy(power)
 			flick("limbgrower_fill", src)
 			icon_state = "limbgrower_idleon"
-			var/temp_category = params["active_tab"]
-			if( ! (temp_category in categories) )
-				return FALSE //seriously come on
 			selected_category = temp_category
 			addtimer(CALLBACK(src, PROC_REF(build_item), consumed_reagents_list), production_speed * production_coefficient)
 			return TRUE
