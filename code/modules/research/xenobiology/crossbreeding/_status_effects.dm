@@ -98,10 +98,14 @@
 	status_type = STATUS_EFFECT_UNIQUE
 	duration = STATUS_EFFECT_PERMANENT //Will remove self when block breaks.
 	alert_type = /atom/movable/screen/alert/status_effect/freon/stasis
+	/// The cube we will place our mob into.
 	var/obj/structure/ice_stasis/cube
+	/// Whether or not this version of the status effect can be resisted out of.
+	var/resistable = TRUE
 
 /datum/status_effect/frozenstasis/on_apply()
-	RegisterSignal(owner, COMSIG_LIVING_RESIST, PROC_REF(breakCube))
+	if(resistable)
+		RegisterSignal(owner, COMSIG_LIVING_RESIST, PROC_REF(breakCube))
 	cube = new /obj/structure/ice_stasis(get_turf(owner))
 	owner.forceMove(cube)
 	ADD_TRAIT(owner, TRAIT_GODMODE, TRAIT_STATUS_EFFECT(id))
@@ -120,7 +124,11 @@
 	if(cube)
 		qdel(cube)
 	REMOVE_TRAIT(owner, TRAIT_GODMODE, TRAIT_STATUS_EFFECT(id))
-	UnregisterSignal(owner, COMSIG_LIVING_RESIST)
+	if(resistable)
+		UnregisterSignal(owner, COMSIG_LIVING_RESIST)
+
+/datum/status_effect/frozenstasis/irresistable
+	resistable = FALSE
 
 /datum/status_effect/slime_clone
 	id = "slime_cloned"

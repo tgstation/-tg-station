@@ -86,8 +86,6 @@
 * Will be removed when the required reagent is removed too
 * is processed on the dead.
 */
-/atom/movable/screen/alert/status_effect/freon/cryostylane
-	desc = "You're frozen inside of a protective ice cube! While inside, you can't do anything, but are immune to harm! You will be free when the chem runs out."
 
 /datum/reagent/inverse/cryostylane
 	name = "Cryogelidia"
@@ -97,27 +95,23 @@
 	ph = 14
 	chemical_flags = REAGENT_DEAD_PROCESS | REAGENT_IGNORE_STASIS | REAGENT_DONOTSPLIT
 	metabolization_rate = 1 * REM
-	///The cube we're stasis'd in
-	var/obj/structure/ice_stasis/cube
-	var/atom/movable/screen/alert/status_effect/freon/cryostylane_alert
 
-/datum/reagent/inverse/cryostylane/on_mob_add(mob/living/carbon/affected_mob, amount)
+/datum/reagent/inverse/cryostylane/expose_mob(mob/living/exposed_mob, methods=TOUCH, reac_volume, show_message = TRUE)
 	. = ..()
-	if(HAS_TRAIT(affected_mob, TRAIT_RESISTCOLD))
+	if(HAS_TRAIT(exposed_mob, TRAIT_RESISTCOLD))
 		holder.remove_reagent(type, volume)
 		return
-	cube = new /obj/structure/ice_stasis(get_turf(affected_mob))
-	cube.color = COLOR_CYAN
-	cube.set_anchored(TRUE)
-	affected_mob.forceMove(cube)
-	affected_mob.apply_status_effect(/datum/status_effect/grouped/stasis, STASIS_CHEMICAL_EFFECT)
-	cryostylane_alert = affected_mob.throw_alert("cryostylane_alert", /atom/movable/screen/alert/status_effect/freon/cryostylane)
-	cryostylane_alert.attached_effect = src //so the alert can reference us, if it needs to
+
+	exposed_mob.apply_status_effect(/datum/status_effect/frozenstasis/irresistable)
+	if(!exposed_mob.has_status_effect(/datum/status_effect/grouped/stasis, STASIS_CHEMICAL_EFFECT))
+		exposed_mob.apply_status_effect(/datum/status_effect/grouped/stasis, STASIS_CHEMICAL_EFFECT)
 
 /datum/reagent/inverse/cryostylane/on_mob_life(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
 	. = ..()
-	if(!cube || affected_mob.loc != cube)
-		metabolization_rate += 0.01
+	if(!affected_mob.has_status_effect(/datum/status_effect/frozenstasis/irresistable))
+		holder.remove_reagent(type, volume) // remove it all if we were broken out
+		return
+	metabolization_rate += 0.01 //speed up our metabolism over time. Chop chop.
 
 /datum/reagent/inverse/cryostylane/metabolize_reagent(mob/living/carbon/affected_mob, seconds_per_tick, times_fired)
 	if(current_cycle >= 60)
@@ -125,12 +119,7 @@
 		return
 	return ..()
 
-/datum/reagent/inverse/cryostylane/on_mob_delete(mob/living/carbon/affected_mob, amount)
+/datum/reagent/inverse/cryostylane/on_mob_end_metabolize(mob/living/affected_mob)
 	. = ..()
-	QDEL_NULL(cube)
-	if(!iscarbon(affected_mob))
-		return
-
-	var/mob/living/carbon/carbon_mob = affected_mob
-	carbon_mob.remove_status_effect(/datum/status_effect/grouped/stasis, STASIS_CHEMICAL_EFFECT)
-	carbon_mob.clear_alert("cryostylane_alert")
+	affected_mob.remove_status_effect(/datum/status_effect/frozenstasis/irresistable)
+	affected_mob.remove_status_effect(/datum/status_effect/grouped/stasis, STASIS_CHEMICAL_EFFECT)
