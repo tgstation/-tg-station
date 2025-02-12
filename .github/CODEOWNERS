@@ -188,7 +188,7 @@
 
 # MULTIPLE OWNERS
 
-/SQL/ @Jordie0608 @scriptis
+/SQL/ @Jordie0608 @tgstation-operations/operations-leads
 
 /_maps/ @EOBGames @Maurukas @MMMiracles @san7890 @ShizCalev
 
@@ -211,15 +211,15 @@
 
 /code/modules/surgery/ @ExcessiveUseOfCobblestone @Ryll-Ryll
 
-/tools/build/ @scriptis @stylemistake
-/tools/tgs_scripts/ @Cyberboss @scriptis
+/tools/build/ @stylemistake @tgstation-operations/operations-leads
+/tools/tgs_scripts/ @Cyberboss @tgstation-operations/operations-leads
 
 /tools/WebhookProcessor/ @BraveMole @TiviPlus
 
 # Host Hell
 
-/code/controllers/configuration/entries @scriptis
-/config/ @scriptis
+/code/controllers/configuration/entries @tgstation-operations/operations-leads
+/config/ @tgstation-operations/operations-leads
 
 # Expensive files that touching basically always cause performance problems
 ## Init times
