@@ -14,7 +14,7 @@
 	blocks_emissive = EMISSIVE_BLOCK_UNIQUE
 
 	///How much we shift the user's pixel y when using the weight machine.
-	var/pixel_shift_y = -3
+	var/pixel_shift_z = -3
 
 	///The weight action we give to people that buckle themselves to us.
 	var/datum/action/push_weights/weight_action
@@ -157,9 +157,9 @@
 	flick_overlay_view(workout, 0.8 SECONDS)
 	flick("[base_icon_state]-u", src)
 	var/mob/living/user = buckled_mobs[1]
-	animate(user, pixel_y = pixel_shift_y, time = WORKOUT_LENGTH * 0.5)
+	animate(user, pixel_z = pixel_shift_z, time = WORKOUT_LENGTH * 0.5, flags = ANIMATION_PARALLEL|ANIMATION_RELATIVE)
+	animate(pixel_z = -pixel_shift_z, time = WORKOUT_LENGTH * 0.5, flags = ANIMATION_PARALLEL)
 	playsound(user, 'sound/machines/creak.ogg', 60, TRUE)
-	animate(pixel_y = user.base_pixel_y, time = WORKOUT_LENGTH * 0.5)
 
 	if(!iscarbon(user) || isnull(user.mind))
 		return TRUE
@@ -194,7 +194,7 @@
 	icon_state = "benchpress"
 	base_icon_state = "benchpress"
 
-	pixel_shift_y = 5
+	pixel_shift_z = 5
 
 	drunk_message = "You raise the bar over you trying to balance it with one hand, keyword tried."
 

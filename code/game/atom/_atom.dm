@@ -735,7 +735,6 @@
 
 	pixel_x = pixel_x + base_pixel_x - .
 
-
 ///Setter for the `base_pixel_y` variable to append behavior related to its changing.
 /atom/proc/set_base_pixel_y(new_value)
 	if(base_pixel_y == new_value)

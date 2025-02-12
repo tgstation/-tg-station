@@ -21,7 +21,7 @@
 	living_parent.stop_pulling() // was only used on humans previously, may change some other behavior
 	log_riding(living_parent, riding_mob)
 	riding_mob.set_glide_size(living_parent.glide_size)
-	handle_vehicle_offsets(living_parent.dir)
+	update_parent_layer_and_offsets(living_parent.dir)
 
 	if(can_use_abilities)
 		setup_abilities(riding_mob)
@@ -109,14 +109,8 @@
 	var/mob/living/living_parent = parent
 	step(living_parent, direction)
 	var/modified_move_delay = vehicle_move_delay
-	if(ishuman(user) && HAS_TRAIT(user, TRAIT_ROUGHRIDER)) // YEEHAW!
-		var/mob/living/carbon/human/rough_rider = user
-		var/ride_benefit = null
-		if(HAS_TRAIT(rough_rider, TRAIT_PRIMITIVE)) // closer to a beast than a man; you don't need to think to ride!
-			ride_benefit = SANITY_LEVEL_GREAT
-		else
-			ride_benefit = rough_rider.mob_mood.sanity_level
-		switch(ride_benefit)
+	if(HAS_TRAIT(user, TRAIT_ROUGHRIDER)) // YEEHAW!
+		switch(HAS_TRAIT(user, TRAIT_PRIMITIVE) ? SANITY_LEVEL_GREAT : user.mob_mood?.sanity_level)
 			if(SANITY_LEVEL_GREAT)
 				modified_move_delay *= 0.8
 			if(SANITY_LEVEL_NEUTRAL)
@@ -212,7 +206,8 @@
 	else if(ride_check_flags & CARRIER_NEEDS_ARM) // fireman
 		human_parent.buckle_lying = 90
 
-/datum/component/riding/creature/post_vehicle_mob_buckle(mob/living/ridden, mob/living/rider)
+/datum/component/riding/creature/handle_buckle(mob/living/rider)
+	var/mob/living/ridden = parent
 	if(!require_minigame || ridden.faction.Find(REF(rider)))
 		return
 	ridden.Shake(duration = 2 SECONDS)
@@ -256,49 +251,55 @@
 /datum/component/riding/creature/human/proc/check_carrier_fall_over(mob/living/carbon/human/human_parent)
 	SIGNAL_HANDLER
 
-	for(var/i in human_parent.buckled_mobs)
-		var/mob/living/rider = i
+	for(var/mob/living/rider as anything in human_parent.buckled_mobs)
 		human_parent.unbuckle_mob(rider)
 		rider.Paralyze(1 SECONDS)
 		rider.Knockdown(4 SECONDS)
-		human_parent.visible_message(span_danger("[rider] topples off of [human_parent] as they both fall to the ground!"), \
-					span_warning("You fall to the ground, bringing [rider] with you!"), span_hear("You hear two consecutive thuds."), COMBAT_MESSAGE_RANGE, ignored_mobs=rider)
+		human_parent.visible_message(
+			span_danger("[rider] topples off of [human_parent] as they both fall to the ground!"),
+			span_warning("You fall to the ground, bringing [rider] with you!"),
+			span_hear("You hear two consecutive thuds."),
+			COMBAT_MESSAGE_RANGE,
+			ignored_mobs = rider,
+			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
+		)
 		to_chat(rider, span_danger("[human_parent] falls to the ground, bringing you with [human_parent.p_them()]!"))
 
-/datum/component/riding/creature/human/handle_vehicle_layer(dir)
-	var/atom/movable/AM = parent
-	if(!AM.buckled_mobs || !AM.buckled_mobs.len)
-		AM.layer = MOB_LAYER
-		return
+/datum/component/riding/creature/human/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	var/mob/living/carbon/human/seat = parent
+	// fireman carry
+	if(seat.buckle_lying)
+		return list(
+			TEXT_NORTH = list(0, 6, MOB_ABOVE_PIGGYBACK_LAYER),
+			TEXT_SOUTH = list(0, 6, MOB_BELOW_PIGGYBACK_LAYER),
+			TEXT_EAST =  list(0, 6, MOB_BELOW_PIGGYBACK_LAYER),
+			TEXT_WEST =  list(0, 6, MOB_BELOW_PIGGYBACK_LAYER),
+		)
+	// piggyback
+	return list(
+		TEXT_NORTH = list( 0, 8, MOB_ABOVE_PIGGYBACK_LAYER),
+		TEXT_SOUTH = list( 0, 8, MOB_BELOW_PIGGYBACK_LAYER),
+		TEXT_EAST =  list(-6, 8, MOB_BELOW_PIGGYBACK_LAYER),
+		TEXT_WEST =  list( 6, 8, MOB_BELOW_PIGGYBACK_LAYER),
+	)
 
-	for(var/mob/M in AM.buckled_mobs) //ensure proper layering of piggyback and carry, sometimes weird offsets get applied
-		M.layer = MOB_LAYER
+/datum/component/riding/creature/human/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0),
+		TEXT_SOUTH = list(0, 0),
+		TEXT_EAST =  list(0, 0),
+		TEXT_WEST =  list(0, 0),
+	)
 
-	if(!AM.buckle_lying) // rider is vertical, must be piggybacking
-		if(dir == SOUTH)
-			AM.layer = MOB_ABOVE_PIGGYBACK_LAYER
-		else
-			AM.layer = MOB_BELOW_PIGGYBACK_LAYER
-	else  // laying flat, we must be firemanning the rider
-		if(dir == NORTH)
-			AM.layer = MOB_BELOW_PIGGYBACK_LAYER
-		else
-			AM.layer = MOB_ABOVE_PIGGYBACK_LAYER
-
-/datum/component/riding/creature/human/get_offsets(pass_index)
-	var/mob/living/carbon/human/H = parent
-	if(H.buckle_lying)
-		return list(TEXT_NORTH = list(0, 6), TEXT_SOUTH = list(0, 6), TEXT_EAST = list(0, 6), TEXT_WEST = list(0, 6))
-	else
-		return list(TEXT_NORTH = list(0, 6), TEXT_SOUTH = list(0, 6), TEXT_EAST = list(-6, 4), TEXT_WEST = list( 6, 4))
-
-/datum/component/riding/creature/human/force_dismount(mob/living/dismounted_rider, throw_range = 8, throw_speed = 3, gentle = FALSE)
-	var/atom/movable/AM = parent
-	AM.unbuckle_mob(dismounted_rider)
-	dismounted_rider.Paralyze(1 SECONDS)
-	dismounted_rider.Knockdown(4 SECONDS)
-	dismounted_rider.visible_message(span_warning("[AM] pushes [dismounted_rider] off of [AM.p_them()]!"), \
-						span_warning("[AM] pushes you off of [AM.p_them()]!"))
+/datum/component/riding/creature/human/force_dismount(mob/living/rider, throw_range = 8, throw_speed = 3, gentle = FALSE)
+	var/atom/movable/seat = parent
+	seat.unbuckle_mob(rider)
+	rider.Paralyze(1 SECONDS)
+	rider.Knockdown(4 SECONDS)
+	rider.visible_message(
+		span_warning("[seat] pushes [rider] off of [seat.p_them()]!"),
+		span_warning("[seat] pushes you off of [seat.p_them()]!"),
+	)
 
 
 //Now onto cyborg riding//
@@ -314,64 +315,87 @@
 		Unbuckle(user)
 		to_chat(user, span_warning("You can't grab onto [robot_parent] with no hands!"))
 
-/datum/component/riding/creature/cyborg/handle_vehicle_layer(dir)
-	var/atom/movable/robot_parent = parent
-	if(dir == SOUTH)
-		robot_parent.layer = MOB_ABOVE_PIGGYBACK_LAYER
-	else
-		robot_parent.layer = MOB_BELOW_PIGGYBACK_LAYER
-
-/datum/component/riding/creature/cyborg/get_offsets(pass_index) // list(dir = x, y, layer)
-	return list(TEXT_NORTH = list(0, 4), TEXT_SOUTH = list(0, 4), TEXT_EAST = list(-6, 3), TEXT_WEST = list( 6, 3))
-
-/datum/component/riding/creature/cyborg/handle_vehicle_offsets(dir)
+/datum/component/riding/creature/cyborg/get_rider_offsets_and_layers(pass_index, mob/offsetter)
 	var/mob/living/silicon/robot/robot_parent = parent
+	return robot_parent.model?.ride_offsets || DEFAULT_ROBOT_RIDING_OFFSETS
 
-	for(var/mob/living/rider in robot_parent.buckled_mobs)
-		rider.setDir(dir)
-		if(istype(robot_parent.model))
-			rider.pixel_x = robot_parent.model.ride_offset_x[dir2text(dir)]
-			rider.pixel_y = robot_parent.model.ride_offset_y[dir2text(dir)]
+/datum/component/riding/creature/cyborg/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, MOB_BELOW_PIGGYBACK_LAYER),
+		TEXT_SOUTH = list(0, 0, MOB_ABOVE_PIGGYBACK_LAYER),
+		TEXT_EAST =  list(0, 0, MOB_ABOVE_PIGGYBACK_LAYER),
+		TEXT_WEST =  list(0, 0, MOB_ABOVE_PIGGYBACK_LAYER),
+	)
 
 //now onto every other ridable mob//
+/datum/component/riding/creature/mulebot
 
-/datum/component/riding/creature/mulebot/handle_specials()
-	. = ..()
-	var/atom/movable/movable_parent = parent
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 12), TEXT_SOUTH = list(0, 12), TEXT_EAST = list(0, 12), TEXT_WEST = list(0, 12)))
-	set_vehicle_dir_layer(SOUTH, movable_parent.layer) //vehicles default to ABOVE_MOB_LAYER while moving, let's make sure that doesn't happen while a mob is riding us.
-	set_vehicle_dir_layer(NORTH, movable_parent.layer)
-	set_vehicle_dir_layer(EAST, movable_parent.layer)
-	set_vehicle_dir_layer(WEST, movable_parent.layer)
+/datum/component/riding/creature/mulebot/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(0, 12),
+		TEXT_SOUTH = list(0, 12),
+		TEXT_EAST =  list(0, 12),
+		TEXT_WEST =  list(0, 12),
+	)
 
+/datum/component/riding/creature/mulebot/get_parent_offsets_and_layers()
+	return null
 
-/datum/component/riding/creature/cow/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 8), TEXT_SOUTH = list(0, 8), TEXT_EAST = list(-2, 8), TEXT_WEST = list(2, 8)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/cow
 
-/datum/component/riding/creature/pig/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 8), TEXT_SOUTH = list(0, 8), TEXT_EAST = list(-2, 8), TEXT_WEST = list(2, 8)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/cow/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 8),
+		TEXT_SOUTH = list( 0, 8),
+		TEXT_EAST =  list(-2, 8),
+		TEXT_WEST =  list( 2, 8),
+	)
 
-/datum/component/riding/creature/pony/handle_specials()
-	. = ..()
-	vehicle_move_delay = 1.5
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 9), TEXT_SOUTH = list(0, 9), TEXT_EAST = list(-2, 9), TEXT_WEST = list(2, 9)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/cow/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
+
+/datum/component/riding/creature/pig
+
+/datum/component/riding/creature/pig/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 8),
+		TEXT_SOUTH = list( 0, 8),
+		TEXT_EAST =  list(-2, 8),
+		TEXT_WEST =  list( 2, 8),
+	)
+
+/datum/component/riding/creature/pig/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/pony
+	vehicle_move_delay = 1.5
 	COOLDOWN_DECLARE(pony_trot_cooldown)
+
+/datum/component/riding/creature/pony/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 9),
+		TEXT_SOUTH = list( 0, 9),
+		TEXT_EAST =  list(-2, 9),
+		TEXT_WEST =  list( 2, 9),
+	)
+
+/datum/component/riding/creature/pony/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/pony/driver_move(atom/movable/movable_parent, mob/living/user, direction)
 	. = ..()
@@ -386,51 +410,80 @@
 		playsound(movable_parent, 'sound/mobs/non-humanoids/pony/clown_gallup.ogg', 50)
 		COOLDOWN_START(src, pony_trot_cooldown, 500 MILLISECONDS)
 
-/datum/component/riding/creature/bear/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(1, 8), TEXT_SOUTH = list(1, 8), TEXT_EAST = list(-3, 6), TEXT_WEST = list(3, 6)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(WEST, ABOVE_MOB_LAYER)
+/datum/component/riding/creature/bear
 
+/datum/component/riding/creature/bear/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 1, 8),
+		TEXT_SOUTH = list( 1, 8),
+		TEXT_EAST =  list(-3, 6),
+		TEXT_WEST =  list( 3, 6),
+	)
+
+/datum/component/riding/creature/bear/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_WEST =  list(0, 0, ABOVE_MOB_LAYER),
+	)
 
 /datum/component/riding/creature/carp
 	override_allow_spacemove = TRUE
 
-/datum/component/riding/creature/carp/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 13), TEXT_SOUTH = list(0, 15), TEXT_EAST = list(-2, 12), TEXT_WEST = list(2, 12)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/carp/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(0, 13),
+		TEXT_SOUTH = list(0, 15),
+		TEXT_EAST =  list(-2, 12),
+		TEXT_WEST =  list( 2, 12),
+	)
 
+/datum/component/riding/creature/carp/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
-/datum/component/riding/creature/megacarp/handle_specials()
-	. = ..()
-	var/atom/movable/movable_parent = parent
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(1, 8), TEXT_SOUTH = list(1, 8), TEXT_EAST = list(-3, 6), TEXT_WEST = list(3, 6)))
-	set_vehicle_dir_offsets(SOUTH, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(NORTH, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(EAST, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(WEST, movable_parent.pixel_x, 0)
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/megacarp
+
+/datum/component/riding/creature/megacarp/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(1, 8),
+		TEXT_SOUTH = list(1, 8),
+		TEXT_EAST =  list(-3, 6),
+		TEXT_WEST =  list(3, 6),
+	)
+
+/datum/component/riding/creature/megacarp/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/vatbeast
 	override_allow_spacemove = TRUE
 	can_use_abilities = TRUE
 
-/datum/component/riding/creature/vatbeast/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 15), TEXT_SOUTH = list(0, 15), TEXT_EAST = list(-10, 15), TEXT_WEST = list(10, 15)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/vatbeast/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(0, 15),
+		TEXT_SOUTH = list(0, 15),
+		TEXT_EAST =  list(-10, 15),
+		TEXT_WEST =  list(10, 15),
+	)
+
+/datum/component/riding/creature/vatbeast/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/goliath
 	keytype = /obj/item/key/lasso
@@ -450,38 +503,58 @@
 	goliath.remove_movespeed_modifier(/datum/movespeed_modifier/goliath_mount)
 	return ..()
 
-/datum/component/riding/creature/goliath/handle_specials()
-	. = ..()
-	set_vehicle_offsets(list(TEXT_NORTH = list(-12, 0), TEXT_SOUTH = list(-12, 0), TEXT_EAST = list(-12, 0), TEXT_WEST = list(-12, 0)))
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 12), TEXT_SOUTH = list(0, 12), TEXT_EAST = list(-4, 12), TEXT_WEST = list(3, 12)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/goliath/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 12),
+		TEXT_SOUTH = list( 0, 12),
+		TEXT_EAST =  list(-4, 12),
+		TEXT_WEST =  list( 3, 12),
+	)
 
-/datum/component/riding/creature/glutton/handle_specials()
-	. = ..()
-	var/atom/movable/movable_parent = parent
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 24), TEXT_SOUTH = list(0, 24), TEXT_EAST = list(-16, 24), TEXT_WEST = list(16, 24)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(WEST, ABOVE_MOB_LAYER)
-	set_vehicle_dir_offsets(SOUTH, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(NORTH, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(EAST, movable_parent.pixel_x, 0)
-	set_vehicle_dir_offsets(WEST, movable_parent.pixel_x, 0)
+/datum/component/riding/creature/goliath/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(-12, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(-12, 0, ABOVE_MOB_LAYER),
+		TEXT_EAST =  list(-12, 0, OBJ_LAYER),
+		TEXT_WEST =  list(-12, 0, OBJ_LAYER),
+	)
+
+/datum/component/riding/creature/glutton
+
+/datum/component/riding/creature/glutton/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 24),
+		TEXT_SOUTH = list( 0, 24),
+		TEXT_EAST =  list(-16, 24),
+		TEXT_WEST =  list( 16, 24),
+	)
+
+/datum/component/riding/creature/glutton/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_WEST =  list(0, 0, ABOVE_MOB_LAYER),
+	)
 
 /datum/component/riding/creature/guardian
 	can_be_driven = FALSE
 
-/datum/component/riding/creature/guardian/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 4), TEXT_SOUTH = list(0, 4), TEXT_EAST = list(-6, 3), TEXT_WEST = list(6, 3)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(WEST, ABOVE_MOB_LAYER)
+/datum/component/riding/creature/guardian/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list( 0, 4),
+		TEXT_SOUTH = list( 0, 4),
+		TEXT_EAST =  list(-6, 3),
+		TEXT_WEST =  list( 6, 3),
+	)
+
+/datum/component/riding/creature/guardian/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_WEST =  list(0, 0, ABOVE_MOB_LAYER),
+	)
 
 /datum/component/riding/creature/guardian/ride_check(mob/living/user, consequences = TRUE)
 	var/mob/living/basic/guardian/charger = parent
@@ -491,22 +564,34 @@
 
 /datum/component/riding/creature/goldgrub
 
-/datum/component/riding/creature/goldgrub/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(11, 3), TEXT_SOUTH = list(11, 3), TEXT_EAST = list(9, 3), TEXT_WEST = list(14, 3)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+/datum/component/riding/creature/goldgrub/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(11, 3),
+		TEXT_SOUTH = list(11, 3),
+		TEXT_EAST =  list( 9, 3),
+		TEXT_WEST =  list(14, 3),
+	)
+
+/datum/component/riding/creature/goldgrub/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_SOUTH = list(0, 0, OBJ_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/leaper
 	can_force_unbuckle = FALSE
 	can_use_abilities = TRUE
 	ride_check_flags = JUST_FRIEND_RIDERS
 
-/datum/component/riding/creature/leaper/handle_specials()
-	. = ..()
-	set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(17, 46), TEXT_SOUTH = list(17,51), TEXT_EAST = list(27, 46), TEXT_WEST = list(6, 46)))
+/datum/component/riding/creature/leaper/get_rider_offsets_and_layers(pass_index, mob/offsetter)
+	return list(
+		TEXT_NORTH = list(17, 46),
+		TEXT_SOUTH = list(17, 51),
+		TEXT_EAST =  list(27, 46),
+		TEXT_WEST =  list( 6, 46),
+	)
 
 /datum/component/riding/creature/leaper/Initialize(mob/living/riding_mob, force = FALSE, ride_check_flags = NONE)
 	. = ..()
@@ -520,7 +605,6 @@
 	if(!basic_parent.CanReach(pointed))
 		return
 	basic_parent.melee_attack(pointed)
-
 
 /datum/component/riding/leaper/handle_unbuckle(mob/living/rider)
 	. = ..()
@@ -556,16 +640,28 @@
 	for(var/mob/living/buckled_mob in living_parent.buckled_mobs)
 		force_dismount(buckled_mob, throw_range = 2, gentle = TRUE)
 
-/datum/component/riding/creature/raptor/handle_specials()
-	. = ..()
+/datum/component/riding/creature/raptor/get_rider_offsets_and_layers(pass_index, mob/offsetter)
 	if(!SSmapping.is_planetary())
-		set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(7, 7), TEXT_SOUTH = list(2, 10), TEXT_EAST = list(12, 7), TEXT_WEST = list(10, 7)))
-	else
-		set_riding_offsets(RIDING_OFFSET_ALL, list(TEXT_NORTH = list(0, 7), TEXT_SOUTH = list(0, 10), TEXT_EAST = list(-3, 9), TEXT_WEST = list(3, 9)))
-	set_vehicle_dir_layer(SOUTH, ABOVE_MOB_LAYER)
-	set_vehicle_dir_layer(NORTH, OBJ_LAYER)
-	set_vehicle_dir_layer(EAST, OBJ_LAYER)
-	set_vehicle_dir_layer(WEST, OBJ_LAYER)
+		return list(
+			TEXT_NORTH = list( 7, 7),
+			TEXT_SOUTH = list( 2, 10),
+			TEXT_EAST =  list(12, 7),
+			TEXT_WEST =  list(10, 7),
+		)
+	return list(
+		TEXT_NORTH = list( 0, 7),
+		TEXT_SOUTH = list( 0, 10),
+		TEXT_EAST =  list(-3, 9),
+		TEXT_WEST =  list( 3, 9),
+	)
+
+/datum/component/riding/creature/raptor/get_parent_offsets_and_layers()
+	return list(
+		TEXT_NORTH = list(0, 0, OBJ_LAYER),
+		TEXT_SOUTH = list(0, 0, ABOVE_MOB_LAYER),
+		TEXT_EAST =  list(0, 0, OBJ_LAYER),
+		TEXT_WEST =  list(0, 0, OBJ_LAYER),
+	)
 
 /datum/component/riding/creature/raptor/fast
 	vehicle_move_delay = 1.5

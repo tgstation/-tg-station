@@ -140,12 +140,12 @@ Difficulty: Extremely Hard
 	adjustHealth(-maxHealth)
 	enraged = TRUE
 	enraging = TRUE
-	animate(src, pixel_y = pixel_y + 96, time = 100, easing = ELASTIC_EASING)
+	animate(src, pixel_z = 96, time = 100, easing = ELASTIC_EASING, flags = ANIMATION_RELATIVE)
 	spin(100, 10)
 	SLEEP_CHECK_DEATH(60, src)
 	playsound(src, 'sound/effects/explosion/explosion3.ogg', 100, TRUE)
 	icon_state = "demonic_miner_phase2"
-	animate(src, pixel_y = pixel_y - 96, time = 8, flags = ANIMATION_END_NOW)
+	animate(src, pixel_z = -96, time = 8, flags = ANIMATION_END_NOW, flags = ANIMATION_RELATIVE)
 	spin(8, 2)
 	for(var/obj/structure/frost_miner_prism/prism_to_set in GLOB.frost_miner_prisms)
 		prism_to_set.set_prism_light(LIGHT_COLOR_PURPLE, 5)

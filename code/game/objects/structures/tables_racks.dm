@@ -837,13 +837,11 @@
 
 ///Align the mob with the table when buckled.
 /obj/structure/table/optable/post_buckle_mob(mob/living/buckled)
-	. = ..()
-	buckled.pixel_y += 6
+	buckled.add_offsets(type, z_add = 6)
 
 ///Disalign the mob with the table when unbuckled.
 /obj/structure/table/optable/post_unbuckle_mob(mob/living/buckled)
-	. = ..()
-	buckled.pixel_y -= 6
+	buckled.remove_offsets(type)
 
 /// Any mob that enters our tile will be marked as a potential patient. They will be turned into a patient if they lie down.
 /obj/structure/table/optable/proc/mark_patient(datum/source, mob/living/carbon/potential_patient)

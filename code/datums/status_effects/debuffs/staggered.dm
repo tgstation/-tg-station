@@ -43,12 +43,9 @@
 /// Helper proc that causes the mob to do a stagger animation.
 /// Doesn't change significantly, just meant to represent swaying back and forth
 /mob/living/proc/do_stagger_animation()
-	var/normal_pos = base_pixel_x + body_position_pixel_x_offset
-	var/jitter_right = normal_pos + 4
-	var/jitter_left = normal_pos - 4
-	animate(src, pixel_x = jitter_left, 0.2 SECONDS, flags = ANIMATION_PARALLEL)
-	animate(pixel_x = jitter_right, time = 0.4 SECONDS)
-	animate(pixel_x = normal_pos, time = 0.2 SECONDS)
+	animate(src, pixel_w = 3, time = 0.2 SECONDS, flags = ANIMATION_RELATIVE|ANIMATION_PARALLEL)
+	animate(pixel_w = -6, time = 0.4 SECONDS, flags = ANIMATION_RELATIVE)
+	animate(pixel_w = 3, time = 0.2 SECONDS, flags = ANIMATION_RELATIVE)
 
 /// Status effect specifically for instances where someone is vulnerable to being stunned when shoved.
 /datum/status_effect/dazed

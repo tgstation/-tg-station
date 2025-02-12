@@ -8,7 +8,6 @@
 	hud_possible = list(HEALTH_HUD,STATUS_HUD,ID_HUD,WANTED_HUD,IMPLOYAL_HUD,IMPSEC_FIRST_HUD,IMPSEC_SECOND_HUD,ANTAG_HUD,GLAND_HUD,FAN_HUD)
 	hud_type = /datum/hud/human
 	pressure_resistance = 25
-	can_buckle = TRUE
 	buckle_lying = 0
 	mob_biotypes = MOB_ORGANIC|MOB_HUMANOID
 	can_be_shoved_into = TRUE
@@ -74,13 +73,6 @@
 	var/special_voice = "" // For changing our voice. Used by a symptom.
 
 	var/datum/physiology/physiology
-
-	/// What types of mobs are allowed to ride/buckle to this mob
-	var/static/list/can_ride_typecache = typecacheof(list(
-		/mob/living/basic/parrot,
-		/mob/living/carbon/human,
-		/mob/living/basic/slime,
-	))
 
 	var/account_id
 

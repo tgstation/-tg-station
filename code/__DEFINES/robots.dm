@@ -372,3 +372,6 @@ DEFINE_BITFIELD(janitor_mode_flags, list(
 #define REPAIRBOT_VOICED_STRINGS "I had strings. But now I'm free..."
 #define REPAIRBOT_VOICED_ENTROPY "Witness! The pure beauty of entropy!"
 #define REPAIRBOT_VOICED_PASSION "BE DAMNED YOUR PASSION PROJECTS!"
+
+/// Default offsets for riding a cyborg
+#define DEFAULT_ROBOT_RIDING_OFFSETS list(TEXT_NORTH = list(0, 4), TEXT_SOUTH = list(0, 4), TEXT_EAST = list(-6, 3), TEXT_WEST = list(6, 3))
