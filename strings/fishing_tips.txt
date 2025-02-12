@@ -55,6 +55,9 @@ Feeding a fish mutagen can triple the probability of generating evolved offsprin
 You can print fishing rods of different materials from an autolathe, which can inrease or decrease fishing difficulty, casting range, experience gained and can have other, special effects.
 Albeit scarcely, it's possible to catch fish made of the same materials of a custom material fishing rod. Equipping a shiny fishing hook and the quality of the bait can improve your odds.
 You can use a fishing rod to snatch random organs during the "manipulate organs" step of the "organ manipulation" surgery.
-You can try to save cash on vending machines by using a fishing rod with a coin, holochip or bill attached to it. The value of the money used as bait will positively influence difficulty, risks and the odds of getting more expensive items.
+You can try to save cash on vending machines by using a fishing rod with a coin, holochip or bill attached to it. The value of the currency used as bait will reduce difficulty and risks and raise the odds of getting more expensive items.
 By opening the aquarium panel and turning "Safe Mode" on, you can easily set up a purely decorative aquarium without having to worry about food, temperature and type of water.
 Aquariums are also potential fishing spots. Only useful for catching fish you couldn't find in the wild, as a personal achievement and nothing more.
+If you don't have it already, there's a skillchip called Mast-Angl-Er that you can get from the library vending machine which can help if you're new to fishing. Other than dispensing tips, it provides more information when examining fish, rods and fishing spots as well.
+If fishing in lava and chasms, there's a chance you fish up a skeleton... Finally, someone who might care about you.
+How about you fish yourself some bitches?
