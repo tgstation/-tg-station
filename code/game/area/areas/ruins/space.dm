@@ -763,3 +763,25 @@
 	airlock_wires = /datum/wires/airlock/security
 	sound_environment = SOUND_AREA_SMALL_ENCLOSED
 	ambience_index = AMBIENCE_DANGER
+
+//Film studio
+/area/ruin/space/has_grav/film_studio
+	name = "\improper Film Studio Generator Room"
+
+/area/ruin/space/has_grav/film_studio/dorms
+	name = "\improper Film Studio Living Quarters"
+
+/area/ruin/space/has_grav/film_studio/stage
+	name = "\improper Film Studio Main Set Area"
+
+/area/ruin/space/has_grav/film_studio/backstage
+	name = "\improper Film Studio Backstage"
+
+/area/ruin/space/has_grav/film_studio/director
+	name = "\improper Film Studio Director Room"
+
+/area/ruin/space/has_grav/film_studio/solars
+	name = "\improper Film Studio Maintenance Solars"
+
+/area/ruin/space/has_grav/film_studio/starboard
+	name = "\improper Film Studio Starboard Wing"

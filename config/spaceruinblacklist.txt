@@ -41,6 +41,7 @@
 #_maps/RandomRuins/SpaceRuins/dj_station.dmm
 #_maps/RandomRuins/SpaceRuins/emptyshell.dmm
 #_maps/RandomRuins/SpaceRuins/fasttravel.dmm
+#_maps/RandomRuins/SpaceRuins/film_studio.dmm
 #_maps/RandomRuins/SpaceRuins/forgottenship.dmm
 #_maps/RandomRuins/SpaceRuins/garbagetruck1.dmm
 #_maps/RandomRuins/SpaceRuins/garbagetruck2.dmm
