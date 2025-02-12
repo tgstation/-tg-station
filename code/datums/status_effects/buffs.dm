@@ -614,29 +614,33 @@
 	desc = "You're immune to radiation, get settled quick!"
 	icon_state = "radiation_shield"
 
-/// Heal in darkness and potentially trigger other effects, persists for a short duration after leaving
-/datum/status_effect/shadow_regeneration
-	id = "shadow_regeneration"
+/// Throw an alert we're in darkness!! Nightvision can make it hard to tell so this is useful
+/datum/status_effect/shadow
+	id = "shadow"
 	duration = 2 SECONDS
 	status_type = STATUS_EFFECT_REFRESH
 	alert_type = /atom/movable/screen/alert/status_effect/shadow_regeneration
 
-/datum/status_effect/shadow_regeneration/on_apply()
+/// Same as above, but also heal in darkness!! Mostly superseded but some simple mobs use this
+/datum/status_effect/shadow/regeneration
+	id = "shadow_regeneration"
+
+/datum/status_effect/shadow/regeneration/on_apply()
 	. = ..()
 	if (!.)
 		return FALSE
 	heal_owner()
 	return TRUE
 
-/datum/status_effect/shadow_regeneration/refresh(effect)
+/datum/status_effect/shadow/regeneration/refresh(effect)
 	. = ..()
 	heal_owner()
 
 /// Regenerate health whenever this status effect is applied or reapplied
-/datum/status_effect/shadow_regeneration/proc/heal_owner()
+/datum/status_effect/shadow/regeneration/proc/heal_owner()
 	owner.heal_overall_damage(brute = 1, burn = 1, required_bodytype = BODYTYPE_ORGANIC)
 
 /atom/movable/screen/alert/status_effect/shadow_regeneration
 	name = "Shadow Regeneration"
-	desc = "Bathed in soothing darkness, you will slowly heal yourself."
+	desc = "Bathed in soothing darkness, you will slowly heal yourself"
 	icon_state = "lightless"

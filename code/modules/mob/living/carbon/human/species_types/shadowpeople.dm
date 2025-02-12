@@ -98,22 +98,8 @@
 	pepperspray_protect = TRUE
 	flash_protect = FLASH_PROTECTION_SENSITIVE
 
-/// the key to some of their powers
+/// the key to none of their powers
 /obj/item/organ/brain/shadow
 	name = "shadowling tumor"
 	desc = "Something that was once a brain, before being remolded by a shadowling. It has adapted to the dark, irreversibly."
 	icon = 'icons/obj/medical/organs/shadow_organs.dmi'
-	/// What status effect do we gain while in darkness?
-	var/applied_status = /datum/status_effect/shadow_regeneration
-
-/obj/item/organ/brain/shadow/on_life(seconds_per_tick, times_fired)
-	. = ..()
-	var/turf/owner_turf = owner.loc
-	if(!isturf(owner_turf))
-		return
-	var/light_amount = owner_turf.get_lumcount()
-
-	if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //heal in the dark
-		owner.apply_status_effect(applied_status)
-	if (!owner.has_status_effect(applied_status))
-		owner.take_overall_damage(brute = 0.5 * seconds_per_tick, burn = 0.5 * seconds_per_tick, required_bodytype = BODYTYPE_ORGANIC)
