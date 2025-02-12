@@ -86,9 +86,9 @@
 		/obj/item/reagent_containers/cup/bottle/salglu_solution = 3,
 		/obj/item/reagent_containers/cup/bottle/toxin = 3,
 		/obj/item/reagent_containers/syringe/antiviral = 6,
-		/obj/item/reagent_containers/medigel/libital = 2,
-		/obj/item/reagent_containers/medigel/aiuri = 2,
-		/obj/item/reagent_containers/medigel/sterilizine = 1,
+		/obj/item/reagent_containers/medigel/libital = 3,
+		/obj/item/reagent_containers/medigel/aiuri = 3,
+		/obj/item/reagent_containers/medigel/sterilizine = 2,
 	)
 	contraband = list(
 		/obj/item/reagent_containers/pill/tox = 3,
