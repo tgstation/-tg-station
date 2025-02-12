@@ -38,7 +38,7 @@
 /// From /datum/computer_file/program/radar/ui_act, when action is "selecttarget": (selected_ref)
 #define COMSIG_MODULAR_COMPUTER_RADAR_SELECTED "comsig_modular_computer_radar_selected"
 
-/// from /obj/item/modular_computer/imprint_id(): (name, job)
+/// from /obj/item/modular_computer/imprint_id(): (name, job, id_card)
 #define COMSIG_MODULAR_PDA_IMPRINT_UPDATED "comsig_modular_pda_imprint_updated"
 /// from /obj/item/modular_computer/reset_id(): ()
 #define COMSIG_MODULAR_PDA_IMPRINT_RESET "comsig_modular_pda_imprint_reset"

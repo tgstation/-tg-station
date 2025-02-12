@@ -100,7 +100,7 @@
 		return
 	var/assignment = worn_id.get_trim_assignment()
 	if(!isnull(assignment))
-		pda.imprint_id(user.real_name, assignment)
+		pda.imprint_id(user.real_name, assignment, worn_id)
 
 /datum/outfit/job/cook/get_types_to_preload()
 	. = ..()
