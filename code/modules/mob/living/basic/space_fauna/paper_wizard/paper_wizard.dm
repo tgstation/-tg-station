@@ -105,7 +105,7 @@
 	faction = list(FACTION_STICKMAN)
 	melee_damage_lower = 1
 	melee_damage_upper = 5
-	ai_controller = /datum/ai_controller/basic_controller/simple_hostile
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile
 
 /mob/living/basic/paper_wizard/copy/Initialize(mapload)
 	. = ..()

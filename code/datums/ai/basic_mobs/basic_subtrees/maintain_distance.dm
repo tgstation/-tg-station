@@ -2,10 +2,6 @@
 /datum/ai_planning_subtree/maintain_distance
 	/// Blackboard key holding atom we want to stay away from
 	var/target_key = BB_BASIC_MOB_CURRENT_TARGET
-	/// How close will we allow our target to get?
-	var/minimum_distance = 4
-	/// How far away will we allow our target to get?
-	var/maximum_distance = 6
 	/// How far do we look for our target?
 	var/view_distance = 10
 	/// the run away behavior we will use
@@ -13,10 +9,19 @@
 
 /datum/ai_planning_subtree/maintain_distance/SelectBehaviors(datum/ai_controller/controller, seconds_per_tick)
 	. = ..()
+
+	var/mob/living/living_pawn = controller.pawn
+	if(LAZYLEN(living_pawn.do_afters))
+		return
+
 	var/atom/target = controller.blackboard[target_key]
 	if (!isliving(target) || !can_see(controller.pawn, target, view_distance))
 		return // Don't run away from cucumbers, they're not snakes
 	var/range = get_dist(controller.pawn, target)
+
+	var/minimum_distance = controller.blackboard[BB_RANGED_SKIRMISH_MIN_DISTANCE] || 4
+	var/maximum_distance = controller.blackboard[BB_RANGED_SKIRMISH_MAX_DISTANCE] || 6
+
 	if (range < minimum_distance)
 		controller.queue_behavior(run_away_behavior, target_key, minimum_distance)
 		return

@@ -134,6 +134,7 @@
 #define VV_HK_GIVE_DIRECT_CONTROL "give_direct_control"
 #define VV_HK_OFFER_GHOSTS "offer_ghosts"
 #define VV_HK_VIEW_PLANES "view_planes"
+#define VV_HK_GIVE_AI "give_ai"
 
 // /mob/living
 #define VV_HK_GIVE_SPEECH_IMPEDIMENT "impede_speech"

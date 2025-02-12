@@ -2,7 +2,7 @@
 	movement_delay = 0.4 SECONDS
 
 /datum/ai_controller/basic_controller/TryPossessPawn(atom/new_pawn)
-	if(!isbasicmob(new_pawn))
+	if(!isliving(new_pawn))
 		return AI_CONTROLLER_INCOMPATIBLE
 	var/mob/living/basic/basic_mob = new_pawn
 
@@ -42,7 +42,7 @@
 	if(ai_traits & PAUSE_DURING_DO_AFTER && LAZYLEN(living_pawn.do_afters))
 		return AI_UNABLE_TO_RUN | AI_PREVENT_CANCEL_ACTIONS //dont erase targets post a do_after
 
-/datum/ai_controller/basic_controller/proc/update_speed(mob/living/basic/basic_mob)
+/datum/ai_controller/basic_controller/proc/update_speed(mob/living/basic_mob)
 	SIGNAL_HANDLER
 	movement_delay = basic_mob.cached_multiplicative_slowdown
 

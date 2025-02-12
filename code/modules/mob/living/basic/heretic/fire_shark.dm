@@ -21,7 +21,7 @@
 	mob_size = MOB_SIZE_TINY
 	speak_emote = list("screams")
 	basic_mob_flags = DEL_ON_DEATH
-	ai_controller = /datum/ai_controller/basic_controller/simple_hostile_obstacles
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles
 	initial_language_holder = /datum/language_holder/carp/hear_common
 
 /mob/living/basic/heretic_summon/fire_shark/Initialize(mapload)

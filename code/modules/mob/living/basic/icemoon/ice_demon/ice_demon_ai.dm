@@ -1,6 +1,7 @@
 /datum/ai_controller/basic_controller/ice_demon
 	blackboard = list(
 		BB_TARGETING_STRATEGY = /datum/targeting_strategy/basic,
+		BB_RANGED_SKIRMISH_MAX_DISTANCE = 7,
 		BB_LIST_SCARY_ITEMS = list(
 			/obj/item/weldingtool,
 			/obj/item/flashlight/flare,
@@ -13,15 +14,11 @@
 		/datum/ai_planning_subtree/simple_find_target,
 		/datum/ai_planning_subtree/flee_target/ice_demon,
 		/datum/ai_planning_subtree/ranged_skirmish/ice_demon,
-		/datum/ai_planning_subtree/maintain_distance/cover_minimum_distance/ice_demon,
+		/datum/ai_planning_subtree/maintain_distance/cover_minimum_distance,
 		/datum/ai_planning_subtree/teleport_away_from_target,
 		/datum/ai_planning_subtree/find_and_hunt_target/teleport_destination,
 		/datum/ai_planning_subtree/targeted_mob_ability/summon_afterimages,
 	)
-
-
-/datum/ai_planning_subtree/maintain_distance/cover_minimum_distance/ice_demon
-	maximum_distance = 7
 
 /datum/ai_planning_subtree/teleport_away_from_target
 	ability_key = BB_DEMON_TELEPORT_ABILITY

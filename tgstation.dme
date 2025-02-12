@@ -907,6 +907,7 @@
 #include "code\datums\ai\bane\bane_behaviors.dm"
 #include "code\datums\ai\bane\bane_controller.dm"
 #include "code\datums\ai\bane\bane_subtrees.dm"
+#include "code\datums\ai\basic_mobs\admin_ai_templates.dm"
 #include "code\datums\ai\basic_mobs\base_basic_controller.dm"
 #include "code\datums\ai\basic_mobs\generic_controllers.dm"
 #include "code\datums\ai\basic_mobs\basic_ai_behaviors\basic_attacking.dm"

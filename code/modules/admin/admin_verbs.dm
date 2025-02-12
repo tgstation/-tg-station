@@ -664,3 +664,18 @@ ADMIN_VERB(create_mob_worm, R_FUN, "Create Mob Worm", "Attach a linked list of m
 		QDEL_NULL(segment.ai_controller)
 		segment.AddComponent(/datum/component/mob_chain, front = previous)
 		previous = segment
+
+ADMIN_VERB(give_ai_controller, R_FUN, "Give AI Controller", ADMIN_VERB_NO_DESCRIPTION, ADMIN_CATEGORY_HIDDEN, mob/living/my_guy)
+	var/static/list/controllers = subtypesof(/datum/admin_ai_template)
+	var/static/list/controllers_by_name = list()
+	if (!length(controllers_by_name))
+		for (var/datum/admin_ai_template/template as anything in controllers)
+			controllers_by_name["[initial(template.name)]"] = template
+
+	var/chosen = tgui_input_list(user, "Which template should we apply?", "Select Template", controllers_by_name)
+	if (isnull(chosen))
+		return
+
+	var/chosen_type = controllers_by_name[chosen]
+	var/datum/admin_ai_template/using_template = new chosen_type
+	using_template.apply(my_guy, user)

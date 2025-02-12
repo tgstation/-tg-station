@@ -98,7 +98,7 @@
 	attack_vis_effect = ATTACK_EFFECT_BITE
 	obj_damage = 0
 	density = FALSE
-	ai_controller = /datum/ai_controller/basic_controller/simple_hostile
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile
 
 /mob/living/basic/hivelord_brood/Initialize(mapload)
 	. = ..()

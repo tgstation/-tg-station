@@ -77,6 +77,13 @@
 #define BB_TARGET_WOUNDED_ONLY "BB_target_wounded_only"
 /// What typepath the holding object targeting strategy should look for
 #define BB_TARGET_HELD_ITEM "BB_target_held_item"
+/// How likely is this mob to move when idle per tick?
+#define BB_BASIC_MOB_IDLE_WALK_CHANCE "BB_basic_idle_walk_chance"
+
+/// Minimum range to keep target within
+#define BB_RANGED_SKIRMISH_MIN_DISTANCE "BB_ranged_skirmish_min_distance"
+/// Maximum range to keep target within
+#define BB_RANGED_SKIRMISH_MAX_DISTANCE "BB_ranged_skirmish_max_distance"
 
 /// Blackboard key storing how long your targeting strategy has held a particular target
 #define BB_BASIC_MOB_HAS_TARGET_TIME "BB_basic_mob_has_target_time"

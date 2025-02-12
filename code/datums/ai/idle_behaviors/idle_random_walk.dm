@@ -8,7 +8,8 @@
 	if(LAZYLEN(living_pawn.do_afters))
 		return FALSE
 
-	if(SPT_PROB(walk_chance, seconds_per_tick) && (living_pawn.mobility_flags & MOBILITY_MOVE) && isturf(living_pawn.loc) && !living_pawn.pulledby)
+	var/actual_chance = controller.blackboard[BB_BASIC_MOB_IDLE_WALK_CHANCE] || walk_chance
+	if(SPT_PROB(actual_chance, seconds_per_tick) && (living_pawn.mobility_flags & MOBILITY_MOVE) && isturf(living_pawn.loc) && !living_pawn.pulledby)
 		var/move_dir = pick(GLOB.alldirs)
 		var/turf/destination_turf = get_step(living_pawn, move_dir)
 		if(!destination_turf?.can_cross_safely(living_pawn))

@@ -27,7 +27,7 @@
 	lighting_cutoff_green = 25
 	lighting_cutoff_blue = 15
 
-	ai_controller = /datum/ai_controller/basic_controller/simple_hostile_obstacles
+	ai_controller = /datum/ai_controller/basic_controller/simple/simple_hostile_obstacles
 	var/health_scaling = TRUE
 
 /mob/living/basic/creature/Initialize(mapload)
