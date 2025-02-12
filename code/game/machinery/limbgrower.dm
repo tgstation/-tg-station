@@ -7,6 +7,7 @@
 	icon_state = "limbgrower_idleoff"
 	density = TRUE
 	circuit = /obj/item/circuitboard/machine/limbgrower
+	interaction_flags_atom = parent_type::interaction_flags_atom | INTERACT_ATOM_REQUIRES_ANCHORED
 
 	/// The category of limbs we're browing in our UI.
 	var/selected_category = SPECIES_HUMAN
@@ -32,6 +33,25 @@
 	stored_research = GLOB.autounlock_techwebs[/datum/techweb/autounlocking/limbgrower]
 	. = ..()
 	AddComponent(/datum/component/plumbing/simple_demand)
+	AddComponent(/datum/component/simple_rotation)
+	register_context()
+
+/obj/machinery/limbgrower/add_context(atom/source, list/context, obj/item/held_item, mob/user)
+	. = ..()
+	if(!held_item)
+		return NONE
+
+	switch(held_item.tool_behaviour)
+		if(TOOL_SCREWDRIVER)
+			context[SCREENTIP_CONTEXT_LMB] = "[panel_open ? "Close" : "Open"] panel"
+			. = CONTEXTUAL_SCREENTIP_SET
+		if(TOOL_WRENCH)
+			context[SCREENTIP_CONTEXT_LMB] = "[anchored ? "Unan" : "An"]chor"
+			. = CONTEXTUAL_SCREENTIP_SET
+
+	if(istype(held_item, /obj/item/disk/design_disk/limbs))
+		context[SCREENTIP_CONTEXT_LMB] = "Load limb designs"
+		. = CONTEXTUAL_SCREENTIP_SET
 
 /// Emagging a limbgrower allows you to build synthetic armblades.
 /obj/machinery/limbgrower/emag_act(mob/user, obj/item/card/emag/emag_card)
@@ -121,41 +141,57 @@
 		reagents.trans_to(our_beaker, our_beaker.reagents.maximum_volume)
 	return ..()
 
-/obj/machinery/limbgrower/attackby(obj/item/user_item, mob/living/user, params)
-	if (busy)
-		to_chat(user, span_warning("The Limb Grower is busy. Please wait for completion of previous operation."))
-		return
+/obj/machinery/limbgrower/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	. = ..()
+	if(user.combat_mode)
+		return ITEM_INTERACT_SKIP_TO_ATTACK
 
-	if(istype(user_item, /obj/item/disk/design_disk/limbs))
-		user.visible_message(span_notice("[user] begins to load \the [user_item] in \the [src]..."),
-			span_notice("You begin to load designs from \the [user_item]..."),
+	if(check_busy(user))
+		return ITEM_INTERACT_BLOCKING
+
+	if(istype(tool, /obj/item/disk/design_disk/limbs))
+		user.visible_message(span_notice("[user] begins to load \the [tool] in \the [src]..."),
+			span_notice("You begin to load designs from \the [tool]..."),
 			span_hear("You hear the clatter of a floppy drive."))
 		busy = TRUE
-		var/obj/item/disk/design_disk/limbs/limb_design_disk = user_item
+		var/obj/item/disk/design_disk/limbs/limb_design_disk = tool
 		if(do_after(user, 2 SECONDS, target = src))
 			for(var/datum/design/found_design in limb_design_disk.blueprints)
 				imported_designs[found_design.id] = TRUE
 			update_static_data(user)
 		busy = FALSE
-		return
+		return ITEM_INTERACT_SUCCESS
 
-	if(default_deconstruction_screwdriver(user, "limbgrower_panelopen", "limbgrower_idleoff", user_item))
+/obj/machinery/limbgrower/screwdriver_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(check_busy(user))
+		return ITEM_INTERACT_BLOCKING
+
+	. = default_deconstruction_screwdriver(user, "limbgrower_panelopen", "limbgrower_idleoff", tool)
+	if(.)
 		ui_close(user)
-		return
 
-	if(panel_open && default_deconstruction_crowbar(user_item))
-		return
+/obj/machinery/limbgrower/crowbar_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(check_busy(user))
+		return ITEM_INTERACT_BLOCKING
 
-	if(user.combat_mode) //so we can hit the machine
-		return ..()
+	return default_deconstruction_crowbar(tool)
+
+/obj/machinery/limbgrower/wrench_act(mob/living/user, obj/item/tool)
+	. = ..()
+	if(check_busy(user))
+		return ITEM_INTERACT_BLOCKING
+
+	if(default_unfasten_wrench(user, tool))
+		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/limbgrower/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()
 	if(.)
 		return
 
-	if (busy)
-		to_chat(usr, span_warning("The limb grower is busy. Please wait for completion of previous operation."))
+	if (check_busy(usr))
 		return
 
 	switch(action)
@@ -267,6 +303,18 @@
 	. = ..()
 	if(in_range(user, src) || isobserver(user))
 		. += span_notice("The status display reads: Storing up to <b>[reagents.maximum_volume]u</b> of reagents.<br>Reagent consumption rate at <b>[production_coefficient * 100]%</b>.")
+
+/**
+ * Check if the limb grower is currently busy.
+ *
+ * user - user initiating the check.
+ *
+ * returns the value of src.busy.
+ */
+/obj/machinery/limbgrower/proc/check_busy(mob/user)
+	. = busy
+	if(.)
+		to_chat(user, span_warning("The limb grower is busy. Please wait for completion of previous operation."))
 
 /*
  * Checks our reagent list to see if a design can be built.
