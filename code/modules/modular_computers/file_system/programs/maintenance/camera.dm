@@ -35,7 +35,7 @@
 		QDEL_NULL(internal_picture)
 	return ..()
 
-/datum/computer_file/program/maintenance/camera/tap(atom/tapped_atom, mob/living/user, params)
+/datum/computer_file/program/maintenance/camera/tap(atom/tapped_atom, mob/living/user, list/modifiers)
 	. = ..()
 	if(internal_picture)
 		QDEL_NULL(internal_picture)

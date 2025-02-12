@@ -88,7 +88,7 @@
  * Normally, modular PCs can be print paper already, but I find this additional step
  * to be less lazy and fitting to the "I gotta go print it before it expires" aspect of it.
  */
-/datum/computer_file/program/coupon/tap(atom/tapped_atom, mob/living/user, params)
+/datum/computer_file/program/coupon/tap(atom/tapped_atom, mob/living/user, list/modifiers)
 	if(!istype(tapped_atom, /obj/machinery/photocopier))
 		return FALSE
 	var/obj/item/card/id/user_id = computer.computer_id_slot

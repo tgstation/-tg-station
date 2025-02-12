@@ -10,7 +10,7 @@
 	/// Information from the last scanned person, to display on the app.
 	var/last_record = ""
 
-/datum/computer_file/program/maintenance/phys_scanner/tap(atom/tapped_atom, mob/living/user, params)
+/datum/computer_file/program/maintenance/phys_scanner/tap(atom/tapped_atom, mob/living/user, list/modifiers)
 	. = ..()
 
 	if(!iscarbon(tapped_atom))

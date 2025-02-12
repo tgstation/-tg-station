@@ -28,12 +28,12 @@
 	return COMPONENT_CANCEL_ATTACK_CHAIN
 
 /// Keep this in sync with its tool based counterpart [/obj/proc/analyzer_act] and [/atom/proc/tool_act]
-/datum/computer_file/program/atmosscan/tap(atom/A, mob/living/user, params)
+/datum/computer_file/program/atmosscan/tap(atom/tapped_atom, mob/living/user, list/modifiers)
 	if(atmozphere_mode != ATMOZPHERE_SCAN_CLICK)
 		return FALSE
-	if(!atmos_scan(user=user, target=A, silent=FALSE))
+	if(!atmos_scan(user, tapped_atom))
 		return FALSE
-	on_analyze(source=computer, target=A)
+	on_analyze(computer, tapped_atom)
 	return TRUE
 
 /// Updates our gasmix data if on click mode.

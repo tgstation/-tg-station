@@ -26,8 +26,8 @@
 	DL_progress = 0
 	return ..()
 
-/datum/computer_file/program/borg_monitor/tap(atom/A, mob/living/user, params)
-	var/mob/living/silicon/robot/borgo = A
+/datum/computer_file/program/borg_monitor/tap(atom/tapped_atom, mob/living/user, list/modifiers)
+	var/mob/living/silicon/robot/borgo = tapped_atom
 	if(!istype(borgo) || !borgo.modularInterface)
 		return FALSE
 	DL_source = borgo
@@ -39,6 +39,7 @@
 		username = "user [stored_card.registered_name]"
 	to_chat(borgo, span_userdanger("Request received from [username] for the system log file. Upload in progress."))//Damning evidence may be contained, so warn the borg
 	borgo.logevent("File request by [username]: /var/logs/syslog")
+	borgo.balloon_alert(user, "downloading logs")
 	return TRUE
 
 /datum/computer_file/program/borg_monitor/process_tick(seconds_per_tick)
