@@ -64,9 +64,10 @@
 		if(player && HAS_TRAIT(player, TRAIT_MUSICIAN) && isliving(M))
 			var/mob/living/L = M
 			L.apply_status_effect(/datum/status_effect/good_music)
-		if(!(M?.client?.prefs.read_preference(/datum/preference/toggle/sound_instruments)))
+		var/pref_volume = M?.client?.prefs.read_preference(/datum/preference/numeric/volume/sound_instruments)
+		if(!pref_volume)
 			continue
-		M.playsound_local(get_turf(parent), null, volume, FALSE, K.frequency, null, channel, null, copy)
+		M.playsound_local(get_turf(parent), null, volume * (pref_volume/100), FALSE, K.frequency, null, channel, null, copy)
 		// Could do environment and echo later but not for now
 
 /**
