@@ -1,5 +1,6 @@
 ///Allows you to set a theme for a set of areas without tying them to looping sounds explicitly
 /datum/component/area_sound_manager
+	dupe_mode = COMPONENT_DUPE_ALLOWED
 	///area -> looping sound type
 	var/list/area_to_looping_type = list()
 	///Current sound loop

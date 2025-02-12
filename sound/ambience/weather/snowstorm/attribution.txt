@@ -1,0 +1,13 @@
+{
+snow1.ogg
+snow2.ogg
+snow4.ogg
+snow5.ogg
+snow6.ogg
+snow7.ogg
+snow8.ogg
+snow9.ogg
+snow10.ogg
+snow_start.ogg
+snow_end.ogg
+} Wind at door howling 4.ogg by Bosk1 -- https://freesound.org/s/217186/ -- License: Attribution 4.0
