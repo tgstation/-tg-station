@@ -266,7 +266,6 @@
 		properties["severity"] = round((properties["severity"] / 2), 1)
 		properties["severity"] *= (symptoms.len / VIRUS_SYMPTOM_LIMIT) //fewer symptoms, less severity
 		properties["severity"] = round(clamp(properties["severity"], 1, 7), 1)
-	properties["capacity"] = get_symptom_weights()
 
 // Assign the properties that are in the list.
 /datum/disease/advance/proc/assign_properties()
@@ -342,7 +341,7 @@
 // Will generate a random cure, the more resistance the symptoms have, the harder the cure.
 /datum/disease/advance/proc/generate_cure()
 	if(properties?.len)
-		var/res = clamp(properties["resistance"] - (symptoms.len * 0.5), 1, advance_cures.len)
+		var/res = clamp(properties["resistance"] - (symptoms.len / 2), 1, advance_cures.len)
 		if(res == oldres)
 			return
 		cures = list(pick(advance_cures[res]))
@@ -405,7 +404,7 @@
 /datum/disease/advance/proc/AddSymptom(datum/symptom/S)
 	if(HasSymptom(S))
 		return
-	while(get_symptom_weights() + S.weight > VIRUS_SYMPTOM_LIMIT)
+	if(symptoms.len >= VIRUS_SYMPTOM_LIMIT)
 		RemoveSymptom(pick(symptoms))
 	symptoms += S
 	S.OnAdd(src)
@@ -421,12 +420,6 @@
 		S.neutered = TRUE
 		S.name += " (neutered)"
 		S.OnRemove(src)
-
-/// How much of the symptom capacity is currently being used?
-/datum/disease/advance/proc/get_symptom_weights()
-	. = 0
-	for(var/datum/symptom/symptom as anything in symptoms)
-		. += symptom.weight
 
 /*
 
