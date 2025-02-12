@@ -23,11 +23,18 @@ You can avoid hacky code by using object-oriented methodologies, such as overrid
 
 ### Develop Secure Code
 
-* Player input must always be escaped safely, we recommend you use stripped_input in all cases where you would use input. Essentially, just always treat input from players as inherently malicious and design with that use case in mind
+* Player input must always be escaped safely, we recommend you use stripped_input in all cases where you would use input. Essentially, just always treat input from players as inherently malicious and design with that use case in mind.
+	* This extends to much further than just numbers or strings. You should always sanity check that an input is valid, especially when it comes to datums or references!
+	* Input stalling is a very common exploit / bug that involves opening an input window when in a valid state, and triggering the input after exiting the valid state. These can be very serious, and allow players to teleport across the map or remove someone's brain at any given moment. If you check the player must be in a specific context before an input, you should generally check that they are still in the context AFTER the input resolves.
+		* For example, if you have an item which can be used (in hand) by a player to make it explode, but you want them to confirm (via prompt) that they want it to explode, you should check that the item is still in the player's hands after confirming. Otherwise, they could drop it and explode it at any moment they want.
+	* Another less common exploit involves allowing a player to open multiple of an input at once. This may allow the player to stack effects, such as triggering 10 explosions when only 1 should be allowed. While a lot of code is generally built in a way making this infeasible (usually due to runtime errors), it is noteworthy regardless.
+		* You should also consider if it would make sense to apply a timeout to your input, to prevent players from opening it and keeping it on their screen until convenient.
 
 * Calls to the database must be escaped properly - use sanitizeSQL to escape text based database entries from players or admins, and isnum() for number based database entries from players or admins.
 
 * All calls to topics must be checked for correctness. Topic href calls can be easily faked by clients, so you should ensure that the call is valid for the state the item is in. Do not rely on the UI code to provide only valid topic calls, because it won't.
+	* Don't expose a topic call to more than what you need it to. If you are only looking for an item inside an atom, don't look for every item in the world - just look in the atom's contents.
+		* You rarely should call `locate(ref)` without specifying a list! This is a serious exploit vector which can be used to spawn Nar'sie or delete players across the map. Try narrowing it down via a list - such as `locate(ref) in contents`, to find an item in an atom's contents.
 
 * Information that players could use to metagame (that is, to identify round information and/or antagonist type via information that would not be available to them in character) should be kept as administrator only.
 
