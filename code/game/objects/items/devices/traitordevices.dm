@@ -355,11 +355,13 @@ effective or pretty fucking useless.
 	user.balloon_alert(user, "disruptor wave released!")
 	to_chat(user, span_notice("You release a disruptor wave, disabling all nearby radio devices."))
 	for (var/atom/potential_owner in view(7, user))
-		disable_radios_on(potential_owner)
+		disable_radios_on(potential_owner, ignore_syndie = TRUE)
 	COOLDOWN_START(src, jam_cooldown, jam_cooldown_duration)
 
 /obj/item/jammer/attack_self_secondary(mob/user, modifiers)
 	. = ..()
+	if(.)
+		return
 	to_chat(user, span_notice("You [active ? "deactivate" : "activate"] [src]."))
 	user.balloon_alert(user, "[active ? "deactivated" : "activated"] the jammer")
 	active = !active
@@ -368,6 +370,7 @@ effective or pretty fucking useless.
 	else
 		GLOB.active_jammers -= src
 	update_appearance()
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/jammer/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	. = ..()
@@ -385,8 +388,10 @@ effective or pretty fucking useless.
 
 	return ITEM_INTERACT_SUCCESS
 
-/obj/item/jammer/proc/disable_radios_on(atom/target)
+/obj/item/jammer/proc/disable_radios_on(atom/target, ignore_syndie = FALSE)
 	for (var/obj/item/radio/radio in target.get_all_contents() + target)
+		if(ignore_syndie && (radio.special_channels & RADIO_SPECIAL_SYNDIE))
+			continue
 		radio.set_broadcasting(FALSE)
 
 /obj/item/jammer/Destroy()
