@@ -472,7 +472,7 @@
 	icon_state = "heart"
 	inhand_icon_state = "nothing"
 	/// The kind of projectile this version of the kiss blower fires
-	var/kiss_type = /obj/projectile/kiss
+	var/kiss_type = null
 	/// TRUE if the user was aiming anywhere but the mouth when they offer the kiss, if it's offered
 	var/cheek_kiss
 
@@ -480,12 +480,6 @@
 	return ranged_interact_with_atom(interacting_with, user, modifiers)
 
 /obj/item/hand_item/kisser/ranged_interact_with_atom(atom/target, mob/living/user, list/modifiers)
-	if(HAS_TRAIT(user, TRAIT_GARLIC_BREATH))
-		kiss_type = /obj/projectile/kiss/french
-
-	if(HAS_TRAIT(user, TRAIT_CHEF_KISS))
-		kiss_type = /obj/projectile/kiss/chef
-
 	var/obj/projectile/blown_kiss = new kiss_type(get_turf(user))
 	user.visible_message("<b>[user]</b> blows \a [blown_kiss] at [target]!", span_notice("You blow \a [blown_kiss] at [target]!"))
 
@@ -544,6 +538,18 @@
 	desc = "Is that a blot of ink in your pocket or are you just happy to see me?"
 	color = COLOR_ALMOST_BLACK
 	kiss_type = /obj/projectile/kiss/ink
+
+/obj/item/hand_item/kisser/french
+	name = "french kiss"
+	desc = "You really should brush your teeth."
+	color = COLOR_GRAY
+	kiss_type = /obj/projectile/kiss/french
+
+/obj/item/hand_item/kisser/chef
+	name = "chef's kiss"
+	desc = "The secret ingridient is love. And opium, but mostly love."
+	color = COLOR_LIGHT_PINK
+	kiss_type = /obj/projectile/kiss/chef
 
 /obj/projectile/kiss
 	name = "kiss"

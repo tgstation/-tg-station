@@ -256,6 +256,12 @@
 	. = ..()
 	var/kiss_type = /obj/item/hand_item/kisser
 
+	if(HAS_TRAIT(user, TRAIT_GARLIC_BREATH))
+		kiss_type = /obj/item/hand_item/kisser/french
+
+	if(HAS_TRAIT(user, TRAIT_CHEF_KISS))
+		kiss_type = /obj/item/hand_item/kisser/chef
+
 	if(HAS_TRAIT(user, TRAIT_SYNDIE_KISS))
 		kiss_type = /obj/item/hand_item/kisser/syndie
 
@@ -265,17 +271,17 @@
 	var/datum/action/cooldown/ink_spit/ink_action = locate() in user.actions
 	if(ink_action?.IsAvailable())
 		kiss_type = /obj/item/hand_item/kisser/ink
-		ink_action.StartCooldown()
 	else
 		ink_action = null
 
 	var/obj/item/kiss_blower = new kiss_type(user)
 	if(user.put_in_hands(kiss_blower))
 		to_chat(user, span_notice("You ready your kiss-blowing hand."))
-	else
-		qdel(kiss_blower)
-		to_chat(user, span_warning("You're incapable of blowing a kiss in your current state."))
-		ink_action?.ResetCooldown()
+		ink_action?.StartCooldown()
+		return
+
+	qdel(kiss_blower)
+	to_chat(user, span_warning("You're incapable of blowing a kiss in your current state."))
 
 /datum/emote/living/laugh
 	key = "laugh"
