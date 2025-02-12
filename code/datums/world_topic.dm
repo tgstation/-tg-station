@@ -205,6 +205,10 @@
 	.["hub"] = GLOB.hub_visibility
 	.["identifier"] = CONFIG_GET(string/serversqlname)
 
+	var/public_address = CONFIG_GET(string/public_address)
+	if(public_address)
+		.["public_address"] = public_address
+
 
 	var/list/adm = get_admin_counts()
 	var/list/presentmins = adm["present"]
