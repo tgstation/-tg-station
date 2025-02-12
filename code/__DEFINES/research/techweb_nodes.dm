@@ -107,6 +107,7 @@
 #define TECHWEB_NODE_SANITATION "sanitation"
 #define TECHWEB_NODE_SEC_EQUIP "sec_equip"
 #define TECHWEB_NODE_SELECTION "selection"
+#define TECHWEB_NODE_SHUTTLE_ENG "shuttle_eng"
 #define TECHWEB_NODE_SPEC_ENG "spec_eng"
 #define TECHWEB_NODE_STICKY_ADVANCED "sticky_advanced"
 #define TECHWEB_NODE_SURGERY "surgery"

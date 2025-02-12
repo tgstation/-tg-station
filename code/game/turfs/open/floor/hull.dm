@@ -8,7 +8,6 @@
 
 /turf/open/floor/engine/hull/ceiling
 	name = "shuttle ceiling plating"
-	var/old_turf_type
 
 /turf/open/floor/engine/hull/ceiling/Initialize(mapload)
 	. = ..()
@@ -19,10 +18,6 @@
 	new /obj/effect/mapping_error (src) //We're in a normal space tile, meaning we aren't lit correct.
 										///datum/unit_test/mapping_nearstation_test.dm SHOULD fail this case automatically
 										//this is just here so the mapper responsible can easily see where the issues are directly on the map.
-
-/turf/open/floor/engine/hull/ceiling/AfterChange(flags, oldType)
-	. = ..()
-	old_turf_type = oldType
 
 /turf/open/floor/engine/hull/reinforced
 	name = "exterior reinforced hull plating"

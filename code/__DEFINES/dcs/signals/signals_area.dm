@@ -38,3 +38,9 @@
 
 ///From base of area/update_beauty()
 #define COMSIG_AREA_BEAUTY_UPDATED "area_beauty_updated"
+
+/// From base of turf/change_area(area/old_area)
+#define COMSIG_AREA_TURF_ADDED "area_turf_added"
+
+/// From base of turf/change_area(area/new_area)
+#define COMSIG_AREA_TURF_REMOVED "area_turf_removed"

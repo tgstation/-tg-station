@@ -33,7 +33,7 @@
 /datum/component/connect_containers/proc/set_tracked(atom/movable/new_tracked)
 	if(tracked)
 		UnregisterSignal(tracked, list(COMSIG_MOVABLE_MOVED, COMSIG_QDELETING))
-		unregister_signals(tracked.loc)
+		unregister_signals(tracked)
 	tracked = new_tracked
 	if(!tracked)
 		return

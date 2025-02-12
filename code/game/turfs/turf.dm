@@ -244,6 +244,9 @@ GLOBAL_LIST_EMPTY(station_turfs)
 	old_area.turfs_to_uncontain_by_zlevel[z] += src
 	new_area.turfs_by_zlevel[z] += src
 	new_area.contents += src
+	SEND_SIGNAL(src, COMSIG_TURF_AREA_CHANGED, old_area)
+	SEND_SIGNAL(new_area, COMSIG_AREA_TURF_ADDED, src, old_area)
+	SEND_SIGNAL(old_area, COMSIG_AREA_TURF_REMOVED, src, new_area)
 
 	//changes to make after turf has moved
 	on_change_area(old_area, new_area)

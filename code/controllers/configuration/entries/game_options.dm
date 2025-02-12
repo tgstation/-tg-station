@@ -504,3 +504,12 @@
 	integer = FALSE
 	default = 1
 	min_val = 0.05
+
+
+//Custom Shuttles
+//Shuttle size limiter
+/datum/config_entry/number/max_shuttle_count
+	default = 6
+
+/datum/config_entry/number/max_shuttle_size
+	default = 250

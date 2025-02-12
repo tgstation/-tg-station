@@ -43,3 +43,14 @@
 
 ///Called when turf no longer blocks light from passing through
 #define COMSIG_TURF_NO_LONGER_BLOCK_LIGHT "turf_no_longer_block_light"
+
+///from /turf/proc/attempt_lattice_replacement() : (list/post_successful_replacement_callbacks)
+/// `post_successful_replacement_callbacks` is a list that signal handlers can mutate to append `/datum/callback` objects.
+/// They will be called with the new catwalk if it is actually created.
+#define COMSIG_TURF_ATTEMPT_LATTICE_REPLACEMENT "turf_replaced_with_lattice"
+
+///from /turf/proc/change_area() : (area/old_area)
+#define COMSIG_TURF_AREA_CHANGED "turf_area_changed"
+
+///from /proc/create_shuttle() and /obj/docking_port/mobile/proc/add_turf() : (obj/docking_port/mobile/shuttle)
+#define COMSIG_TURF_ADDED_TO_SHUTTLE "turf_added_to_shuttle"

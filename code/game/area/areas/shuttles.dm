@@ -21,10 +21,17 @@
 	. = ..()
 	if(ispath(added_layer, /turf/open/floor/plating))
 		new_baseturfs.Add(/turf/baseturf_skipover/shuttle)
+		. |= CHANGETURF_GENERATE_SHUTTLE_CEILING
 	else if(ispath(new_baseturfs[1], /turf/open/floor/plating))
 		new_baseturfs.Insert(1, /turf/baseturf_skipover/shuttle)
+		. |= CHANGETURF_GENERATE_SHUTTLE_CEILING
 
-////////////////////////////Multi-area shuttles////////////////////////////
+////////////////////////////Custom Shuttles////////////////////////////
+
+/area/shuttle/custom
+	requires_power = TRUE
+
+////////////////////////////Multi-area shuttles//////////////////////////////
 
 ////////////////////////////Syndicate infiltrator////////////////////////////
 
