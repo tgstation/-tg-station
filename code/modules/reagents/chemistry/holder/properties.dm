@@ -32,7 +32,7 @@
 
 		//short cut to break when we have found our one exact type
 		if(type_check == REAGENT_STRICT_TYPE)
-			return total_amount
+			break
 
 	return total_amount
 
