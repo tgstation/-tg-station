@@ -172,6 +172,9 @@
 
 	var/mutable_appearance/overlay = mutable_appearance(icon, "[icon_living]_[overlay_state]")
 	overlay.appearance_flags = RESET_COLOR
+	// the overlay should inherit the atom color only if the dragon is dyed by colorful reagent or something
+	if(!cached_color_filter)
+		overlay.appearance_flags |= KEEP_APART
 	. += overlay
 
 /mob/living/basic/space_dragon/melee_attack(obj/vehicle/sealed/mecha/target, list/modifiers, ignore_cooldown)
