@@ -3,6 +3,7 @@
 	access = NONE
 	group = "Goodies"
 	goody = TRUE
+	crate_type = null
 	discountable = SUPPLY_PACK_STD_DISCOUNTABLE
 
 /datum/supply_pack/goody/clear_pda

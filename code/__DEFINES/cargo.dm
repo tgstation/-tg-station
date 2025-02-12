@@ -13,6 +13,9 @@
 
 #define SUPPLYPOD_X_OFFSET -16
 
+///DO NOT GO ANY LOWER THAN X1.4 the "CARGO_CRATE_VALUE" value if using regular crates, or infinite profit will be possible! This is also unit tested against.
+#define CARGO_MINIMUM_COST CARGO_CRATE_VALUE * 1.4
+
 /// The baseline unit for cargo crates. Adjusting this will change the cost of all in-game shuttles, crate export values, bounty rewards, and all supply pack import values, as they use this as their unit of measurement.
 #define CARGO_CRATE_VALUE 200
 

@@ -2971,7 +2971,7 @@ GLOBAL_LIST_EMPTY(fire_appearances)
 /**
  * Totals the physical cash on the mob and returns the total.
  */
-/mob/living/verb/tally_physical_credits()
+/mob/living/proc/tally_physical_credits()
 	//Here is all the possible non-ID payment methods.
 	var/list/counted_money = list()
 	var/physical_cash_total = 0

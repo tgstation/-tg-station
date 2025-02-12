@@ -113,6 +113,7 @@
 #include "can_see.dm"
 #include "card_mismatch.dm"
 #include "cardboard_cutouts.dm"
+#include "cargo_crate_sanity.dm"
 #include "cargo_dep_order_locations.dm"
 #include "cargo_selling.dm"
 #include "chain_pull_through_space.dm"
