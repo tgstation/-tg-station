@@ -89,6 +89,6 @@
 	if(isnull(chosen_one))
 		return NOT_ENOUGH_PLAYERS
 	santa = new /mob/living/carbon/human(pick(GLOB.blobstart))
-	santa.key = chosen_one.key
+	santa.PossessByPlayer(chosen_one.key)
 	var/datum/antagonist/santa/A = new
 	santa.mind.add_antag_datum(A)

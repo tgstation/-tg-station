@@ -117,7 +117,7 @@ GLOBAL_LIST_INIT(guardian_radial_images, setup_guardian_radial())
 	var/datum/guardian_fluff/guardian_theme = GLOB.guardian_themes[theme]
 	var/mob/living/basic/guardian/summoned_guardian = new guardian_path(user, guardian_theme)
 	summoned_guardian.set_summoner(user, different_person = TRUE)
-	summoned_guardian.key = candidate.key
+	summoned_guardian.PossessByPlayer(candidate.key)
 	user.log_message("has summoned [key_name(summoned_guardian)], a [summoned_guardian.creator_name] holoparasite.", LOG_GAME)
 	summoned_guardian.log_message("was summoned as a [summoned_guardian.creator_name] holoparasite.", LOG_GAME)
 	to_chat(user, guardian_theme.get_fluff_string(summoned_guardian.guardian_type))

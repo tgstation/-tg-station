@@ -149,7 +149,7 @@
 	new_slime.set_combat_mode(TRUE)
 
 	if(isnull(mind))
-		new_slime.key = key
+		new_slime.PossessByPlayer(key)
 	else
 		mind.transfer_to(new_slime)
 

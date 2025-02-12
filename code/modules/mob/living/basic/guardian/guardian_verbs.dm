@@ -180,7 +180,7 @@
 	to_chat(owner, span_boldholoparasite("The personality of <font color=\"[chosen_guardian.guardian_colour]\">[chosen_guardian.theme.name]</font> has been successfully reset."))
 	message_admins("[key_name_admin(chosen_one)] has taken control of ([ADMIN_LOOKUPFLW(chosen_guardian)])")
 	chosen_guardian.ghostize(FALSE)
-	chosen_guardian.key = chosen_one.key
+	chosen_guardian.PossessByPlayer(chosen_one.key)
 	COOLDOWN_START(chosen_guardian, resetting_cooldown, 5 MINUTES)
 	chosen_guardian.guardian_rename() //give it a new color and name, to show it's a new person
 	chosen_guardian.guardian_recolour()

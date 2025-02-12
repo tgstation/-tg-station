@@ -286,7 +286,7 @@ ADMIN_VERB(create_or_modify_area, R_DEBUG, "Create Or Modify Area", "Create of m
 	log_admin("[key_name(usr)] stuffed [frommob.key] into [tomob.name].")
 	BLACKBOX_LOG_ADMIN_VERB("Ghost Drag Control")
 
-	tomob.key = frommob.key
+	tomob.PossessByPlayer(frommob.key)
 	tomob.client?.init_verbs()
 	qdel(frommob)
 

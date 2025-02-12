@@ -371,7 +371,7 @@ Striking a noncultist, however, will tear their flesh."}
 
 	// Get the heretic's new body and antag datum.
 	trapped_entity = trapped_mind?.current
-	trapped_entity.key = trapped_mind?.key
+	trapped_entity.PossessByPlayer(trapped_mind?.key)
 	var/datum/antagonist/heretic/heretic_holder = GET_HERETIC(trapped_entity)
 	if(!heretic_holder)
 		stack_trace("[soul_to_bind] in but not a heretic on the heretic soul blade.")

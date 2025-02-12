@@ -86,9 +86,8 @@ SUBSYSTEM_DEF(blackbox)
 		if (MS.rc_msgs.len)
 			record_feedback("tally", "radio_usage", MS.rc_msgs.len, "request console")
 
-	for(var/player_key in GLOB.player_details)
-		var/datum/player_details/PD = GLOB.player_details[player_key]
-		record_feedback("tally", "client_byond_version", 1, PD.full_byond_version())
+	for(var/datum/persistent_client/PC as anything in GLOB.persistent_clients)
+		record_feedback("tally", "client_byond_version", 1, PC.full_byond_version())
 
 /datum/controller/subsystem/blackbox/Shutdown()
 	sealed = FALSE

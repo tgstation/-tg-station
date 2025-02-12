@@ -194,7 +194,7 @@
 
 	var/mob/living/carbon/human/nukie = new(spawn_loc)
 	chosen_one.client.prefs.safe_transfer_prefs_to(nukie, is_antag = TRUE)
-	nukie.key = chosen_one.key
+	nukie.PossessByPlayer(chosen_one.key)
 
 	var/datum/antagonist/nukeop/antag_datum = new()
 	antag_datum.send_to_spawnpoint = FALSE

@@ -283,7 +283,7 @@ Works together with spawning an observer, noted above.
 	var/mob/dead/observer/ghost = new(src) // Transfer safety to observer spawning proc.
 	SStgui.on_transfer(src, ghost) // Transfer NanoUIs.
 	ghost.can_reenter_corpse = can_reenter_corpse
-	ghost.key = key
+	ghost.PossessByPlayer(key)
 	ghost.client?.init_verbs()
 	if(!can_reenter_corpse)// Disassociates observer mind from the body mind
 		ghost.mind = null
@@ -293,7 +293,7 @@ Works together with spawning an observer, noted above.
 	if(isliving(former_mob))
 		recordable_time = former_mob.timeofdeath
 
-	ghost.client?.player_details.time_of_death = recordable_time
+	ghost.persistent_client?.time_of_death = recordable_time
 	SEND_SIGNAL(src, COMSIG_MOB_GHOSTIZED)
 	return ghost
 
@@ -386,7 +386,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	SStgui.on_transfer(src, mind.current) // Transfer NanoUIs.
 	if(mind.current.stat == DEAD && SSlag_switch.measures[DISABLE_DEAD_KEYLOOP])
 		to_chat(src, span_warning("To leave your body again use the Ghost verb."))
-	mind.current.key = key
+	mind.current.PossessByPlayer(key)
 	mind.current.client.init_verbs()
 	return TRUE
 
@@ -680,7 +680,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		to_chat(src, span_warning("Someone has taken this body while you were choosing!"))
 		return FALSE
 
-	target.key = key
+	target.PossessByPlayer(key)
 	target.faction = list(FACTION_NEUTRAL)
 	return TRUE
 

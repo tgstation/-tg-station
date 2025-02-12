@@ -59,10 +59,9 @@ SUBSYSTEM_DEF(achievements)
 				most_unlocked_achievement = instance
 	qdel(query)
 
-	for(var/i in GLOB.clients)
-		var/client/C = i
-		if(!C.player_details.achievements.initialized)
-			C.player_details.achievements.InitializeData()
+	for(var/client/C in GLOB.clients)
+		if(!C.persistent_client.achievements.initialized)
+			C.persistent_client.achievements.InitializeData()
 
 	return SS_INIT_SUCCESS
 
@@ -71,11 +70,12 @@ SUBSYSTEM_DEF(achievements)
 
 /datum/controller/subsystem/achievements/proc/save_achievements_to_db()
 	var/list/cheevos_to_save = list()
-	for(var/ckey in GLOB.player_details)
-		var/datum/player_details/PD = GLOB.player_details[ckey]
+	for(var/ckey in GLOB.persistent_clients_by_ckey)
+		var/datum/persistent_client/PD = GLOB.persistent_clients_by_ckey[ckey]
 		if(!PD || !PD.achievements)
 			continue
 		cheevos_to_save += PD.achievements.get_changed_data()
+
 	if(!length(cheevos_to_save))
 		return
 	SSdbcore.MassInsert(format_table_name("achievements"), cheevos_to_save, duplicate_key = TRUE)

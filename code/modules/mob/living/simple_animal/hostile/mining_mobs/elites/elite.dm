@@ -206,7 +206,7 @@ While using this makes the system rely on OnFire, it still gives options for tim
 	visible_message(span_boldwarning("[mychild] emerges from [src]!"))
 	playsound(loc,'sound/effects/phasein.ogg', 200, 0, 50, TRUE, TRUE)
 	if(boosted)
-		mychild.key = elitemind.key
+		mychild.PossessByPlayer(elitemind.key)
 		mychild.sentience_act()
 		notify_ghosts(
 			"\A [mychild] has been awakened in \the [get_area(src)]!",

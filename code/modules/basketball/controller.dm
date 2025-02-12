@@ -198,7 +198,7 @@ GLOBAL_VAR(basketball_game)
 				old_mind = player_client.mob.mind, \
 				old_body = player_client.mob.mind.current, \
 			)
-		baller.key = player_key
+		baller.PossessByPlayer(player_key)
 
 		SEND_SOUND(baller, sound('sound/items/whistle/whistle.ogg', volume=30))
 		if(is_player_referee)

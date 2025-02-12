@@ -378,7 +378,7 @@
 	if(chosen_one)
 		to_chat(target, span_boldnotice("You have been noticed by a ghost and it has possessed you!"))
 		var/mob/dead/observer/ghosted_target = target.ghostize(FALSE)
-		target.key = chosen_one.key
+		target.PossessByPlayer(chosen_one.key)
 		trauma.add_friend(ghosted_target)
 	else
 		to_chat(target, span_notice("Your mind has managed to go unnoticed in the spirit world."))

@@ -67,7 +67,7 @@
 		if(mind)
 			mind.transfer_to(specter)
 		else
-			specter.key = key
+			specter.PossessByPlayer(key)
 	return ..()
 
 /mob/living/basic/parrot/poly/get_static_list_of_phrases() // there's only one poly, so there should only be one ongoing list of phrases. i guess

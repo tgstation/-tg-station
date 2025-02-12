@@ -71,7 +71,7 @@
 		var/obj/vent = pick_n_take(vents)
 		var/mob/dead/observer/selected = pick_n_take(candidates)
 		var/mob/living/carbon/alien/larva/new_xeno = new(vent.loc)
-		new_xeno.key = selected.key
+		new_xeno.PossessByPlayer(selected.key)
 		new_xeno.move_into_vent(vent)
 
 		spawncount--

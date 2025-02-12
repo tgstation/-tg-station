@@ -101,7 +101,7 @@
 			aliver.death()
 			aliver.visible_message(span_deadsay("[aliver.name]'s soul is struggling to return!"))
 	else
-		aliver.key = chosen_one.key
+		aliver.PossessByPlayer(chosen_one.ckey)
 		on_successful_revive?.Invoke(aliver)
 		qdel(src)
 

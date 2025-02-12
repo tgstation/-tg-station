@@ -283,9 +283,8 @@
 				M_rname_as_key = null
 
 			var/previous_names_string = ""
-			var/datum/player_details/readable = GLOB.player_details[M.ckey]
-			if(readable)
-				previous_names_string = readable.get_played_names()
+			if(M.persistent_client)
+				previous_names_string = M.persistent_client.get_played_names()
 
 			//output for each mob
 			dat += {"

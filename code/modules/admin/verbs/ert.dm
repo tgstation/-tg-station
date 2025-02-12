@@ -174,7 +174,7 @@
 				var/chosen_outfit = usr.client?.prefs?.read_preference(/datum/preference/choiced/brief_outfit)
 				usr.client.prefs.safe_transfer_prefs_to(admin_officer, is_antag = TRUE)
 				admin_officer.equipOutfit(chosen_outfit)
-				admin_officer.key = usr.key
+				admin_officer.PossessByPlayer(usr.key)
 
 			else
 				to_chat(usr, span_warning("Could not spawn you in as briefing officer as you are not a ghost!"))
@@ -232,7 +232,7 @@
 			else
 				ert_operative = new /mob/living/carbon/human(spawnloc)
 				chosen_candidate.client.prefs.safe_transfer_prefs_to(ert_operative, is_antag = TRUE)
-			ert_operative.key = chosen_candidate.key
+			ert_operative.PossessByPlayer(chosen_candidate.key)
 
 			if(ertemplate.enforce_human || !(ert_operative.dna.species.changesource_flags & ERT_SPAWN))
 				ert_operative.set_species(/datum/species/human)
