@@ -290,6 +290,16 @@ GLOBAL_LIST_EMPTY(vending_machines_to_restock)
 	GLOB.vending_machines_to_restock -= src
 	return ..()
 
+/obj/machinery/vending/vv_edit_var(vname, vval)
+	. = ..()
+	if (vname == NAMEOF(src, all_products_free))
+		if (all_products_free)
+			qdel(GetComponent(/datum/component/payment))
+			GLOB.vending_machines_to_restock -= src
+		else
+			AddComponent(/datum/component/payment, 0, SSeconomy.get_dep_account(payment_department), PAYMENT_VENDING)
+			GLOB.vending_machines_to_restock += src
+
 /obj/machinery/vending/can_speak(allow_mimes)
 	return is_operational && !shut_up && ..()
 
