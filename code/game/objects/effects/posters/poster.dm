@@ -296,4 +296,14 @@ MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/ripped, 32)
 
 MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/random, 32)
 
+/obj/structure/sign/poster/greenscreen
+	name = "greenscreen"
+	desc = "Used to create a convincing illusion of a different background."
+	icon_state = "greenscreen"
+	poster_item_name = "greenscreen"
+	poster_item_desc = "Used to create a convincing illusion of a different background."
+	never_random = TRUE
+
+MAPPING_DIRECTIONAL_HELPERS(/obj/structure/sign/poster/greenscreen, 32)
+
 #undef PLACE_SPEED

@@ -558,31 +558,10 @@ Moving interrupts
 /obj/structure/statue/custom/proc/set_visuals(model_appearance)
 	if(content_ma)
 		QDEL_NULL(content_ma)
-	content_ma = new
-	content_ma.appearance = model_appearance
+	content_ma = copy_appearance_filter_overlays(model_appearance)
 	content_ma.pixel_x = 0
 	content_ma.pixel_y = 0
 	content_ma.alpha = 255
-
-	var/static/list/plane_whitelist = list(FLOAT_PLANE, GAME_PLANE, FLOOR_PLANE)
-
-	/// Ideally we'd have knowledge what we're removing but i'd have to be done on target appearance retrieval
-	var/list/overlays_to_keep = list()
-	for(var/mutable_appearance/special_overlay as anything in content_ma.overlays)
-		var/mutable_appearance/real = new()
-		real.appearance = special_overlay
-		if(PLANE_TO_TRUE(real.plane) in plane_whitelist)
-			overlays_to_keep += real
-	content_ma.overlays = overlays_to_keep
-
-	var/list/underlays_to_keep = list()
-	for(var/mutable_appearance/special_underlay as anything in content_ma.underlays)
-		var/mutable_appearance/real = new()
-		real.appearance = special_underlay
-		if(PLANE_TO_TRUE(real.plane) in plane_whitelist)
-			underlays_to_keep += real
-	content_ma.underlays = underlays_to_keep
-
 	content_ma.appearance_flags &= ~KEEP_APART //Don't want this
 	content_ma.filters = filter(type="color",color=greyscale_with_value_bump,space=FILTER_COLOR_HSV)
 	update_content_planes()

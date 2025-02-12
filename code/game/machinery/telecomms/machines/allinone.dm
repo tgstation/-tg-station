@@ -32,7 +32,7 @@
 		return
 	if(!on || !is_freq_listening(signal))  // has to be on to receive messages
 		return
-	if(!syndicate && !(z in signal.levels) && !(0 in signal.levels))  // has to be syndicate or on the right level
+	if(!syndicate && !(z in signal.levels) && !(RADIO_NO_Z_LEVEL_RESTRICTION in signal.levels))  // has to be syndicate or on the right level
 		return
 
 	// Decompress the signal and mark it done

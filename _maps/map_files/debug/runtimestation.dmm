@@ -645,6 +645,7 @@
 "dW" = (
 /obj/effect/turf_decal/stripes/line,
 /obj/machinery/camera/directional/north,
+/obj/machinery/status_display/evac/directional/north,
 /turf/open/floor/iron,
 /area/station/construction)
 "dX" = (
@@ -1295,6 +1296,7 @@
 	},
 /obj/effect/turf_decal/stripes/line,
 /obj/structure/cable,
+/obj/item/radio/intercom/directional/north,
 /turf/open/floor/iron,
 /area/station/construction)
 "oK" = (
@@ -1555,6 +1557,20 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /turf/open/floor/iron/white/corner,
 /area/station/medical/medbay)
+"vD" = (
+/obj/machinery/greenscreen_camera{
+	dir = 1
+	},
+/turf/open/floor/plating,
+/area/station/construction)
+"vN" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/stripes/line,
+/obj/structure/sign/poster/greenscreen/directional/north,
+/turf/open/floor/greenscreen,
+/area/station/construction)
 "vQ" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
@@ -1716,6 +1732,11 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /turf/open/floor/iron,
 /area/station/commons/storage/primary)
+"Af" = (
+/obj/effect/turf_decal/stripes/line,
+/obj/machinery/status_display/evac/directional/north,
+/turf/open/floor/iron,
+/area/station/construction)
 "Aj" = (
 /obj/structure/cable,
 /turf/open/floor/iron,
@@ -2204,6 +2225,11 @@
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/engineering/gravity_generator)
+"MZ" = (
+/obj/effect/turf_decal/stripes/line,
+/obj/structure/sign/poster/greenscreen/directional/north,
+/turf/open/floor/greenscreen,
+/area/station/construction)
 "Nb" = (
 /obj/machinery/bci_implanter,
 /turf/open/floor/iron/dark,
@@ -2348,6 +2374,14 @@
 	},
 /turf/open/floor/engine,
 /area/station/cargo/miningoffice)
+"QB" = (
+/obj/effect/turf_decal/siding/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/stripes/line,
+/obj/structure/sign/poster/greenscreen/directional/north,
+/turf/open/floor/greenscreen,
+/area/station/construction)
 "QM" = (
 /obj/structure/cable,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -6545,7 +6579,7 @@ Ef
 QV
 bE
 cN
-cY
+vN
 dn
 dn
 dn
@@ -6637,8 +6671,8 @@ Hc
 QV
 hp
 cN
-cY
-dn
+MZ
+vD
 dn
 dn
 dn
@@ -6729,7 +6763,7 @@ Hc
 QV
 bE
 cN
-cY
+QB
 dn
 dn
 dn
@@ -6821,7 +6855,7 @@ Hc
 QV
 bE
 cN
-cY
+Af
 dn
 dn
 dn

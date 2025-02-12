@@ -7839,6 +7839,14 @@
 /obj/structure/cable,
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/aft)
+"cSA" = (
+/obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/machinery/greenscreen_camera{
+	pixel_y = -5
+	},
+/turf/open/floor/wood/large,
+/area/station/command/heads_quarters/captain/private)
 "cSC" = (
 /turf/closed/wall,
 /area/station/commons/vacant_room/office)
@@ -16989,6 +16997,7 @@
 	pixel_y = 5
 	},
 /obj/machinery/light/small/directional/north,
+/obj/machinery/status_display/ai/directional/north,
 /turf/open/floor/iron/dark/small,
 /area/station/command/heads_quarters/captain/private)
 "gaf" = (
@@ -23261,6 +23270,7 @@
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/light/small/directional/south,
+/obj/machinery/firealarm/directional/south,
 /turf/open/floor/wood/large,
 /area/station/command/heads_quarters/captain/private)
 "iaA" = (
@@ -29278,8 +29288,8 @@
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/aft)
 "jOS" = (
-/obj/machinery/vending/cigarette,
 /obj/machinery/light/small/directional/south,
+/obj/structure/sign/poster/greenscreen/directional/south,
 /turf/open/floor/wood/large,
 /area/station/command/heads_quarters/captain/private)
 "jOU" = (
@@ -30480,6 +30490,7 @@
 /obj/effect/turf_decal/tile/neutral{
 	dir = 1
 	},
+/obj/machinery/status_display/evac/directional/north,
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/fore)
 "kiP" = (
@@ -30522,10 +30533,10 @@
 	dir = 4
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
-/obj/machinery/status_display/evac/directional/north,
 /obj/effect/turf_decal/tile/neutral{
 	dir = 1
 	},
+/obj/structure/sign/poster/official/report_crimes/directional/north,
 /turf/open/floor/iron,
 /area/station/hallway/primary/central/fore)
 "kjl" = (
@@ -36517,7 +36528,7 @@
 /area/station/security/checkpoint/customs)
 "mgt" = (
 /obj/machinery/vending/boozeomat,
-/obj/machinery/firealarm/directional/south,
+/obj/machinery/status_display/evac/directional/south,
 /turf/open/floor/wood/large,
 /area/station/command/heads_quarters/captain/private)
 "mgF" = (
@@ -36937,11 +36948,11 @@
 /turf/open/floor/iron/dark/small,
 /area/station/maintenance/central/lesser)
 "mnw" = (
-/obj/effect/spawner/random/vending/colavend,
 /obj/machinery/firealarm/directional/east,
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 4
 	},
+/obj/machinery/vending/cigarette,
 /turf/open/floor/iron/smooth,
 /area/station/hallway/secondary/command)
 "mny" = (
@@ -103648,7 +103659,7 @@ uBQ
 ptt
 iOE
 jcU
-lGK
+cSA
 jOS
 tsF
 vrn

@@ -218,6 +218,10 @@
 	name = "black floor"
 	icon_state = "black"
 
+/turf/open/floor/greenscreen
+	name = "greenscreen"
+	icon_state = "green"
+
 /turf/open/floor/plastic
 	name = "plastic floor"
 	desc = "Cheap, lightweight flooring. Melts easily."
