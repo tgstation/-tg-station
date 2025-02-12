@@ -249,6 +249,10 @@
 	icon_state = "vial"
 
 /obj/item/mayhem/attack_self(mob/user)
+	if(tgui_alert(user, "Breaking the bottle will cause nearby crewmembers to go into a murderous frenzy. Be sure you know what you are doing...","Break the bottle?",list("Break it!","DON'T")) != "Break it!")
+		return
+	if(QDELETED(src) || !user.is_holding(src) || user.incapacitated)
+		return
 	for(var/mob/living/carbon/human/target in range(7,user))
 		target.apply_status_effect(/datum/status_effect/mayhem)
 	to_chat(user, span_notice("You shatter the bottle!"))
