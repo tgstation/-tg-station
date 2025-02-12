@@ -90,7 +90,7 @@ ADMIN_VERB(debug_traitor_objectives, R_DEBUG, "Debug Traitor Objectives", "Verif
 	return data
 
 /datum/traitor_objective_debug/ui_state(mob/user)
-	return GLOB.admin_state
+	return admin_state(R_DEBUG)
 
 /datum/traitor_objective_debug/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
 	. = ..()

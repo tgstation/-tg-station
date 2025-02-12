@@ -24,7 +24,7 @@
 		drip.name = "New Outfit"
 
 /datum/outfit_editor/ui_state(mob/user)
-	return GLOB.admin_state
+	return admin_state(R_NONE)
 
 /datum/outfit_editor/ui_status(mob/user, datum/ui_state/state)
 	if(QDELETED(drip))
