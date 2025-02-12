@@ -28,8 +28,6 @@
 	var/list/datum/weakref/spawned_threat_refs = list()
 	/// Scales loot with extra players
 	var/multiplayer_bonus = 1.1
-	///The radio the console can speak into
-	var/obj/item/radio/radio
 	/// The amount of points in the system, used to purchase maps
 	var/points = 0
 	/// Keeps track of the number of times someone has built a hololadder
@@ -54,11 +52,6 @@
 /obj/machinery/quantum_server/post_machine_initialize()
 	. = ..()
 
-	radio = new(src)
-	radio.keyslot = new /obj/item/encryptionkey/headset_cargo()
-	radio.set_listening(FALSE)
-	radio.recalculateChannels()
-
 	RegisterSignals(src, list(COMSIG_MACHINERY_BROKEN, COMSIG_MACHINERY_POWER_LOST), PROC_REF(on_broken))
 	RegisterSignal(src, COMSIG_QDELETING, PROC_REF(on_delete))
 
@@ -70,7 +63,6 @@
 	spawned_threat_refs.Cut()
 	QDEL_NULL(exit_turfs)
 	QDEL_NULL(generated_domain)
-	QDEL_NULL(radio)
 
 /obj/machinery/quantum_server/examine(mob/user)
 	. = ..()
@@ -178,3 +170,10 @@
 	servo_bonus = servo_rating
 
 	return ..()
+
+/datum/aas_config_entry/bitrunning_QS_ready_announcement
+	name = "Cargo Alert: Bitrunning QS Ready"
+	general_tooltip = "Announces when the quantum server is ready to be used. No variables provided"
+	announcement_lines_map = list(
+		"Message" = "Quantum Server report: Thermal systems within operational parameters. Proceeding to domain configuration."
+	)

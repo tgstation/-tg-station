@@ -17,8 +17,6 @@
 		human remains, classified nuclear weaponry, mail, undelivered departmental order crates, syndicate bombs, \
 		homing beacons, unstable eigenstates, fax machines, or machinery housing any form of artificial intelligence."
 	var/blockade_warning = "Bluespace instability detected. Shuttle movement impossible."
-	/// radio used by the console to send messages on supply channel
-	var/obj/item/radio/headset/radio
 	/// var that tracks message cooldown
 	var/message_cooldown
 	var/list/loaded_coupons
@@ -45,14 +43,6 @@
 	can_send = FALSE
 	can_approve_requests = FALSE
 	requestonly = TRUE
-
-/obj/machinery/computer/cargo/Initialize(mapload)
-	. = ..()
-	radio = new /obj/item/radio/headset/headset_cargo(src)
-
-/obj/machinery/computer/cargo/Destroy()
-	QDEL_NULL(radio)
-	return ..()
 
 /obj/machinery/computer/cargo/attacked_by(obj/item/I, mob/living/user)
 	if(istype(I,/obj/item/trade_chip))
@@ -310,8 +300,7 @@
 	if(self_paid)
 		say("Order processed. The price will be charged to [account.account_holder]'s bank account on delivery.")
 	if(requestonly && message_cooldown < world.time)
-		var/message = amount == 1 ? "A new order has been requested." : "[amount] order has been requested."
-		radio.talk_into(src, message, RADIO_CHANNEL_SUPPLY)
+		aas_config_announce(/datum/aas_config_entry/cargo_orders_announcement, list("AMOUNT" = amount), src, list(RADIO_CHANNEL_SUPPLY), amount == 1 ? "Single Order" : "Multiple Orders")
 		message_cooldown = world.time + 30 SECONDS
 	. = TRUE
 
@@ -486,3 +475,13 @@
 
 	var/datum/signal/status_signal = new(list("command" = command))
 	frequency.post_signal(src, status_signal)
+
+/datum/aas_config_entry/cargo_orders_announcement
+	name = "Cargo Alert: New Orders"
+	announcement_lines_map = list(
+		"Single Order" = "A new order has been requested.",
+		"Multiple Orders" = "%AMOUNT orders have been requested.",
+	)
+	vars_and_tooltips_map = list(
+		"AMOUNT" = "will be replaced wuth number of orders.",
+	)
