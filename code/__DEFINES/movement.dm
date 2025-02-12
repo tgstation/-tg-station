@@ -6,6 +6,10 @@
 
 /// Compensating for time dilation
 GLOBAL_VAR_INIT(glide_size_multiplier, 1.0)
+GLOBAL_VAR_INIT(old_glide_size_multiplier, 1.0)
+GLOBAL_VAR_INIT(use_new_glide, FALSE)
+
+#define GLIDE_SIZE_MULTI (GLOB.use_new_glide ? GLOB.glide_size_multiplier : GLOB.old_glide_size_multiplier)
 
 ///Broken down, here's what this does:
 /// divides the world icon_size by delay divided by ticklag to get the number of pixels something should be moving each tick.
@@ -13,10 +17,10 @@ GLOBAL_VAR_INIT(glide_size_multiplier, 1.0)
 /// Then that's multiplied by the global glide size multiplier. 1.25 by default feels pretty close to spot on. This is just to try to get byond to behave.
 /// The whole result is then clamped to within the range above.
 /// Not very readable but it works
-#define DELAY_TO_GLIDE_SIZE(delay) (clamp(((ICON_SIZE_ALL / max((delay) / world.tick_lag, 1)) * GLOB.glide_size_multiplier), MIN_GLIDE_SIZE, MAX_GLIDE_SIZE))
+#define DELAY_TO_GLIDE_SIZE(delay) (clamp(((ICON_SIZE_ALL / max((delay) / world.tick_lag, 1)) * GLIDE_SIZE_MULTI), MIN_GLIDE_SIZE, MAX_GLIDE_SIZE))
 
 ///Similar to DELAY_TO_GLIDE_SIZE, except without the clamping, and it supports piping in an unrelated scalar
-#define MOVEMENT_ADJUSTED_GLIDE_SIZE(delay, movement_disparity) (ICON_SIZE_ALL / ((delay) / world.tick_lag) * movement_disparity * GLOB.glide_size_multiplier)
+#define MOVEMENT_ADJUSTED_GLIDE_SIZE(delay, movement_disparity) (ICON_SIZE_ALL / ((delay) / world.tick_lag) * movement_disparity * GLIDE_SIZE_MULTI)
 
 //Movement loop priority. Only one loop can run at a time, this dictates that
 // Higher numbers beat lower numbers
