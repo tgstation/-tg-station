@@ -1048,8 +1048,8 @@ Remember to update _globalvars/traits.dm if you're adding/removing/renaming trai
 #define TRAIT_FISH_FED_LUBE "fish_fed_lube"
 #define TRAIT_FISH_WELL_COOKED "fish_well_cooked"
 #define TRAIT_FISH_NO_HUNGER "fish_no_hunger"
-///It comes from a fish case. Relevant for bounties so far.
-#define TRAIT_FISH_FROM_CASE "fish_from_case"
+///Fish with this trait only sell for 1/20 of the original price when exported. For fish cases and trophy mounts.
+#define TRAIT_FISH_LOW_PRICE "fish_from_case"
 ///Fish will also occasionally fire weak tesla zaps
 #define TRAIT_FISH_ELECTROGENESIS "fish_electrogenesis"
 ///Offsprings from this fish will never be of its same type (unless it's self-reproducing).

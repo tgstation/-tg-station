@@ -154,8 +154,13 @@
 	/// power of the tesla zap created by the fish in a bioelectric generator. Scales with size.
 	var/electrogenesis_power = 2 MEGA JOULES
 
-	/// The beauty this fish provides to the aquarium it's inserted in.
+	/// The beauty this fish provides to the aquarium or mount it's inserted in.
 	var/beauty = FISH_BEAUTY_GENERIC
+
+	/// Set and used by trophy mounts, this one is for the name of who mounted it (might actually not be the catcher but w/e)
+	var/catcher_name
+	/// Set and used by trophy mounts, this is for the day of when it was first mounted
+	var/catch_date
 
 	/**
 	 * If you wonder why this isn't being tracked by the edible component instead:
@@ -483,6 +488,9 @@
 
 /obj/item/fish/examine(mob/user)
 	. = ..()
+	if(catcher_name && catch_date)
+		. += span_boldnicegreen("Caught by [catcher_name] on [catch_date].")
+
 	if(HAS_MIND_TRAIT(user, TRAIT_EXAMINE_FISH) || HAS_TRAIT(loc, TRAIT_EXAMINE_FISH))
 		. += span_notice("It's [size] cm long.")
 		. += span_notice("It weighs [weight] g.")
@@ -550,8 +558,11 @@
 	fish_flags |= FISH_FLAG_UPDATING_SIZE_AND_WEIGHT
 	SEND_SIGNAL(src, COMSIG_FISH_UPDATE_SIZE_AND_WEIGHT, new_size, new_weight)
 
+	var/is_mount = istype(loc, /obj/structure/fish_mount) //used to prevent fish from getting butchered inside mounts
+
 	if(size)
-		remove_fillet_type()
+		if(!is_mount)
+			remove_fillet_type()
 		if(size > FISH_SIZE_TWO_HANDS_REQUIRED)
 			qdel(GetComponent(/datum/component/two_handed))
 	else
@@ -590,7 +601,8 @@
 		inhand_icon_state = "[inhand_icon_state]_wielded"
 		AddComponent(/datum/component/two_handed, require_twohands = TRUE)
 
-	add_fillet_type()
+	if(!is_mount)
+		add_fillet_type()
 
 	var/make_edible = !weight
 	if(weight)
@@ -1426,7 +1438,7 @@
 	if(raw_price >= FISH_PRICE_SOFT_CAP_THRESHOLD + 1)
 		var/soft_cap = (raw_price - FISH_PRICE_SOFT_CAP_THRESHOLD)^FISH_PRICE_SOFT_CAP_EXPONENT
 		raw_price = FISH_PRICE_SOFT_CAP_THRESHOLD + soft_cap
-	if(HAS_TRAIT(src, TRAIT_FISH_FROM_CASE)) //Avoid printing money by simply ordering fish and sending it back.
+	if(HAS_TRAIT(src, TRAIT_FISH_LOW_PRICE)) //Avoid printing money by simply ordering fish and sending it back.
 		raw_price *= 0.05
 	return raw_price * elasticity_percent
 
