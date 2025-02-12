@@ -5,7 +5,7 @@
 	route = PATH_SIDE
 
 	tier1 = /datum/heretic_knowledge/medallion
-	tier2 = /datum/heretic_knowledge/curse/paralysis
+	tier2 = /datum/heretic_knowledge/ether
 	tier3 = /datum/heretic_knowledge/summon/ashy
 
 // Sidepaths for knowledge between Ash and Flesh.
@@ -25,44 +25,21 @@
 	research_tree_icon_path = 'icons/obj/antags/eldritch.dmi'
 	research_tree_icon_state = "eye_medalion"
 
-/datum/heretic_knowledge/curse/paralysis
-	name = "Curse of Paralysis"
-	desc = "Allows you to transmute a hatchet and both a left and right leg to cast a curse of immobility on a crew member. \
-		While cursed, the victim will be unable to walk. You can additionally supply an item that a victim has touched \
-		or is covered in the victim's blood to make the curse last longer."
-	gain_text = "The flesh of humanity is weak. Make them bleed. Show them their fragility."
-
+/datum/heretic_knowledge/ether
+	name = "Ether Of The Newborn"
+	desc = "Conjures a single use potion, drinking it will remove any sort of abnormality from your body including diseases, traumas and implants \
+		on top of restoring it to full health, at the cost of losing consciousness for an entire minute."
+	gain_text = "Vision and thought grow hazy as the fumes of this ichor swirl up to meet me. \
+		Through the haze, I find myself staring back in relief, or something grossly resembling my visage. \
+		It is this wretched thing that I consign to my fate, and whose own that I snatch through the haze of dreams. Fools that we are."
 	required_atoms = list(
-		/obj/item/bodypart/leg/left = 1,
-		/obj/item/bodypart/leg/right = 1,
-		/obj/item/hatchet = 1,
+		/obj/item/shard = 1,
+		/obj/effect/decal/cleanable/vomit = 1,
 	)
-	duration = 3 MINUTES
-	duration_modifier = 2
-	curse_color = "#f19a9a"
+	result_atoms = list(/obj/item/ether)
 	cost = 1
-
-	research_tree_icon_path = 'icons/ui_icons/antags/heretic/knowledge.dmi'
-	research_tree_icon_state = "curse_paralysis"
-
-
-/datum/heretic_knowledge/curse/paralysis/curse(mob/living/carbon/human/chosen_mob, boosted = FALSE)
-	if(chosen_mob.usable_legs <= 0) // What're you gonna do, curse someone who already can't walk?
-		to_chat(chosen_mob, span_notice("You feel a slight pain for a moment, but it passes shortly. Odd."))
-		return
-
-	to_chat(chosen_mob, span_danger("You suddenly lose feeling in your leg[chosen_mob.usable_legs == 1 ? "":"s"]!"))
-	chosen_mob.add_traits(list(TRAIT_PARALYSIS_L_LEG, TRAIT_PARALYSIS_R_LEG), type)
-	return ..()
-
-/datum/heretic_knowledge/curse/paralysis/uncurse(mob/living/carbon/human/chosen_mob, boosted = FALSE)
-	if(QDELETED(chosen_mob))
-		return
-
-	chosen_mob.remove_traits(list(TRAIT_PARALYSIS_L_LEG, TRAIT_PARALYSIS_R_LEG), type)
-	if(chosen_mob.usable_legs > 1)
-		to_chat(chosen_mob, span_green("You regain feeling in your leg[chosen_mob.usable_legs == 1 ? "":"s"]!"))
-	return ..()
+	research_tree_icon_path = 'icons/obj/antags/eldritch.dmi'
+	research_tree_icon_state = "poison_flask"
 
 /datum/heretic_knowledge/summon/ashy
 	name = "Ashen Ritual"

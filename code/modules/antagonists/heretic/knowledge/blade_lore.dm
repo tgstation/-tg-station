@@ -12,9 +12,9 @@
 	mark = /datum/heretic_knowledge/mark/blade_mark
 	ritual_of_knowledge = /datum/heretic_knowledge/knowledge_ritual/blade
 	unique_ability = /datum/heretic_knowledge/spell/realignment
-	tier2 = /datum/heretic_knowledge/duel_stance
+	tier2 = /datum/heretic_knowledge/spell/furious_steel
 	blade = /datum/heretic_knowledge/blade_upgrade/blade
-	tier3 =	 /datum/heretic_knowledge/spell/furious_steel
+	tier3 = /datum/heretic_knowledge/spell/wolves_among_sheep
 	ascension = /datum/heretic_knowledge/ultimate/blade_final
 
 /datum/heretic_knowledge/limited_amount/starting/base_blade
@@ -188,70 +188,19 @@
 	action_to_add = /datum/action/cooldown/spell/realignment
 	cost = 1
 
-
-/// The amount of blood flow reduced per level of severity of gained bleeding wounds for Stance of the Torn Champion.
-#define BLOOD_FLOW_PER_SEVEIRTY -1
-
-/datum/heretic_knowledge/duel_stance
-	name = "Stance of the Torn Champion"
-	desc = "Grants resilience to blood loss from wounds and immunity to having your limbs dismembered. \
-		Additionally, when damaged below 50% of your maximum health, \
-		you gain increased resistance to gaining wounds and resistance to batons."
-	gain_text = "In time, it was he who stood alone among the bodies of his former comrades, awash in blood, none of it his own. \
-		He was without rival, equal, or purpose."
+/datum/heretic_knowledge/spell/wolves_among_sheep
+	name = "Wolves Among Sheep"
+	desc = "Alters the fabric of reality, conjuring a magical arena unpassable to outsiders, \
+		all participants are trapped and immune to any form of crowd control or enviromental hazards; \
+		trapped participants are granted a Blade and are unable to leave or jaunt until they score a critical hit. \
+		Critical hits partially restore the Heretic's health."
+	gain_text = "Shadows crawl across the room, casting every chair, table \
+		and console into the looming shape of another traitorous hand. \
+		I have made an enemy of all, and peace will never be known to me \
+		again. I have shattered bonds and severed all alliances. In this truth, \
+		I know now the fragility of comradery. My enemies will be all, divided."
 	cost = 1
-	research_tree_icon_path = 'icons/effects/blood.dmi'
-	research_tree_icon_state = "suitblood"
-	research_tree_icon_dir = SOUTH
-	/// Whether we're currently in duelist stance, gaining certain buffs (low health)
-	var/in_duelist_stance = FALSE
-
-/datum/heretic_knowledge/duel_stance/on_gain(mob/user, datum/antagonist/heretic/our_heretic)
-	ADD_TRAIT(user, TRAIT_NODISMEMBER, type)
-	RegisterSignal(user, COMSIG_ATOM_EXAMINE, PROC_REF(on_examine))
-	RegisterSignal(user, COMSIG_CARBON_GAIN_WOUND, PROC_REF(on_wound_gain))
-	RegisterSignal(user, COMSIG_LIVING_HEALTH_UPDATE, PROC_REF(on_health_update))
-
-	on_health_update(user) // Run this once, so if the knowledge is learned while hurt it activates properly
-
-/datum/heretic_knowledge/duel_stance/on_lose(mob/user, datum/antagonist/heretic/our_heretic)
-	REMOVE_TRAIT(user, TRAIT_NODISMEMBER, type)
-	if(in_duelist_stance)
-		user.remove_traits(list(TRAIT_HARDLY_WOUNDED, TRAIT_BATON_RESISTANCE), type)
-
-	UnregisterSignal(user, list(COMSIG_ATOM_EXAMINE, COMSIG_CARBON_GAIN_WOUND, COMSIG_LIVING_HEALTH_UPDATE))
-
-/datum/heretic_knowledge/duel_stance/proc/on_examine(mob/living/source, mob/user, list/examine_list)
-	SIGNAL_HANDLER
-
-	var/obj/item/held_item = source.get_active_held_item()
-	if(in_duelist_stance)
-		examine_list += span_warning("[source] looks unnaturally poised[held_item?.force >= 15 ? " and ready to strike out":""].")
-
-/datum/heretic_knowledge/duel_stance/proc/on_wound_gain(mob/living/source, datum/wound/gained_wound, obj/item/bodypart/limb)
-	SIGNAL_HANDLER
-
-	if(gained_wound.blood_flow <= 0)
-		return
-
-	gained_wound.adjust_blood_flow(gained_wound.severity * BLOOD_FLOW_PER_SEVEIRTY)
-
-/datum/heretic_knowledge/duel_stance/proc/on_health_update(mob/living/source)
-	SIGNAL_HANDLER
-
-	if(in_duelist_stance && source.health > source.maxHealth * 0.5)
-		source.balloon_alert(source, "exited duelist stance")
-		in_duelist_stance = FALSE
-		source.remove_traits(list(TRAIT_HARDLY_WOUNDED, TRAIT_BATON_RESISTANCE), type)
-		return
-
-	if(!in_duelist_stance && source.health <= source.maxHealth * 0.5)
-		source.balloon_alert(source, "entered duelist stance")
-		in_duelist_stance = TRUE
-		source.add_traits(list(TRAIT_HARDLY_WOUNDED, TRAIT_BATON_RESISTANCE), type)
-		return
-
-#undef BLOOD_FLOW_PER_SEVEIRTY
+	action_to_add = /datum/action/cooldown/spell/wolves_among_sheep
 
 /datum/heretic_knowledge/blade_upgrade/blade
 	name = "Empowered Blades"

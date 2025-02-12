@@ -7,6 +7,7 @@
  * - Summon rituals sleep after completing as they expect a ghost candidate to fill the summon, so they're skipped.
  * - Final rituals results in a bunch of side-effects and vary a good deal so they're skipped explicitly.
  * - Sacrifice ritual (Hunt and Sacrifice) requires sacrifice targets, as well as spawning a new z-level, so it's better not to test.
+ * - Codex Morbus doesn't consume the body that is required in it's ritual.
  */
 /datum/unit_test/heretic_rituals
 
@@ -29,6 +30,7 @@
 		/datum/heretic_knowledge/summon,
 		/datum/heretic_knowledge/ultimate,
 		/datum/heretic_knowledge/hunt_and_sacrifice,
+		/datum/heretic_knowledge/codex_morbus,
 	))
 	var/list/all_ritual_knowledge = list()
 

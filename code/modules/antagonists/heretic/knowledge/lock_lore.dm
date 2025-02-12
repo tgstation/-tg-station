@@ -104,7 +104,6 @@
 	research_tree_icon_path = 'icons/obj/card.dmi'
 	research_tree_icon_state = "card_gold"
 
-
 /datum/heretic_knowledge/mark/lock_mark
 	name = "Mark of Lock"
 	desc = "Your Mansus Grasp now applies the Mark of Lock. \
