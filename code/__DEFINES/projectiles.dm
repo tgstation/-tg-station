@@ -18,7 +18,7 @@
 #define CALIBER_9MM "9mm"
 /// The caliber used by smart SMG ammunition
 #define CALIBER_160SMART ".160 Smart"
-/// The caliber used as the default for ballistic guns. Only not overridden for the [surplus rifle][/obj/item/gun/ballistic/automatic/surplus].
+/// The caliber used as the default for ballistic guns.
 #define CALIBER_10MM "10mm"
 /// The caliber used by most revolver variants.
 #define CALIBER_357 ".357"

@@ -1,11 +1,3 @@
-/obj/item/ammo_box/magazine/sr10mm
-	name = "rifle magazine (10mm)"
-	desc = "A well-worn magazine fitted for the surplus rifle."
-	icon_state = "75"
-	ammo_type = /obj/item/ammo_casing/c10mm
-	max_ammo = 10
-	multiple_sprites = AMMO_BOX_FULL_EMPTY
-
 /obj/item/ammo_box/magazine/m223
 	name = "toploader magazine (.223)"
 	desc = "A top-loading .223 magazine, suitable for the M-90gl carbine."
