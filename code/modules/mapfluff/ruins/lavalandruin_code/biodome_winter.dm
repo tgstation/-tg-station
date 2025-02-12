@@ -18,7 +18,7 @@
 	. = ..()
 	. += span_notice("Throw this at objects or creatures to freeze them, it will boomerang back so be cautious!")
 
-/obj/item/freeze_cube/throw_at(atom/target, range, speed, mob/thrower, spin=1, diagonals_first = 0, datum/callback/callback, gentle, quickstart = TRUE)
+/obj/item/freeze_cube/throw_at(atom/target, range, speed, mob/thrower, spin=1, diagonals_first = 0, datum/callback/callback, gentle, quickstart = TRUE, throw_type_path = /datum/thrownthing)
 	. = ..()
 	if(!.)
 		return
