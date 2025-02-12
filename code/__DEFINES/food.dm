@@ -94,6 +94,9 @@ DEFINE_BITFIELD(foodtypes, list(
 	"Rocks", \
 )
 
+/// Food types assigned to all podperson organs
+#define PODPERSON_ORGAN_FOODTYPES (VEGETABLES | RAW | GORE)
+
 #define DRINK_REVOLTING 1
 #define DRINK_NICE 2
 #define DRINK_GOOD 3

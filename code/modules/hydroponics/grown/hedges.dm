@@ -13,6 +13,7 @@
 	instability = 10
 	growthstages = 3
 	reagents_add = list()
+	mutatelist = list(/obj/item/seeds/organ_tree)
 
 /obj/item/grown/shrub
 	seed = /obj/item/seeds/shrub
@@ -58,3 +59,62 @@
  */
 /obj/structure/hedge/opaque
 	opacity = TRUE
+
+/obj/item/seeds/organ_tree
+	name = "organ tree seed pack"
+	desc = "These seeds grow into an organ tree."
+	icon_state = "seed-organ"
+	species = "organ"
+	plantname = "Organ Tree"
+	product = null // handled snowflake
+	lifespan = 10 // organs rot fast
+	maturation = 5
+	production = 15 // organ growing takes a while
+	endurance = 50
+	yield = 1
+	instability = 2
+	growthstages = 3
+	genes = list(/datum/plant_gene/trait/complex_harvest)
+
+/obj/item/seeds/organ_tree/harvest(mob/user)
+	var/yield_amount = getYield()
+	var/obj/machinery/hydroponics/parent = loc
+	if(yield_amount <= 0)
+		parent.update_tray(user, yield_amount)
+		return list()
+
+	var/list/possible_organs = list(
+		/obj/item/bodypart/arm/left/pod = 2,
+		/obj/item/bodypart/arm/right/pod = 2,
+		/obj/item/bodypart/leg/left/pod = 2,
+		/obj/item/bodypart/leg/right/pod = 2,
+		/obj/item/food/meat/slab/human/mutant/plant = 3,
+		/obj/item/organ/appendix/pod = 1,
+		/obj/item/organ/brain/pod = 1,
+		/obj/item/organ/ears/pod = 1,
+		/obj/item/organ/eyes/pod = 1,
+		/obj/item/organ/heart/pod = 1,
+		/obj/item/organ/liver/pod = 1,
+		/obj/item/organ/lungs/pod = 1,
+		/obj/item/organ/stomach/pod = 1,
+		/obj/item/organ/tongue/pod = 1,
+	)
+
+	var/list/created = list()
+	var/atom/drop_at = user.Adjacent(loc) ? user.drop_location() : drop_location()
+	for(var/i in 1 to yield)
+		var/organ = pick_weight(possible_organs)
+		if(prob(66)) // 66% chance to reduce the chance to 0 so we get less duplicates
+			possible_organs[organ] = 0
+		var/obj/item/spawned = new organ(drop_at)
+		if(isbodypart(spawned))
+			var/obj/item/bodypart/bodypart_spawned = spawned
+			bodypart_spawned.species_color = COLOR_GREEN
+			bodypart_spawned.update_icon_dropped()
+		qdel(spawned.GetComponent(/datum/component/decomposition))
+		qdel(spawned.GetComponent(/datum/component/germ_sensitive))
+		created += spawned
+
+	parent.update_tray(user, yield_amount)
+
+	return created
