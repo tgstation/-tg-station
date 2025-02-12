@@ -920,20 +920,15 @@
 
 /// Re-generates the honorific title. Returns the compiled honorific_title value
 /obj/item/card/id/proc/update_honorific()
-	var/is_mononym = is_mononym(registered_name)
 	switch(honorific_position)
 		if(HONORIFIC_POSITION_FIRST)
 			honorific_title = "[chosen_honorific] [first_name(registered_name)]"
 		if(HONORIFIC_POSITION_LAST)
 			honorific_title = "[chosen_honorific] [last_name(registered_name)]"
 		if(HONORIFIC_POSITION_FIRST_FULL)
-			honorific_title = "[chosen_honorific] [first_name(registered_name)]"
-			if(!is_mononym)
-				honorific_title += " [last_name(registered_name)]"
+			honorific_title = "[chosen_honorific] [registered_name]"
 		if(HONORIFIC_POSITION_LAST_FULL)
-			if(!is_mononym)
-				honorific_title += "[first_name(registered_name)] "
-			honorific_title += "[last_name(registered_name)][chosen_honorific]"
+			honorific_title = "[registered_name][chosen_honorific]"
 	return honorific_title
 
 /// Returns the trim assignment name.
