@@ -49,9 +49,7 @@
 	//otherwise don't do anything because turfs and areas are initialized before movables.
 	if(!mapload)
 		addtimer(CALLBACK(src, PROC_REF(drop_stuff)), 0)
-	var/turf/turf_parent = parent
-	if(!istype(turf_parent.loc, /area/deathmatch)) // there are so so so many explosives in deathmatch and i dont think anyone is going to fish in the *death*match arena
-		parent.AddComponent(/datum/component/fishing_spot, GLOB.preset_fish_sources[/datum/fish_source/chasm])
+	parent.AddComponent(/datum/component/fishing_spot, GLOB.preset_fish_sources[/datum/fish_source/chasm])
 
 /datum/component/chasm/UnregisterFromParent()
 	storage = null
