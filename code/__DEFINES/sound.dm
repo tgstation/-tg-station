@@ -257,6 +257,11 @@ GLOBAL_LIST_INIT(announcer_keys, list(
 #define SFX_BANDAGE_END "bandage_end"
 #define SFX_CLOTH_DROP "cloth_drop"
 #define SFX_CLOTH_PICKUP "cloth_pickup"
+#define SFX_SUTURE_BEGIN "suture_begin"
+#define SFX_SUTURE_CONTINUOUS "suture_continuous"
+#define SFX_SUTURE_END "suture_end"
+#define SFX_SUTURE_PICKUP "suture_pickup"
+#define SFX_SUTURE_DROP "suture_drop"
 
 // Standard is 44.1khz
 #define MIN_EMOTE_PITCH 40000

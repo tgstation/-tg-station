@@ -40,6 +40,8 @@
 	var/heal_begin_sound = null
 	/// The sound this makes when healed successfully with this item
 	var/heal_end_sound = null
+	/// The sound this makes when doing a continuous loop of healing with this item
+	var/heal_continuous_sound = null
 
 /obj/item/stack/medical/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
 	if(!isliving(interacting_with))
@@ -118,8 +120,11 @@
  * * auto_change_zone - Handles the behavior when we finish healing a zone
  * If auto_change_zone is set to TRUE, it picks the next most damaged zone to heal
  * If auto_change_zone is set to FALSE, it'll give the user a chance to pick a new zone to heal
+ * If continuous is set to true, it will play the continuous sound for healing
  */
-/obj/item/stack/medical/proc/try_heal(mob/living/patient, mob/living/user, healed_zone, silent = FALSE, auto_change_zone = TRUE)
+/obj/item/stack/medical/proc/try_heal(mob/living/patient, mob/living/user, healed_zone, silent = FALSE, auto_change_zone = TRUE, var/continuous = FALSE)
+	if(heal_begin_sound && !continuous)
+		playsound(patient, heal_begin_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 	if(patient == user)
 		if(!silent)
 			user.visible_message(
@@ -174,12 +179,14 @@
 			return
 	else
 		CRASH("Stack medical item healing a non-carbon, non-animal mob [patient] ([patient.type])")
-
-	log_combat(user, patient, "healed", src)
 	if(!use(1) || !repeating || amount <= 0)
 		var/atom/alert_loc = QDELETED(src) ? user : src
 		alert_loc.balloon_alert(user, repeating ? "all used up!" : "treated [parse_zone(healed_zone)]")
+		playsound(patient, heal_end_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 		return
+	if(heal_continuous_sound && (continuous || !silent))
+		playsound(patient, heal_continuous_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+	log_combat(user, patient, "healed", src)
 
 	// first, just try looping
 	// 1. we can keep healing the current target
@@ -188,7 +195,7 @@
 	if(try_heal_checks(patient, user, preferred_target, silent = TRUE))
 		if(preferred_target != healed_zone)
 			patient.balloon_alert(user, "[apply_verb] [parse_zone(preferred_target)]...")
-		try_heal(patient, user, preferred_target, TRUE, auto_change_zone)
+		try_heal(patient, user, preferred_target, TRUE, auto_change_zone, TRUE)
 		return
 
 	// second, handle what happens otherwise
@@ -201,6 +208,8 @@
 	else
 		// behavior 2: assess injury, giving the user time to manually pick another zone
 		try_heal_manual_target(patient, user)
+	if(heal_end_sound)
+		playsound(patient, heal_end_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 
 /obj/item/stack/medical/proc/try_heal_auto_change_zone(mob/living/carbon/patient, mob/living/user, preferred_target, last_zone)
 	PRIVATE_PROC(TRUE)
@@ -218,7 +227,7 @@
 	var/next_picked = (preferred_target in other_affected_limbs) ? preferred_target : other_affected_limbs[1]
 	if(next_picked != last_zone)
 		patient.balloon_alert(user, "[apply_verb] [parse_zone(next_picked)]...")
-	try_heal(patient, user, next_picked, silent = TRUE, auto_change_zone = TRUE)
+	try_heal(patient, user, next_picked, silent = TRUE, auto_change_zone = TRUE, continuous = TRUE)
 
 /obj/item/stack/medical/proc/try_heal_manual_target(mob/living/carbon/patient, mob/living/user)
 	PRIVATE_PROC(TRUE)
@@ -230,7 +239,7 @@
 	if(!try_heal_checks(patient, user, new_zone))
 		return
 	patient.balloon_alert(user, "[apply_verb] [parse_zone(new_zone)]...")
-	try_heal(patient, user, new_zone, silent = TRUE, auto_change_zone = FALSE)
+	try_heal(patient, user, new_zone, silent = TRUE, auto_change_zone = FALSE, continuous = TRUE)
 
 /// Checks if the passed patient can be healed by the passed user
 /obj/item/stack/medical/proc/can_heal(mob/living/patient, mob/living/user, healed_zone, silent = FALSE)
@@ -452,7 +461,7 @@
 				span_warning("You begin wrapping the wounds on [user == patient ? "your" : "[patient]'s"] [limb.plaintext_zone] with [src]..."),
 				visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 			)
-	playsound(src, heal_begin_sound, 30, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+	playsound(src, heal_begin_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 
 	if(!do_after(user, treatment_delay, target = patient))
 		return
@@ -465,7 +474,7 @@
 			visible_message_flags = ALWAYS_SHOW_SELF_MESSAGE,
 		)
 		if(heal_end_sound)
-			playsound(patient, heal_end_sound, 30, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+			playsound(patient, heal_end_sound, 75, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
 	limb.apply_gauze(src)
 
 /obj/item/stack/medical/gauze/twelve
@@ -529,6 +538,11 @@
 	grind_results = list(/datum/reagent/medicine/spaceacillin = 2)
 	merge_type = /obj/item/stack/medical/suture
 	apply_verb = "suturing"
+	drop_sound = SFX_SUTURE_DROP
+	pickup_sound = SFX_SUTURE_PICKUP
+	heal_begin_sound = SFX_SUTURE_BEGIN
+	heal_continuous_sound = SFX_SUTURE_CONTINUOUS
+	heal_end_sound = SFX_SUTURE_END
 
 /obj/item/stack/medical/suture/emergency
 	name = "emergency suture"
