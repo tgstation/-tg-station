@@ -5148,9 +5148,9 @@
 /obj/item/reagent_containers/spray/cleaner{
 	pixel_x = 2
 	},
-/obj/item/radio/headset/headset_medsci{
-	pixel_x = -7;
-	pixel_y = 6
+/obj/item/flesh_shears{
+	pixel_y = 5;
+	pixel_x = -10
 	},
 /turf/open/floor/iron/dark,
 /area/station/science/genetics)

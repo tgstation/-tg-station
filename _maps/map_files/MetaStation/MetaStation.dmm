@@ -64308,6 +64308,9 @@
 	pixel_x = -9
 	},
 /obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/item/flesh_shears{
+	pixel_x = 15
+	},
 /turf/open/floor/iron/dark,
 /area/station/science/genetics)
 "wBs" = (

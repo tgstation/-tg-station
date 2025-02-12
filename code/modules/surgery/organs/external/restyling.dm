@@ -81,3 +81,47 @@
 		)
 
 		simple_change_sprite(restyles[new_style]) //turn name to type and pass it on
+
+/// Allows for the restyling of visual organs to other styles within the same pool (if not forbidden)
+/obj/item/flesh_shears
+	name = "flesh reshaper"
+	desc = "Uses shearing action and growth inducers to reshape your coworkers external features!"
+
+	icon_state = "flesh_shaper"
+	icon = 'icons/obj/medical/surgery_tools.dmi'
+	icon_angle = 90
+
+	inhand_icon_state = "flesh_shaper"
+	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
+	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
+
+	force = 5
+	w_class = WEIGHT_CLASS_SMALL
+	throwforce = 10
+
+	attack_verb_continuous = list("shears", "snips")
+	attack_verb_simple = list("shear", "snip")
+	sharpness = SHARP_EDGED
+
+	obj_flags = CONDUCTS_ELECTRICITY
+
+	custom_materials = list(/datum/material/iron=SHEET_MATERIAL_AMOUNT*1, /datum/material/silver=SHEET_MATERIAL_AMOUNT*1)
+
+	/// How long does it take, after selecting a new style, for the new style to be applied?
+	var/restyle_speed = 2 SECONDS
+
+///Catch right clicks so we can stylize!
+/obj/item/flesh_shears/interact_with_atom(atom/interacting_with, mob/living/user, list/modifiers)
+	if(user.combat_mode)
+		return NONE
+
+	restyle(interacting_with, user)
+	return ITEM_INTERACT_SUCCESS
+
+///Send a signal to whatever we clicked and start RESTYLING
+/obj/item/flesh_shears/proc/restyle(atom/target, mob/living/user)
+	SEND_SIGNAL(target, COMSIG_ATOM_RESTYLE, user, target, user.zone_selected, EXTERNAL_RESTYLE_ALL, restyle_speed)
+
+/obj/item/flesh_shears/medical
+	icon_state = "flesh_shaper_med"
+	inhand_icon_state = "flesh_shaper_med"

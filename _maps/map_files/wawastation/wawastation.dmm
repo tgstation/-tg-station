@@ -19270,6 +19270,10 @@
 	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/item/flesh_shears{
+	pixel_y = 10;
+	pixel_x = -5
+	},
 /turf/open/floor/iron/white/textured,
 /area/station/science/genetics)
 "gOG" = (

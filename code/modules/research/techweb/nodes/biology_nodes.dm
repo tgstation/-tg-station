@@ -58,6 +58,8 @@
 		"dna_disk",
 		"dnainfuser",
 		"mod_dna_lock",
+		"fleshreshaper",
+		"fleshreshapermed",
 	)
 	research_costs = list(TECHWEB_POINT_TYPE_GENERIC = TECHWEB_TIER_4_POINTS)
 	discount_experiments = list(/datum/experiment/scanning/people/mutant = TECHWEB_TIER_4_POINTS)

@@ -10,6 +10,7 @@
 	dna_block = DNA_MOTH_WINGS_BLOCK
 
 	bodypart_overlay = /datum/bodypart_overlay/mutant/wings/moth
+	restyle_flags = EXTERNAL_RESTYLE_FLESH
 
 	///Are we burned?
 	var/burnt = FALSE

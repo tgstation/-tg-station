@@ -9380,6 +9380,9 @@
 /obj/machinery/firealarm/directional/north,
 /obj/machinery/camera/autoname/directional/north,
 /obj/structure/cable,
+/obj/item/flesh_shears{
+	pixel_x = -5
+	},
 /turf/open/floor/iron/dark,
 /area/station/science/genetics)
 "dtO" = (

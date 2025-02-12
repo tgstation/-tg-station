@@ -33068,6 +33068,7 @@
 	dir = 4
 	},
 /obj/machinery/light/directional/east,
+/obj/item/flesh_shears,
 /turf/open/floor/iron/dark,
 /area/station/science/genetics)
 "ijm" = (

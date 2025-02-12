@@ -830,12 +830,13 @@ GLOBAL_LIST_INIT(layers_to_offset, list(
 #define ALL_EXTERNAL_OVERLAYS EXTERNAL_FRONT | EXTERNAL_ADJACENT | EXTERNAL_BEHIND
 
 // Bitflags for external organs restylability
+#define EXTERNAL_RESTYLE_ALL ALL
 /// This organ allows restyle through plant restyling (like secateurs)
-#define EXTERNAL_RESTYLE_PLANT (1 << 1)
+#define EXTERNAL_RESTYLE_PLANT (1 << 0)
 /// This organ allows restyling with flesh restyling stuff (surgery or something idk)
-#define EXTERNAL_RESTYLE_FLESH (1 << 2)
+#define EXTERNAL_RESTYLE_FLESH (1 << 1)
 /// This organ allows restyling with enamel restyling (like a fucking file or something?). It's for horns and shit
-#define EXTERNAL_RESTYLE_ENAMEL (1 << 3)
+#define EXTERNAL_RESTYLE_ENAMEL (1 << 2)
 
 //Mob Overlay Index Shortcuts for alternate_worn_layer, layers
 //Because I *KNOW* somebody will think layer+1 means "above"

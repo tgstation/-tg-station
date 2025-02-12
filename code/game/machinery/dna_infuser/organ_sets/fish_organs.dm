@@ -172,6 +172,7 @@
 	dna_block = DNA_FISH_TAIL_BLOCK
 	wag_flags = NONE
 	organ_traits = list(TRAIT_FLOPPING)
+	restyle_flags = EXTERNAL_RESTYLE_FLESH
 
 	// Fishlike reagents, you could serve it raw like fish
 	food_reagents = list(

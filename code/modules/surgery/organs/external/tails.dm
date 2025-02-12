@@ -157,6 +157,7 @@
 	preference = "feature_human_tail"
 
 	bodypart_overlay = /datum/bodypart_overlay/mutant/tail/cat
+	restyle_flags = EXTERNAL_RESTYLE_FLESH
 
 	wag_flags = WAG_ABLE
 

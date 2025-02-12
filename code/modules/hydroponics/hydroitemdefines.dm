@@ -230,11 +230,12 @@
 	hitsound = 'sound/items/weapons/bladeslice.ogg'
 
 ///Catch right clicks so we can stylize!
-/obj/item/secateurs/pre_attack_secondary(atom/target, mob/living/user, params)
+/obj/item/secateurs/interact_with_atom_secondary(atom/interacting_with, mob/living/user, list/modifiers)
 	if(user.combat_mode)
-		return ..()
-	restyle(target, user)
-	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
+		return NONE
+
+	restyle(interacting_with, user)
+	return ITEM_INTERACT_SUCCESS
 
 ///Send a signal to whatever we clicked and ask them if they wanna be PLANT RESTYLED YEAAAAAAAH
 /obj/item/secateurs/proc/restyle(atom/target, mob/living/user)

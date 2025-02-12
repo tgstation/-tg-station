@@ -63696,6 +63696,7 @@
 	name = "Genetics Requests Console";
 	department = "Genetics"
 	},
+/obj/item/flesh_shears,
 /turf/open/floor/iron/white,
 /area/station/science/genetics)
 "vpt" = (
