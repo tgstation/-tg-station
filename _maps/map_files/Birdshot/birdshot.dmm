@@ -2742,6 +2742,7 @@
 	name = "Medical Supplies";
 	req_access = list("medical")
 	},
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/white/small,
 /area/station/medical/storage)
 "bbB" = (
@@ -13158,6 +13159,7 @@
 /obj/effect/turf_decal/delivery,
 /obj/machinery/door/firedoor,
 /obj/effect/mapping_helpers/airlock/access/all/command/eva,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/smooth_half{
 	dir = 1
 	},
@@ -46254,6 +46256,7 @@
 	req_access = list("medical")
 	},
 /obj/machinery/atmospherics/components/unary/vent_scrubber/on/layer2,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/white/small,
 /area/station/medical/storage)
 "pDD" = (

@@ -9180,10 +9180,10 @@
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/machinery/door/window/right/directional/north{
 	name = "First-Aid Supplies";
-	red_alert_access = 1;
 	req_access = list("medical")
 	},
 /obj/effect/turf_decal/tile/blue/full,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/medical/storage)
 "cwH" = (
@@ -12242,6 +12242,7 @@
 	},
 /obj/effect/turf_decal/siding/dark_blue,
 /obj/structure/cable,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/dark/textured,
 /area/station/ai_monitored/command/storage/eva)
 "dpl" = (
@@ -21631,7 +21632,6 @@
 /obj/structure/window/reinforced/spawner/directional/east,
 /obj/machinery/door/window/right/directional/south{
 	name = "First-Aid Supplies";
-	red_alert_access = 1;
 	req_access = list("medical")
 	},
 /obj/structure/table/glass,
@@ -30377,11 +30377,11 @@
 	},
 /obj/machinery/door/window/left/directional/east{
 	name = "First-Aid Supplies";
-	red_alert_access = 1;
 	req_access = list("medical")
 	},
 /obj/effect/turf_decal/tile/blue/full,
 /obj/machinery/light/cold/directional/west,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/dark/smooth_large,
 /area/station/medical/storage)
 "iIe" = (
@@ -31888,6 +31888,7 @@
 	name = "Emergency EVA Storage"
 	},
 /obj/effect/mapping_helpers/airlock/access/all/command/eva,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/textured,
 /area/station/hallway/secondary/exit/departure_lounge)
 "jbU" = (
