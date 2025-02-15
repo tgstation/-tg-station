@@ -165,6 +165,25 @@
 	if(IsAdminAdvancedProcCall())
 		return
 
+	var/list/separate_levels = splittext(filename, "/")
+	// allows for inheriting our folder from the thing that included us
+	var/subfolder = ""
+	// do we have an actual directory or is this just one file
+	if(length(separate_levels) > 1)
+		var/actual_filename = separate_levels[length(separate_levels)]
+		// We need to sanitize out .. to ensure filename_to_test doesn't accidentially an infinte loop here
+		// Need filename in absolute form
+		var/list/parsed_folder_bits = list()
+		// look at just the relative directory referenced
+		for(var/entry in separate_levels - actual_filename)
+			if(entry == ".." && length(parsed_folder_bits))
+				parsed_folder_bits.Cut(length(parsed_folder_bits), 0)
+			else
+				parsed_folder_bits += entry
+		if(length(parsed_folder_bits))
+			subfolder = "[parsed_folder_bits.Join("/")]/"
+		filename = "[subfolder][actual_filename]"
+
 	var/filename_to_test = world.system_type == MS_WINDOWS ? LOWER_TEXT(filename) : filename
 	if(filename_to_test in stack)
 		log_config_error("Warning: Config recursion detected ([english_list(stack)]), breaking!")
@@ -204,7 +223,7 @@
 			if(!value)
 				log_config_error("Warning: Invalid $include directive: [value]")
 			else
-				LoadEntries(value, stack)
+				LoadEntries("[subfolder][value]", stack)
 				++.
 			continue
 
