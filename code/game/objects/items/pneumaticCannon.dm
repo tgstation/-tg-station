@@ -338,6 +338,29 @@
 	maxWeightClass = 6 //2 pies
 	charge_ticks = 2 //4 second/pie
 
+/obj/item/pneumatic_cannon/burger
+	name = "Burger Blaster"
+	desc = "I wonder what's for dinner?"
+	force = 10
+	icon_state = "piecannon"
+	gasPerThrow = 0
+	checktank = FALSE
+	range_multiplier = 3
+	fire_mode = PCANNON_FIFO
+	throw_amount = 1
+	maxWeightClass = 150 //50 pies. :^)
+	needs_air = FALSE
+	clumsyCheck = FALSE
+	selfcharge = FALSE
+	charge_type = /obj/item/food/burger
+	var/static/list/burger_typecache = typecacheof(/obj/item/food/burger)
+
+/obj/item/pneumatic_cannon/burger/Initialize(mapload)
+	. = ..()
+	allowed_typecache = burger_typecache
+
+
+
 #undef PCANNON_FIREALL
 #undef PCANNON_FILO
 #undef PCANNON_FIFO

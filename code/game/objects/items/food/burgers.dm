@@ -689,3 +689,9 @@
 	foodtypes = GRAIN | MEAT | VEGETABLES
 	venue_value = FOOD_PRICE_NORMAL
 	crafting_complexity = FOOD_COMPLEXITY_3
+
+//allows you to feed people burgers by throwing them at their head.
+
+
+
+

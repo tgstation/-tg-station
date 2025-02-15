@@ -80,6 +80,7 @@ Behavior that's still missing from this component that original food items had t
 	RegisterSignal(parent, COMSIG_OOZE_EAT_ATOM, PROC_REF(on_ooze_eat))
 	RegisterSignal(parent, COMSIG_FOOD_INGREDIENT_ADDED, PROC_REF(edible_ingredient_added))
 	RegisterSignal(parent, COMSIG_ATOM_CREATEDBY_PROCESSING, PROC_REF(OnProcessed))
+	RegisterSignal(parent, COMSIG_MOVABLE_IMPACT_ZONE , PROC_REF(ThrownBite))
 
 	if(isturf(parent))
 		RegisterSignal(parent, COMSIG_ATOM_ENTERED, PROC_REF(on_entered))
@@ -461,6 +462,29 @@ Behavior that's still missing from this component that original food items had t
 #undef EAT_TIME_FORCE_FEED
 #undef EAT_TIME_VORACIOUS_MULT
 #undef EAT_TIME_VORACIOUS_FULL_MULT
+
+/datum/component/edible/proc/ThrownBite(obj/item/food, mob/living/carbon/victim, hit_zone, blocked, datum/thrownthing/throwingdatum)
+
+	var/atom/owner = food
+	///if the thrown object's target zone isn't the head
+	//if(hit_zone != BODY_ZONE_HEAD)
+		//return
+
+	if(victim.is_mouth_covered(ITEM_SLOT_HEAD))
+		victim.visible_message(span_danger("[src] smashes against [victim]'s [victim.head]!"), \
+		span_userdanger("[src] smashes against your [victim.head]!"))
+		return
+
+	if((ishuman(victim)))
+		var/mob/living/carbon/M = victim
+		TakeBite(victim,null)
+		TakeBite(victim,null)
+		TakeBite(victim,null)
+		TakeBite(victim,null)
+		TakeBite(victim,null)
+		victim.visible_message(span_danger("[M] is hit in the face by flying food, and eats it!"))
+		qdel(owner)
+
 
 ///This function lets the eater take a bite and transfers the reagents to the eater.
 /datum/component/edible/proc/TakeBite(mob/living/eater, mob/living/feeder)
