@@ -19,10 +19,10 @@ GLOBAL_LIST_EMPTY(order_console_products)
 	COOLDOWN_DECLARE(order_cooldown)
 	///Cooldown time between uses, express console will have extra time depending on express_cost_multiplier.
 	var/cooldown_time = 60 SECONDS
-	///The radio the console can speak into
-	var/obj/item/radio/radio
 	///The channel we will attempt to speak into through our radio.
 	var/radio_channel = RADIO_CHANNEL_SUPPLY
+	///What line we should announce on ordering_groceries
+	var/announcement_line
 
 	///The kind of cash does the console use.
 	var/credit_type = CREDIT_TYPE_CREDIT
@@ -41,11 +41,6 @@ GLOBAL_LIST_EMPTY(order_console_products)
 
 /obj/machinery/computer/order_console/Initialize(mapload)
 	. = ..()
-	radio = new(src)
-	radio.set_frequency(FREQ_SUPPLY)
-	radio.subspace_transmission = TRUE
-	radio.canhear_range = 0
-	radio.recalculateChannels()
 
 	if(GLOB.order_console_products.len)
 		return
@@ -53,10 +48,6 @@ GLOBAL_LIST_EMPTY(order_console_products)
 		if(!initial(path.purchase_path))
 			continue
 		GLOB.order_console_products += new path
-
-/obj/machinery/computer/order_console/Destroy()
-	QDEL_NULL(radio)
-	return ..()
 
 /obj/machinery/computer/order_console/proc/get_total_cost()
 	var/cost = 0
@@ -242,5 +233,22 @@ GLOBAL_LIST_EMPTY(order_console_products)
  */
 /obj/machinery/computer/order_console/proc/order_groceries(mob/living/purchaser, obj/item/card/id/card, list/groceries)
 	return
+
+/datum/aas_config_entry/order_console
+	name = "Local Ordering Console Announcements"
+	announcement_lines_map = list()
+	general_tooltip = "Used to make announces, when consoles listed here placing new order"
+
+/datum/aas_config_entry/order_console/New()
+	. = ..()
+	for(var/obj/machinery/computer/order_console/subconsole as anything in subtypesof(/obj/machinery/computer/order_console))
+		if(subconsole.blackbox_key)
+			announcement_lines_map[capitalize(subconsole.blackbox_key)] = subconsole.announcement_line
+
+/datum/aas_config_entry/order_console/compile_announce(list/variables_map, announcement_line)
+	if (!announcement_lines_map.len)
+		announcement_lines_map["Error"] = "Unknown Error happened, while we tried to procceed an order, please report this to Nanotrasen."
+	. = ..()
+
 
 #undef CREDIT_TYPE_CREDIT

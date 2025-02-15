@@ -24,6 +24,7 @@
 		CATEGORY_PKA,
 	)
 	blackbox_key = "mining"
+	announcement_line = "A shaft miner has ordered equipment which will arrive on the cargo shuttle! Please make sure it gets to them as soon as possible!"
 
 /obj/machinery/computer/order_console/mining/subtract_points(final_cost, obj/item/card/id/card)
 	if(final_cost <= card.registered_account.mining_points)
@@ -56,7 +57,7 @@
 		can_be_cancelled = FALSE,
 	)
 	say("Thank you for your purchase! It will arrive on the next cargo shuttle!")
-	radio.talk_into(src, "A shaft miner has ordered equipment which will arrive on the cargo shuttle! Please make sure it gets to them as soon as possible!", radio_channel)
+	aas_config_announce(/datum/aas_config_entry/order_console, list(), src, list(radio_channel), capitalize(blackbox_key))
 	SSshuttle.shopping_list += new_order
 
 /obj/machinery/computer/order_console/mining/retrieve_points(obj/item/card/id/id_card)

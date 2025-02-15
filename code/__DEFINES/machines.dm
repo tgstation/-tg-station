@@ -139,15 +139,6 @@
 /// Max length of a status line in the status display
 #define MAX_STATUS_LINE_LENGTH 40
 
-///Define for automated system arrival announcement
-#define AUTO_ANNOUNCE_ARRIVAL "ARRIVAL"
-///Define for automated system announcement when a head of staff arrives
-#define AUTO_ANNOUNCE_NEWHEAD "NEWHEAD"
-///Define for automated system announcement for when the arrival shuttle is broken
-#define AUTO_ANNOUNCE_ARRIVALS_BROKEN "ARRIVALS_BROKEN"
-///Define for automated system announcement for researched nodes
-#define AUTO_ANNOUNCE_NODE "NODE"
-
 /// Blank Status Display
 #define SD_BLANK 0
 /// Shows the emergency shuttle timer

@@ -41,9 +41,9 @@ SUBSYSTEM_DEF(modular_computers)
 ///Generate new coupon codes that can be redeemed with the Coupon Master App
 /datum/controller/subsystem/modular_computers/proc/announce_coupon()
 	//If there's no way to announce the coupon, we may as well skip it.
-	if(!length(GLOB.announcement_systems))
+	var/obj/machinery/announcement_system/announcement_system = get_announcement_system()
+	if(!announcement_system)
 		return
-	var/obj/machinery/announcement_system/announcement_system = pick(GLOB.announcement_systems)
 
 	var/static/list/discounts = list("0.10" = 7, "0.15" = 16, "0.20" = 20, "0.25" = 16, "0.50" = 8, "0.66" = 1)
 	var/static/list/flash_discounts = list("0.30" = 3, "0.40" = 8, "0.50" = 8, "0.66" = 2, "0.75" = 1)

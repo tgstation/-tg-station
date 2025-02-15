@@ -10,8 +10,6 @@
 	density = FALSE
 	/// Connected stacking machine
 	var/obj/machinery/mineral/stacking_machine/laborstacker/stacking_machine
-	/// Needed to send messages to sec radio
-	var/obj/item/radio/security_radio
 	/// Whether the claim console initiated the launch.
 	var/initiated_launch = FALSE
 	/// Cooldown for console says.
@@ -19,8 +17,6 @@
 
 /obj/machinery/mineral/labor_claim_console/Initialize(mapload)
 	. = ..()
-	security_radio = new /obj/item/radio(src)
-	security_radio.set_listening(FALSE)
 	locate_stacking_machine()
 	if(!SSshuttle.initialized)
 		RegisterSignal(SSshuttle, COMSIG_SUBSYSTEM_POST_INITIALIZE, PROC_REF(register_shuttle_signal))
@@ -37,7 +33,6 @@
 	UnregisterSignal(SSshuttle, COMSIG_SUBSYSTEM_POST_INITIALIZE)
 
 /obj/machinery/mineral/labor_claim_console/Destroy()
-	QDEL_NULL(security_radio)
 	if(stacking_machine)
 		stacking_machine.labor_console = null
 		stacking_machine = null
@@ -130,11 +125,10 @@
 						COOLDOWN_START(src, say_cooldown, 2 SECONDS)
 				else
 					if(!(obj_flags & EMAGGED))
-						security_radio.set_frequency(FREQ_SECURITY)
 						var/datum/record/crew/target = find_record(user_mob.real_name)
 						target?.wanted_status = WANTED_PAROLE
 
-						security_radio.talk_into(src, "[user_mob.name] returned to the station. Minerals and Prisoner ID card ready for retrieval.", FREQ_SECURITY)
+						aas_config_announce(/datum/aas_config_entry/security_labor_stacker, list("PERSON" = user_mob.real_name), src, list(RADIO_CHANNEL_SECURITY))
 					user_mob.log_message("has completed their labor points goal and is now sending the gulag shuttle back to the station.", LOG_GAME)
 					say("Labor sentence finished, shuttle returning.")
 					initiated_launch = TRUE
@@ -226,5 +220,14 @@
 	say("ID: [prisoner_id.registered_name].")
 	say("Points Collected: [prisoner_id.points] / [prisoner_id.goal].")
 	say("Collect points by bringing smelted minerals to the Labor Shuttle stacking machine. Reach your quota to earn your release.")
+
+/datum/aas_config_entry/security_labor_stacker
+	name = "Security Alert: Labor Camp Release"
+	announcement_lines_map = list(
+		"Message" = "%PERSON returned to the station. Minerals and Prisoner ID card ready for retrieval."
+	)
+	vars_and_tooltips_map = list(
+		"PERSON" = "will be replaced with the name of the prisoner."
+	)
 
 #undef SHEET_POINT_VALUE

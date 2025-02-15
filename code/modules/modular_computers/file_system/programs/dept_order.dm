@@ -32,18 +32,16 @@ GLOBAL_VAR(department_cd_override)
 	)
 	/// Reference to the order we've made UNTIL it gets sent on the supply shuttle. this is so heads can cancel it
 	VAR_PRIVATE/datum/supply_order/department_order
-	/// Our radio object we use to talk to our department.
-	VAR_PRIVATE/obj/item/radio/radio
 	/// The radio channel we will speak into by default.
 	VAR_PRIVATE/radio_channel
-	/// Maps what department gets what encryption key
+	/// Maps what department should report to what radio channel
 	/// I could've put this on the job department datum but it felt unnecessary
-	VAR_PRIVATE/static/list/dept_to_radio = list(
-		/datum/job_department/engineering = /obj/item/encryptionkey/headset_eng,
-		/datum/job_department/medical = /obj/item/encryptionkey/headset_med,
-		/datum/job_department/science = /obj/item/encryptionkey/headset_sci,
-		/datum/job_department/security = /obj/item/encryptionkey/headset_sec,
-		/datum/job_department/service = /obj/item/encryptionkey/headset_service,
+	VAR_PRIVATE/static/list/dept_to_radio_channel = list(
+		/datum/job_department/engineering = RADIO_CHANNEL_ENGINEERING,
+		/datum/job_department/medical = RADIO_CHANNEL_MEDICAL,
+		/datum/job_department/science = RADIO_CHANNEL_SCIENCE,
+		/datum/job_department/security = RADIO_CHANNEL_SECURITY,
+		/datum/job_department/service = RADIO_CHANNEL_SERVICE,
 	)
 
 /// Sets the passed department type as the active department for this computer file.
@@ -56,21 +54,9 @@ GLOBAL_VAR(department_cd_override)
 	use_access |= linked_department_real.head_of_staff_access
 	use_access |= linked_department_real.department_access
 	// Also set up the radio
-	if(dept_to_radio[linked_department])
-		if(!isnull(radio))
-			QDEL_NULL(radio)
-		var/picked_key = dept_to_radio[linked_department] || /obj/item/encryptionkey/headset_cargo
-		radio = new(computer)
-		radio.keyslot = new picked_key()
-		radio.subspace_transmission = TRUE
-		radio.canhear_range = 0
-		radio.recalculateChannels()
-		radio_channel = radio.keyslot.channels[1]
+	if(dept_to_radio_channel[linked_department])
+		radio_channel = dept_to_radio_channel[linked_department] || RADIO_CHANNEL_SUPPLY
 	computer.update_static_data_for_all_viewers()
-
-/datum/computer_file/program/department_order/Destroy()
-	QDEL_NULL(radio)
-	return ..()
 
 /datum/computer_file/program/department_order/ui_interact(mob/user, datum/tgui/ui)
 	check_cooldown()
@@ -244,6 +230,9 @@ GLOBAL_VAR(department_cd_override)
 	SSshuttle.shopping_list += department_order
 	if(!already_signalled)
 		RegisterSignal(SSshuttle, COMSIG_SUPPLY_SHUTTLE_BUY, PROC_REF(finalize_department_order))
+	if(!alert_silenced && alert_able)
+		aas_config_announce(/datum/aas_config_entry/department_orders, list("ORDER" = pack.name, "PERSON" = name), computer.physical, list(radio_channel), "Order Placed")
+		aas_config_announce(/datum/aas_config_entry/department_orders_cargo, list("DEPARTMENT" = linked_department.department_name), computer.physical, list(RADIO_CHANNEL_SUPPLY))
 	computer.physical.say("Order processed. Cargo will deliver the crate when it comes in on their shuttle. NOTICE: Heads of staff may override the order.")
 	calculate_cooldown(pack.cost)
 
@@ -266,7 +255,7 @@ GLOBAL_VAR(department_cd_override)
 /datum/computer_file/program/department_order/process_tick(seconds_per_tick)
 	if(!check_cooldown() || alert_silenced || !alert_able)
 		return
-	radio?.talk_into(computer, "Order cooldown has expired! A new order may now be placed!", radio_channel)
+	aas_config_announce(/datum/aas_config_entry/department_orders, list(), computer.physical, list(radio_channel), "Cooldown Reset")
 	computer.alert_call(src, "Order cooldown expired!", 'sound/machines/ping.ogg')
 
 /// Checks if the cooldown is up and resets it if so.
@@ -275,3 +264,23 @@ GLOBAL_VAR(department_cd_override)
 		department_cooldowns[linked_department] = 0
 		return TRUE
 	return FALSE
+
+/datum/aas_config_entry/department_orders
+	name = "Departmental Order Announcement"
+	announcement_lines_map = list(
+		"Order Placed" = "A department order has been placed by %PERSON for %ORDER.",
+		"Cooldown Reset" = "Department order cooldown has expired! A new order may now be placed!",
+	)
+	vars_and_tooltips_map = list(
+		"ORDER" = "will be replaced with the package name",
+		"PERSON" = "with the orderer's name",
+	)
+
+/datum/aas_config_entry/department_orders_cargo
+	name = "Cargo Alert: New Departmental Order"
+	announcement_lines_map = list(
+		"Message" = "New %DEPARTMENT departmental order has been placed"
+	)
+	vars_and_tooltips_map = list(
+		"DEPARTMENT" = "will be replaced with orderer's department."
+	)

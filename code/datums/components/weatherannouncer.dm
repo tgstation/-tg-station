@@ -80,7 +80,15 @@
 	if(previous_level == warning_level && previous_danger == is_weather_dangerous)
 		return // No change
 	var/atom/movable/speaker = parent
-	speaker.say(get_warning_message())
+	var/msg = get_warning_message()
+	var/obj/machinery/announcement_system/aas = get_announcement_system(/datum/aas_config_entry/weather, speaker)
+	// Active AAS will override default announcement lines
+	if (aas)
+		msg = aas.compile_config_message(/datum/aas_config_entry/weather, list(), !is_weather_dangerous ? 4 : warning_level + 1)
+		// Stop toggling on radios for it, please!
+		aas.broadcast(msg, list(RADIO_CHANNEL_SUPPLY))
+	// Still say it, because you can be not on our level
+	speaker.say(msg)
 	speaker.update_appearance(UPDATE_ICON)
 	update_light_color()
 
@@ -169,6 +177,17 @@
 /datum/component/weather_announcer/UnregisterFromParent()
 	.=..()
 	UnregisterSignal(parent, COMSIG_ATOM_EXAMINE)
+
+/datum/aas_config_entry/weather
+	name = "Cargo Alert: Weather Forecast"
+	general_tooltip = "Allows the radio to announce incoming weather."
+	announcement_lines_map = list(
+		"Clear" = "All clear, no weather alerts to report.",
+		"Incoming" = "Weather front incoming, begin to seek shelter.",
+		"Imminent or Active" = "Weather front imminent, find shelter immediately.",
+		"Safe" = "No risk expected from incoming weather front.",
+	)
+
 
 #undef WEATHER_ALERT_CLEAR
 #undef WEATHER_ALERT_INCOMING
