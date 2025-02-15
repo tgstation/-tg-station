@@ -376,7 +376,7 @@ GLOBAL_VAR_INIT(roaches_deployed, FALSE)
 		/obj/item/table_clock = 1,
 	)
 	premium = list(
-		/obj/item/autopsy_scanner = 1,
+		/obj/item/autopsy_scanner = 2,
 		/obj/item/storage/medkit/coroner = 1,
 	)
 	refill_canister = /obj/item/vending_refill/wardrobe/coroner_wardrobe
@@ -593,7 +593,7 @@ GLOBAL_VAR_INIT(roaches_deployed, FALSE)
 		/obj/item/clothing/gloves/latex = 2,
 		/obj/item/clothing/shoes/sneakers/white = 2,
 		/obj/item/storage/backpack/chemistry = 2,
-		/obj/item/storage/backpack/satchel/chem = 2,
+		/obj/item/storage/backpack/satchel/chem = 4,
 		/obj/item/storage/backpack/duffelbag/chemistry = 2,
 		/obj/item/storage/backpack/messenger/chem = 2,
 		/obj/item/storage/bag/chemistry = 2,
