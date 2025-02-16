@@ -13,6 +13,7 @@
 	size = 5
 	tgui_id = "NtosSecurEye"
 	program_icon = "eye"
+	always_update_ui = TRUE
 
 	///Boolean on whether or not the app will make noise when flipping around the channels.
 	var/spying = FALSE
