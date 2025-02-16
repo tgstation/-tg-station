@@ -148,7 +148,7 @@
 			old_body = observer.mind.current, \
 		)
 	new_player.equipOutfit(loadout) // Loadout
-	new_player.key = ckey
+	new_player.PossessByPlayer(ckey)
 	players_info["mob"] = new_player
 
 	for(var/datum/deathmatch_modifier/modifier as anything in modifiers)

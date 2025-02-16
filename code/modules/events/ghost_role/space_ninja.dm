@@ -24,7 +24,7 @@
 		return NOT_ENOUGH_PLAYERS
 	//spawn the ninja and assign the candidate
 	var/mob/living/carbon/human/ninja = create_space_ninja(spawn_location)
-	ninja.key = chosen_one.key
+	ninja.PossessByPlayer(chosen_one.key)
 	ninja.mind.add_antag_datum(/datum/antagonist/ninja)
 	spawned_mobs += ninja
 	message_admins("[ADMIN_LOOKUPFLW(ninja)] has been made into a space ninja by an event.")

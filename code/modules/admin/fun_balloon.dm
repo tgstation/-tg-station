@@ -112,7 +112,7 @@
 
 		message_admins("[key_name_admin(C)] has taken control of ([key_name_admin(body)])")
 		body.ghostize(FALSE)
-		body.key = C.key
+		body.PossessByPlayer(C.key)
 		if (make_antag)
 			body.mind.add_antag_datum(antag_type)
 			continue

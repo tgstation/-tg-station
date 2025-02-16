@@ -167,7 +167,9 @@ ADMIN_VERB(cmd_assume_direct_control, R_ADMIN, "Assume Direct Control", "Assume 
 	var/mob/adminmob = user.mob
 	if(M.ckey)
 		M.ghostize(FALSE)
-	M.key = user.key
+
+	M.PossessByPlayer(user.key)
+
 	user.init_verbs()
 	if(isobserver(adminmob))
 		qdel(adminmob)

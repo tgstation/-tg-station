@@ -73,7 +73,7 @@
 			return FALSE
 	var/monster_type = pick(monster_types)
 	var/mob/living/monster = new monster_type(loc)
-	monster.key = user.key
+	monster.PossessByPlayer(user.key)
 	monster.set_name()
 	var/datum/antagonist/heretic_monster/woohoo_free_antag = new(src)
 	monster.mind.add_antag_datum(woohoo_free_antag)

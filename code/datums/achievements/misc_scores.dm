@@ -37,14 +37,16 @@
 
 /datum/award/score/progress/fish/proc/validate_early_joiners(datum/source)
 	for(var/client/client as anything in GLOB.clients)
-		var/datum/achievement_data/holder = client.player_details.achievements
+		var/datum/achievement_data/holder = client.persistent_client.achievements
 		if(!holder?.initialized)
 			continue
+
 		var/list/entries = holder.data[/datum/award/score/progress/fish]
 		var/list_copied = FALSE
 		for(var/fish_id in entries)
 			if(SSfishing.catchable_fish[fish_id])
 				continue
+
 			//make a new list, unbound from the cached awards data, so that the score can be updated at the end of the round.
 			if(!list_copied)
 				entries = entries.Copy()

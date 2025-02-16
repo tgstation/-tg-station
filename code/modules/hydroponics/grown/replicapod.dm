@@ -181,9 +181,9 @@
 		podman.real_name = "Pod Person ([rand(1,999)])"
 	mind.transfer_to(podman)
 	if(ckey)
-		podman.ckey = ckey
+		podman.PossessByPlayer(ckey)
 	else
-		podman.ckey = ckey_holder
+		podman.PossessByPlayer(ckey_holder)
 	podman.gender = blood_gender
 	podman.faction |= factions
 	if(!features["mcolor"])

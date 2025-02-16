@@ -306,7 +306,7 @@ GLOBAL_LIST_EMPTY(antagonists)
 		message_admins("[key_name_admin(chosen_one)] has taken control of ([key_name_admin(owner)]) to replace antagonist banned player.")
 		log_game("[key_name(chosen_one)] has taken control of ([key_name(owner)]) to replace antagonist banned player.")
 		owner.current.ghostize(FALSE)
-		owner.current.key = chosen_one.key
+		owner.current.PossessByPlayer(chosen_one.key)
 	else
 		log_game("Couldn't find antagonist ban replacement for ([key_name(owner)]).")
 
