@@ -325,4 +325,10 @@
 	. = ..()
 	AddElement(/datum/element/dangerous_organ_removal, /*surgical = */ TRUE)
 
+/obj/item/organ/stomach/pod
+	name = "pod chloroplast"
+	desc = "A green plant-like organ that functions similarly to a human stomach."
+	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
+	color = COLOR_LIME
+
 #undef STOMACH_METABOLISM_CONSTANT

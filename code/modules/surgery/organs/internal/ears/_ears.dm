@@ -260,3 +260,9 @@
 	if(. & EMP_PROTECT_SELF)
 		return
 	apply_organ_damage(20 / severity)
+
+/obj/item/organ/ears/pod
+	name = "pod ears"
+	desc = "Strangest salad you've ever seen."
+	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
+	color = COLOR_LIME

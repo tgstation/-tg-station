@@ -186,6 +186,10 @@
 /obj/item/seeds/proc/getYield()
 	var/return_yield = yield
 
+	for(var/datum/plant_gene/trait/trait in genes)
+		if(trait.trait_flags & TRAIT_NO_POLLINATION)
+			return return_yield
+
 	var/obj/machinery/hydroponics/parent = loc
 	if(istype(loc, /obj/machinery/hydroponics))
 		if(parent.yieldmod == 0)

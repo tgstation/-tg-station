@@ -302,3 +302,9 @@
 		owner.heal_overall_damage(brute = 15, burn = 15, required_bodytype = BODYTYPE_ORGANIC)
 		if(owner.reagents.get_reagent_amount(/datum/reagent/medicine/ephedrine) < 20)
 			owner.reagents.add_reagent(/datum/reagent/medicine/ephedrine, 10)
+
+/obj/item/organ/heart/pod
+	name = "pod mitochondria"
+	desc = "This plant-like organ is the powerhouse of the podperson." // deliberate wording here
+	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
+	color = COLOR_LIME

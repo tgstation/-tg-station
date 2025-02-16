@@ -680,6 +680,14 @@
 	stank.temperature = T20C // without this the room would eventually freeze and miasma mining would be easier
 	tray_turf.assume_air(stank)
 
+/// Hard caps the yield at 5 (effectively)
+/datum/plant_gene/trait/complex_harvest
+	name = "Complex Harvest"
+	description = "Halves the maximum yield of the plant, and prevents it from benefiting from pollination's yield bonus."
+	icon = FA_ICON_SLASH
+	trait_flags = TRAIT_HALVES_YIELD|TRAIT_NO_POLLINATION
+	mutability_flags = NONE
+
 /// Starthistle's essential invasive spreading
 /datum/plant_gene/trait/invasive/galaxythistle
 	mutability_flags = PLANT_GENE_GRAFTABLE

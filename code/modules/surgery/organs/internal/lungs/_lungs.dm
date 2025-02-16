@@ -874,7 +874,7 @@
 	healing_factor = SMOKER_LUNG_HEALING
 
 /obj/item/organ/lungs/slime
-	name = "vacuole"
+	name = "slime vacuole"
 	desc = "A large organelle designed to store oxygen and other important gasses."
 
 	safe_plasma_max = 0 //We breathe this to gain POWER.
@@ -1035,6 +1035,12 @@
 	breath_out.gases[/datum/gas/oxygen][MOLES] += gas_breathed
 	breath_out.gases[/datum/gas/hydrogen][MOLES] += gas_breathed * 2
 
+
+/obj/item/organ/lungs/pod
+	name = "pod vacuole"
+	desc = "A large organelle designed to store oxygen and other important gasses."
+	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
+	color = COLOR_LIME
 
 #undef BREATH_RELATIONSHIP_INITIAL_GAS
 #undef BREATH_RELATIONSHIP_CONVERT

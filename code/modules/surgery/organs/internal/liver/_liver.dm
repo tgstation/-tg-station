@@ -273,6 +273,21 @@
 	. = ..()
 	AddElement(/datum/element/dangerous_organ_removal, /*surgical = */ TRUE)
 
+/obj/item/organ/liver/pod
+	name = "pod peroxisome"
+	desc = "A small plant-like organ found in podpeople responsible for filtering toxins while aiding in photosynthesis."
+	foodtype_flags = PODPERSON_ORGAN_FOODTYPES
+	color = COLOR_LIME
+
+/obj/item/organ/liver/pod/handle_chemical(mob/living/carbon/organ_owner, datum/reagent/chem, seconds_per_tick, times_fired)
+	. = ..()
+	if(. & COMSIG_MOB_STOP_REAGENT_CHECK)
+		return
+	if(!(organ_owner.mob_biotypes & MOB_PLANT))
+		return
+	if(chem.type == /datum/reagent/toxin/plantbgone)
+		organ_owner.adjustToxLoss(3 * REM * seconds_per_tick)
+
 #undef LIVER_DEFAULT_TOX_TOLERANCE
 #undef LIVER_DEFAULT_TOX_RESISTANCE
 #undef LIVER_FAILURE_STAGE_SECONDS
