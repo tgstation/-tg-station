@@ -4690,6 +4690,7 @@
 #include "code\modules\mapfluff\ruins\spaceruin_code\deepstorage.dm"
 #include "code\modules\mapfluff\ruins\spaceruin_code\derelict_sulaco.dm"
 #include "code\modules\mapfluff\ruins\spaceruin_code\DJstation.dm"
+#include "code\modules\mapfluff\ruins\spaceruin_code\film_studio.dm"
 #include "code\modules\mapfluff\ruins\spaceruin_code\forgottenship.dm"
 #include "code\modules\mapfluff\ruins\spaceruin_code\garbagetruck.dm"
 #include "code\modules\mapfluff\ruins\spaceruin_code\hauntedtradingpost.dm"
