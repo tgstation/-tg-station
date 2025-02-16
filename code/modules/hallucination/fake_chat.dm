@@ -48,7 +48,9 @@
 	if(!chosen)
 		if(is_radio)
 			chosen = pick(list("Help!",
+				"Help [pick_list_replacements(HALLUCINATION_FILE, "location")][prob(50)?"!":"!!"]",
 				"[pick_list_replacements(HALLUCINATION_FILE, "people")] is [pick_list_replacements(HALLUCINATION_FILE, "accusations")]!",
+				"[pick_list_replacements(HALLUCINATION_FILE, "people")] has [pick_list_replacements(HALLUCINATION_FILE, "contraband")]!",
 				"[pick_list_replacements(HALLUCINATION_FILE, "threat")] in [pick_list_replacements(HALLUCINATION_FILE, "location")][prob(50)?"!":"!!"]",
 				"[pick("Where's [first_name(hallucinator.name)]?", "Set [first_name(hallucinator.name)] to arrest!")]",
 				"[pick("C","Ai, c","Someone c","Rec")]all the shuttle!",
