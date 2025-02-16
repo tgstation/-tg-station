@@ -11223,6 +11223,12 @@
 	},
 /turf/open/floor/iron,
 /area/station/security/prison)
+"cOr" = (
+/obj/structure/closet{
+	name = "evidence closet 2"
+	},
+/turf/open/floor/iron/dark,
+/area/station/security/evidence)
 "cOC" = (
 /obj/effect/turf_decal/trimline/neutral/filled/line{
 	dir = 4
@@ -18379,7 +18385,7 @@
 /area/station/security/prison)
 "fsQ" = (
 /obj/structure/closet{
-	name = "Evidence Closet 1"
+	name = "evidence closet 4"
 	},
 /turf/open/floor/iron/dark,
 /area/station/security/evidence)
@@ -28464,11 +28470,12 @@
 /turf/open/floor/iron/dark,
 /area/station/ai_monitored/turret_protected/aisat_interior)
 "jil" = (
-/obj/structure/closet{
-	name = "Evidence Closet 1"
-	},
 /obj/machinery/power/apc/auto_name/directional/east,
 /obj/structure/cable,
+/obj/effect/spawner/random/contraband/narcotics,
+/obj/structure/closet{
+	name = "evidence closet 3"
+	},
 /turf/open/floor/iron/dark,
 /area/station/security/evidence)
 "jim" = (
@@ -48881,11 +48888,13 @@
 /turf/open/floor/iron/dark,
 /area/station/hallway/secondary/exit/departure_lounge)
 "qmC" = (
-/obj/structure/closet{
-	name = "Evidence Closet 1"
+/obj/structure/secure_safe/directional/east{
+	name = "evidence safe"
 	},
-/obj/structure/secure_safe/directional/east,
 /obj/effect/spawner/random/contraband/cannabis,
+/obj/structure/closet{
+	name = "evidence closet 1"
+	},
 /turf/open/floor/iron/dark,
 /area/station/security/evidence)
 "qmH" = (
@@ -48937,10 +48946,8 @@
 /turf/open/floor/iron,
 /area/station/security/brig)
 "qnr" = (
-/obj/structure/closet{
-	name = "Evidence Closet 1"
-	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
+/obj/structure/closet/secure_closet/evidence,
 /turf/open/floor/iron/dark,
 /area/station/security/evidence)
 "qnv" = (
@@ -58114,11 +58121,10 @@
 /turf/open/floor/circuit/green,
 /area/station/ai_monitored/turret_protected/ai_upload)
 "tyx" = (
-/obj/structure/closet{
-	name = "Evidence Closet 1"
-	},
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
-/obj/effect/spawner/random/contraband/narcotics,
+/obj/structure/filingcabinet/security{
+	pixel_x = -6
+	},
 /turf/open/floor/iron/dark,
 /area/station/security/evidence)
 "tyE" = (
@@ -159611,8 +159617,8 @@ abM
 abM
 tFJ
 kyN
-qnr
 tyx
+qnr
 qnr
 jKq
 pTr
@@ -160125,7 +160131,7 @@ abM
 abM
 tFJ
 qmC
-fsQ
+cOr
 jil
 fsQ
 jKq
