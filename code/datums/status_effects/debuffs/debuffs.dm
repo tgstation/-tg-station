@@ -354,29 +354,26 @@
 	var/boosted = FALSE
 	/// How long before the mark is ready to be detonated. Used for both the visual overlay and to determine when it's ready
 	var/ready_delay = 0.8 SECONDS
-	/// Tracks world.time when the mark was applied
-	var/mark_applied
 
 /datum/status_effect/crusher_mark/on_creation(mob/living/new_owner, was_boosted)
 	. = ..()
 	boosted = was_boosted
-	mark_applied = world.time
 
 /datum/status_effect/crusher_mark/on_apply()
-	if(owner.mob_size >= MOB_SIZE_LARGE)
-		marked_underlay = new()
-		marked_underlay.pixel_x = -owner.pixel_x
-		marked_underlay.pixel_y = -owner.pixel_y
+	if(owner.mob_size < MOB_SIZE_LARGE)
+		return FALSE
 
-		var/list/new_color = list(
-			0, 1, 0,
-			0, 1, 0,
-			0, 1, 0
-		)
-		owner.vis_contents += marked_underlay
-		animate(marked_underlay, color = new_color, time = ready_delay, loop = 1)
-		return TRUE
-	return FALSE
+	marked_underlay = new()
+	marked_underlay.pixel_x = -owner.pixel_x
+	marked_underlay.pixel_y = -owner.pixel_y
+	marked_underlay.transform *= 0.5
+	owner.vis_contents += marked_underlay
+	animate(marked_underlay, ready_delay, transform = matrix() * 1.2, flags = CIRCULAR_EASING | EASE_IN)
+	addtimer(CALLBACK(src, PROC_REF(scale_back)), ready_delay) // Animate chains do not function with vis_contents
+	return TRUE
+
+/datum/status_effect/crusher_mark/proc/scale_back()
+	animate(marked_underlay, time = 0.1 SECONDS, transform = matrix(), flags = CUBIC_EASING | EASE_OUT)
 
 /datum/status_effect/crusher_mark/Destroy()
 	if(owner)
@@ -389,14 +386,9 @@
 	name = "Crusher mark underlay"
 	icon = 'icons/effects/effects.dmi'
 	icon_state = "shield"
-	appearance_flags = TILE_BOUND|LONG_GLIDE|RESET_COLOR
+	appearance_flags = TILE_BOUND|LONG_GLIDE|RESET_COLOR|PIXEL_SCALE
 	vis_flags = VIS_UNDERLAY
 	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
-	color = list(
-		1, 0, 0,
-		1, 0, 0,
-		1, 0, 0
-	)
 
 /datum/status_effect/stacking/saw_bleed
 	id = "saw_bleed"
