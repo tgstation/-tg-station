@@ -24,24 +24,33 @@
 /obj/machinery/medipen_refiller/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/plumbing/simple_demand)
+	AddComponent(/datum/component/simple_rotation)
 	register_context()
 	CheckParts()
 
 /obj/machinery/medipen_refiller/add_context(atom/source, list/context, obj/item/held_item, mob/user)
-	if(held_item)
-		if(held_item.tool_behaviour == TOOL_WRENCH)
-			context[SCREENTIP_CONTEXT_LMB] = anchored ? "Unsecure" : "Secure"
-		else if(held_item.tool_behaviour == TOOL_CROWBAR && panel_open)
-			context[SCREENTIP_CONTEXT_LMB] = "Deconstruct"
-		else if(held_item.tool_behaviour == TOOL_SCREWDRIVER)
-			context[SCREENTIP_CONTEXT_LMB] = panel_open ? "Close panel" : "Open panel"
-		else if(is_reagent_container(held_item) && held_item.is_open_container())
-			context[SCREENTIP_CONTEXT_LMB] = "Refill machine"
-		else if(istype(held_item, /obj/item/reagent_containers/hypospray/medipen) && reagents.has_reagent(allowed_pens[held_item.type]))
-			context[SCREENTIP_CONTEXT_LMB] = "Refill medipen"
-		else if(istype(held_item, /obj/item/plunger))
-			context[SCREENTIP_CONTEXT_LMB] = "Plunge machine"
-	return CONTEXTUAL_SCREENTIP_SET
+	. = ..()
+	if(!held_item)
+		return NONE
+
+	if(held_item.tool_behaviour == TOOL_WRENCH)
+		context[SCREENTIP_CONTEXT_LMB] = anchored ? "Unsecure" : "Secure"
+		. = CONTEXTUAL_SCREENTIP_SET
+	else if(held_item.tool_behaviour == TOOL_CROWBAR && panel_open)
+		context[SCREENTIP_CONTEXT_LMB] = "Deconstruct"
+		. = CONTEXTUAL_SCREENTIP_SET
+	else if(held_item.tool_behaviour == TOOL_SCREWDRIVER)
+		context[SCREENTIP_CONTEXT_LMB] = panel_open ? "Close panel" : "Open panel"
+		. = CONTEXTUAL_SCREENTIP_SET
+	else if(is_reagent_container(held_item) && held_item.is_open_container())
+		context[SCREENTIP_CONTEXT_LMB] = "Refill machine"
+		. = CONTEXTUAL_SCREENTIP_SET
+	else if(istype(held_item, /obj/item/reagent_containers/hypospray/medipen) && reagents.has_reagent(allowed_pens[held_item.type]))
+		context[SCREENTIP_CONTEXT_LMB] = "Refill medipen"
+		. = CONTEXTUAL_SCREENTIP_SET
+	else if(istype(held_item, /obj/item/plunger))
+		context[SCREENTIP_CONTEXT_LMB] = "Plunge machine"
+		. = CONTEXTUAL_SCREENTIP_SET
 
 /obj/machinery/medipen_refiller/RefreshParts()
 	. = ..()
@@ -53,32 +62,43 @@
 	reagents.maximum_volume = new_volume
 	return TRUE
 
-/obj/machinery/medipen_refiller/attackby(obj/item/weapon, mob/user, params)
+/obj/machinery/medipen_refiller/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	. = ..()
+	if(user.combat_mode)
+		return ITEM_INTERACT_SKIP_TO_ATTACK
+
 	if(DOING_INTERACTION(user, src))
 		balloon_alert(user, "already interacting!")
-		return
-	if(is_reagent_container(weapon) && weapon.is_open_container())
-		var/obj/item/reagent_containers/reagent_container = weapon
+		return ITEM_INTERACT_BLOCKING
+
+	if(is_reagent_container(tool) && tool.is_open_container())
+		var/obj/item/reagent_containers/reagent_container = tool
 		if(!length(reagent_container.reagents.reagent_list))
 			balloon_alert(user, "nothing to transfer!")
-			return
+			return ITEM_INTERACT_BLOCKING
+
 		var/units = reagent_container.reagents.trans_to(src, reagent_container.amount_per_transfer_from_this, transferred_by = user)
 		if(units)
 			balloon_alert(user, "[units] units transferred")
+			return ITEM_INTERACT_SUCCESS
 		else
 			balloon_alert(user, "reagent storage full!")
-		return
-	if(istype(weapon, /obj/item/reagent_containers/hypospray/medipen))
-		var/obj/item/reagent_containers/hypospray/medipen/medipen = weapon
+			return ITEM_INTERACT_BLOCKING
+
+	if(istype(tool, /obj/item/reagent_containers/hypospray/medipen))
+		var/obj/item/reagent_containers/hypospray/medipen/medipen = tool
 		if(!(LAZYFIND(allowed_pens, medipen.type)))
 			balloon_alert(user, "medipen incompatible!")
-			return
+			return ITEM_INTERACT_BLOCKING
+
 		if(medipen.reagents?.reagent_list.len)
 			balloon_alert(user, "medipen full!")
-			return
+			return ITEM_INTERACT_BLOCKING
+
 		if(!reagents.has_reagent(allowed_pens[medipen.type], 10))
 			balloon_alert(user, "not enough reagents!")
-			return
+			return ITEM_INTERACT_BLOCKING
+
 		add_overlay("active")
 		if(do_after(user, 2 SECONDS, src))
 			medipen.used_up = FALSE
@@ -87,8 +107,7 @@
 			balloon_alert(user, "refilled")
 			use_energy(active_power_usage)
 		cut_overlays()
-		return
-	return ..()
+		return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/medipen_refiller/plunger_act(obj/item/plunger/P, mob/living/user, reinforced)
 	user.balloon_alert_to_viewers("furiously plunging...", "plunging medipen refiller...")
@@ -103,7 +122,7 @@
 
 /obj/machinery/medipen_refiller/crowbar_act(mob/living/user, obj/item/tool)
 	default_deconstruction_crowbar(tool)
-	return TRUE
+	return ITEM_INTERACT_SUCCESS
 
 /obj/machinery/medipen_refiller/screwdriver_act(mob/living/user, obj/item/tool)
 	return default_deconstruction_screwdriver(user, "[initial(icon_state)]_open", initial(icon_state), tool)
