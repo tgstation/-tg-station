@@ -222,3 +222,9 @@ sound/items/dice_roll.ogg -- https://freesound.org/people/Crovic/sounds/661935/ 
 sound/items/handling/materials/snow_drop.ogg and sound/items/handling/materials/snow_pick_up.ogg -- https://freesound.org/people/Vrymaa/sounds/775014/ by Vrymaa (CC0)
 
 sound/items/hair-clippers.ogg -- https://freesound.org/people/VIPERSTRONG/sounds/655747/ -- by VIPERSTRONG (CC0)
+
+sound/items/weapons/cain_and_abel/dagger_slash_1 to dagger_slash_6 -- https://pixabay.com/sound-effects/whooshslash-sounds-different-pitches-vol2-187377/ by Ponjisk
+
+sound/items/weapons/crystal_dagger_sound.ogg -- https://pixabay.com/sound-effects/breaking-glass-with-feet-45176/ freesound community
+
+'sound/items/weapons/effects/blood_wisp_explode.ogg' -- https://pixabay.com/sound-effects/fire-sound-effects-224089/ by Alice-soundz
