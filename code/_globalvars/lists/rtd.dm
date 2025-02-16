@@ -1,6 +1,3 @@
-//dont create icons for TGUI if direction is any of these values cause its handled inside CSS
-GLOBAL_LIST_INIT(tile_dont_rotate, list(NORTH, EAST, SOUTH, WEST))
-
 ///all designs supported by the RTD
 GLOBAL_LIST_INIT(floor_designs, list(
 	//what players will use most of the time
@@ -11,21 +8,21 @@ GLOBAL_LIST_INIT(floor_designs, list(
 			list("name" = "Small", "type" = /obj/item/stack/tile/iron/small, "tile_cost" = 3),
 			list("name" = "Large", "type" = /obj/item/stack/tile/iron/large, "tile_cost" = 7),
 			list("name" = "Diagonal", "type" = /obj/item/stack/tile/iron/diagonal, "tile_cost" = 5),
-			list("name" = "Edge", "type" = /obj/item/stack/tile/iron/edge, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Half", "type" = /obj/item/stack/tile/iron/half, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Corner", "type" = /obj/item/stack/tile/iron/corner, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Edge", "type" = /obj/item/stack/tile/iron/edge, "tile_cost" = 5),
+			list("name" = "Half", "type" = /obj/item/stack/tile/iron/half, "tile_cost" = 5),
+			list("name" = "Corner", "type" = /obj/item/stack/tile/iron/corner, "tile_cost" = 5),
 			list("name" = "Textured", "type" = /obj/item/stack/tile/iron/textured, "tile_cost" = 5),
-			list("name" = "Textured Edge", "type" = /obj/item/stack/tile/iron/textured_edge, "tile_cost" = 6, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Textured Half", "type" = /obj/item/stack/tile/iron/textured_half, "tile_cost" = 6, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Textured Corner", "type" = /obj/item/stack/tile/iron/textured_corner, "tile_cost" = 6, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Textured Edge", "type" = /obj/item/stack/tile/iron/textured_edge, "tile_cost" = 6),
+			list("name" = "Textured Half", "type" = /obj/item/stack/tile/iron/textured_half, "tile_cost" = 6),
+			list("name" = "Textured Corner", "type" = /obj/item/stack/tile/iron/textured_corner, "tile_cost" = 6),
 			list("name" = "Textured Large", "type" = /obj/item/stack/tile/iron/textured_large, "tile_cost" = 6),
 		),
 		//Looks slightly transparent or faded
 		"Translucent" = list(
 			list("name" = "Smooth", "type" = /obj/item/stack/tile/iron/smooth, "tile_cost" = 4),
-			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/smooth_edge, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/smooth_half, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Smooth Corner", "type" = /obj/item/stack/tile/iron/smooth_corner, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/smooth_edge, "tile_cost" = 4),
+			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/smooth_half, "tile_cost" = 4),
+			list("name" = "Smooth Corner", "type" = /obj/item/stack/tile/iron/smooth_corner, "tile_cost" = 4),
 			list("name" = "Smooth Large", "type" = /obj/item/stack/tile/iron/smooth_large, "tile_cost" = 7),
 			list("name" = "Freezer", "type" = /obj/item/stack/tile/iron/freezer, "tile_cost" = 5),
 			list("name" = "Showroom", "type" = /obj/item/stack/tile/iron/showroomfloor, "tile_cost" = 5),
@@ -49,42 +46,42 @@ GLOBAL_LIST_INIT(floor_designs, list(
 		//Dark Colored tiles
 		"Dark Colored" = list(
 			list("name" = "Base", "type" = /obj/item/stack/tile/iron/dark, "tile_cost" = 4),
-			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/dark/smooth_edge, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/dark/smooth_half, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Smooth Corner" ,"type" = /obj/item/stack/tile/iron/dark/smooth_corner, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/dark/smooth_edge, "tile_cost" = 4),
+			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/dark/smooth_half, "tile_cost" = 4),
+			list("name" = "Smooth Corner" ,"type" = /obj/item/stack/tile/iron/dark/smooth_corner, "tile_cost" = 4),
 			list("name" = "Smooth Large", "type" = /obj/item/stack/tile/iron/dark/smooth_large, "tile_cost" = 7),
 			list("name" = "Small", "type" = /obj/item/stack/tile/iron/dark/small, "tile_cost" = 4),
 			list("name" = "Diagonal", "type" = /obj/item/stack/tile/iron/dark/diagonal, "tile_cost" = 4),
 			list("name" = "Herringbone", "type" = /obj/item/stack/tile/iron/dark/herringbone, "tile_cost" = 4),
-			list("name" = "Half Dark", "type" = /obj/item/stack/tile/iron/dark_side, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)),
-			list("name" = "Dark Corner" ,"type" = /obj/item/stack/tile/iron/dark_corner, "tile_cost" = 4, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Half Dark", "type" = /obj/item/stack/tile/iron/dark_side, "tile_cost" = 4),
+			list("name" = "Dark Corner" ,"type" = /obj/item/stack/tile/iron/dark_corner, "tile_cost" = 4),
 		),
 
 		//White Colored tiles
 		"White Colored" = list(
 			list("name" = "Base", "type" = /obj/item/stack/tile/iron/white, "tile_cost" = 5),
-			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/white/smooth_edge, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/white/smooth_half, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Smooth Corner", "type" = /obj/item/stack/tile/iron/white/smooth_corner, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Smooth Edge", "type" = /obj/item/stack/tile/iron/white/smooth_edge, "tile_cost" = 5),
+			list("name" = "Smooth Half", "type" = /obj/item/stack/tile/iron/white/smooth_half, "tile_cost" = 5),
+			list("name" = "Smooth Corner", "type" = /obj/item/stack/tile/iron/white/smooth_corner, "tile_cost" = 5),
 			list("name" = "Smooth Large", "type" = /obj/item/stack/tile/iron/white/smooth_large, "tile_cost" = 7),
 			list("name" = "Small", "type" = /obj/item/stack/tile/iron/white/small, "tile_cost" = 5),
 			list("name" = "Diagonal", "type" = /obj/item/stack/tile/iron/white/diagonal, "tile_cost" = 5),
 			list("name" = "Herringbone", "type" = /obj/item/stack/tile/iron/white/herringbone, "tile_cost" = 5),
-			list("name" = "Half White", "type" = /obj/item/stack/tile/iron/white_side, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST, SOUTHEAST, SOUTHWEST, NORTHEAST, NORTHWEST)),
-			list("name" = "White Corner", "type" = /obj/item/stack/tile/iron/white_corner, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Half White", "type" = /obj/item/stack/tile/iron/white_side, "tile_cost" = 5),
+			list("name" = "White Corner", "type" = /obj/item/stack/tile/iron/white_corner, "tile_cost" = 5),
 		),
 
 		//Textured tiles
 		"Textured" = list(
 			list("name" = "Textured White", "type" = /obj/item/stack/tile/iron/white/textured, "tile_cost" = 5),
-			list("name" = "Textured White Edge", "type" = /obj/item/stack/tile/iron/white/textured_edge, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Textured White Half", "type" = /obj/item/stack/tile/iron/white/textured_half, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Textured White Corner", "type" = /obj/item/stack/tile/iron/white/textured_corner, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Textured White Edge", "type" = /obj/item/stack/tile/iron/white/textured_edge, "tile_cost" = 5),
+			list("name" = "Textured White Half", "type" = /obj/item/stack/tile/iron/white/textured_half, "tile_cost" = 5),
+			list("name" = "Textured White Corner", "type" = /obj/item/stack/tile/iron/white/textured_corner, "tile_cost" = 5),
 			list("name" = "Textured White Large", "type" = /obj/item/stack/tile/iron/white/textured_large, "tile_cost" = 7),
 			list("name" = "Textured Dark", "type" = /obj/item/stack/tile/iron/dark/textured, "tile_cost" = 5),
-			list("name" = "Textured Dark Edge", "type" = /obj/item/stack/tile/iron/dark/textured_edge, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
-			list("name" = "Textured Dark Half", "type" = /obj/item/stack/tile/iron/dark/textured_half, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH)),
-			list("name" = "Textured Dark Corner", "type" = /obj/item/stack/tile/iron/dark/textured_corner, "tile_cost" = 5, "tile_rotate_dirs" = list(SOUTH, NORTH, EAST, WEST)),
+			list("name" = "Textured Dark Edge", "type" = /obj/item/stack/tile/iron/dark/textured_edge, "tile_cost" = 5),
+			list("name" = "Textured Dark Half", "type" = /obj/item/stack/tile/iron/dark/textured_half, "tile_cost" = 5),
+			list("name" = "Textured Dark Corner", "type" = /obj/item/stack/tile/iron/dark/textured_corner, "tile_cost" = 5),
 			list("name" = "Textured Dark Large", "type" = /obj/item/stack/tile/iron/dark/textured_large, "tile_cost" = 7),
 		)
 	),
@@ -114,3 +111,11 @@ GLOBAL_LIST_INIT(floor_designs, list(
 		)
 	)
 ))
+
+/// Lazy-initialize the datum field on all the designs
+/proc/populate_rtd_datums()
+	for(var/main_root in GLOB.floor_designs)
+		for(var/sub_category in GLOB.floor_designs[main_root])
+			for(var/list/design in GLOB.floor_designs[main_root][sub_category])
+				var/datum/tile_info/tile_data = new /datum/tile_info(design)
+				design["datum"] = tile_data

@@ -26,12 +26,6 @@ type Design = {
   icon: string;
 };
 
-const ROTATION_MAP = {
-  north: 'rotateZ(-180deg)',
-  west: 'rotateZ(90deg)',
-  east: 'rotateZ(-90deg)',
-} as const;
-
 const TilePreview = (props) => {
   const { data } = useBackend<Data>();
   const { selected_icon, selected_direction } = data;
@@ -45,12 +39,10 @@ const TilePreview = (props) => {
       }}
     >
       <Box
-        className={classes(['rtd32x32', selected_icon])}
-        style={{
-          transform:
-            'scale(1.5) translate(9.5%, 9.5%) ' +
-            (ROTATION_MAP[selected_direction] || ''),
-        }}
+        className={classes([
+          'rtd32x32',
+          `${selected_icon}${selected_direction ? `${selected_direction}` : 'south'}`,
+        ])}
       />
     </Section>
   );
@@ -140,10 +132,7 @@ const TileDesignSection = (props) => {
             inline
             verticalAlign="middle"
             mr="20px"
-            className={classes(['rtd32x32', recipe.icon])}
-            style={{
-              transform: 'scale(1.2) translate(9.5%, 9.5%)',
-            }}
+            className={classes(['rtd32x32', `${recipe.icon}south`])}
           />
           <span>{capitalizeAll(recipe.name)}</span>
         </Button>

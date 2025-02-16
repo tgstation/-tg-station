@@ -26,6 +26,8 @@
 	var/list/tile_reskin_types
 	/// Cached associative lazy list to hold the radial options for tile dirs. See tile_reskinning.dm for more information.
 	var/list/tile_rotate_dirs
+	/// tile_rotate_dirs but before it gets converted to text
+	var/list/tile_rotate_dirs_number
 
 /obj/item/stack/tile/Initialize(mapload, new_amount, merge = TRUE, list/mat_override=null, mat_amt=1)
 	. = ..()
@@ -35,6 +37,7 @@
 	if(tile_reskin_types)
 		tile_reskin_types = tile_reskin_list(tile_reskin_types)
 	if(tile_rotate_dirs)
+		tile_rotate_dirs_number = tile_rotate_dirs.Copy()
 		var/list/values = list()
 		for(var/set_dir in tile_rotate_dirs)
 			values += dir2text(set_dir)
