@@ -24,7 +24,7 @@
 	var/x_offset = 0
 	///y offset for where the camera eye will spawn. Starts from the shuttle's docking port
 	var/y_offset = 0
-	var/list/whitelist_turfs = list(/turf/open/space, /turf/open/floor/plating, /turf/open/lava, /turf/open/openspace)
+	var/list/whitelist_turfs = list(/turf/open/space, /turf/open/floor/plating, /turf/open/lava, /turf/open/openspace, /turf/open/misc)
 	var/see_hidden = FALSE
 	var/designate_time = 0
 	var/turf/designating_target_loc

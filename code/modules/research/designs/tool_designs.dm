@@ -425,3 +425,13 @@
 		RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_ENGINEERING_ADVANCED
 	)
 	departmental_flags = DEPARTMENT_BITFLAG_ENGINEERING
+
+/datum/design/shuttle_blueprints
+	name = "Shuttle Blueprints"
+	desc = "Blueprints suitable for constructing shuttles"
+	id = "shuttle_blueprints"
+	build_type = PROTOLATHE
+	materials = list(/datum/material/plastic = HALF_SHEET_MATERIAL_AMOUNT)
+	build_path = /obj/item/shuttle_blueprints
+	category = list(RND_CATEGORY_TOOLS + RND_SUBCATEGORY_TOOLS_ENGINEERING)
+	departmental_flags = DEPARTMENT_BITFLAG_CARGO | DEPARTMENT_BITFLAG_ENGINEERING | DEPARTMENT_BITFLAG_SCIENCE

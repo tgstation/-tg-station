@@ -107,6 +107,8 @@
 	var/image_layer = MOB_LAYER
 	/// The plane of the image
 	var/image_plane = GAME_PLANE
+	/// Should this image holder persist if there are no seers for it?
+	var/persist_without_seers = FALSE
 
 /obj/effect/client_image_holder/Initialize(mapload, list/mobs_which_see_us)
 	. = ..()
@@ -121,10 +123,7 @@
 
 	who_sees_us = list()
 	for(var/mob/seer as anything in mobs_which_see_us)
-		RegisterSignal(seer, COMSIG_MOB_LOGIN, PROC_REF(show_image_to))
-		RegisterSignal(seer, COMSIG_QDELETING, PROC_REF(remove_seer))
-		who_sees_us += seer
-		show_image_to(seer)
+		add_seer(seer)
 
 /obj/effect/client_image_holder/Destroy(force)
 	if(shown_image)
@@ -141,6 +140,12 @@
 		return
 	SET_PLANE(shown_image, PLANE_TO_TRUE(shown_image.plane), new_turf)
 
+/obj/effect/client_image_holder/proc/add_seer(mob/new_seer)
+	RegisterSignal(new_seer, COMSIG_MOB_LOGIN, PROC_REF(show_image_to))
+	RegisterSignal(new_seer, COMSIG_QDELETING, PROC_REF(remove_seer))
+	who_sees_us += new_seer
+	show_image_to(new_seer)
+
 /// Signal proc to clean up references if people who see us are deleted.
 /obj/effect/client_image_holder/proc/remove_seer(mob/source)
 	SIGNAL_HANDLER
@@ -150,7 +155,7 @@
 	who_sees_us -= source
 
 	// No reason to exist, anymore
-	if(!QDELETED(src) && !length(who_sees_us))
+	if(!QDELETED(src) && !length(who_sees_us) && !persist_without_seers)
 		qdel(src)
 
 /// Generates the image which we take on.

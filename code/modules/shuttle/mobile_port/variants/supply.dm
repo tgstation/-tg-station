@@ -119,7 +119,7 @@ GLOBAL_LIST_INIT(blacklisted_cargo_types, typecacheof(list(
 	message_admins("Blacklisted item found on in-transit Cargo Shuttle. See cargo logs for more details.")
 	SSshuttle.centcom_message = "Contraband found on Cargo Shuttle. This has been returned via drop pod."
 
-/obj/docking_port/mobile/supply/initiate_docking()
+/obj/docking_port/mobile/supply/initiate_docking(obj/docking_port/stationary/new_dock, force=FALSE)
 	if(getDockedId() == "cargo_away") // Buy when we leave home.
 		buy()
 		create_mail()

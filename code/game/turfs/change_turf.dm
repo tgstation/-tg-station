@@ -125,6 +125,16 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 	if(!(flags & CHANGETURF_DEFER_CHANGE))
 		new_turf.AfterChange(flags, old_type)
 
+	if(flags & CHANGETURF_GENERATE_SHUTTLE_CEILING)
+		var/turf/above = get_step_multiz(src, UP)
+		if(above)
+			if(!(istype(above, /turf/open/floor/engine/hull/ceiling) || above.depth_to_find_baseturf(/turf/open/floor/engine/hull/ceiling)))
+				if(istype(above, /turf/open/openspace) || istype(above, /turf/open/space/openspace))
+					above.place_on_top(/turf/open/floor/engine/hull/ceiling)
+				else
+					above.stack_ontop_of_baseturf(/turf/open/openspace, /turf/open/floor/engine/hull/ceiling)
+					above.stack_ontop_of_baseturf(/turf/open/space/openspace, /turf/open/floor/engine/hull/ceiling)
+
 	new_turf.blueprint_data = old_bp
 	new_turf.rcd_memory = old_rcd_memory
 	new_turf.explosion_throw_details = old_explosion_throw_details
@@ -281,8 +291,12 @@ GLOBAL_LIST_INIT(blacklisted_automated_baseturfs, typecacheof(list(
 /// Attempts to replace a tile with lattice. Amount is the amount of tiles to scrape away.
 /turf/proc/attempt_lattice_replacement(amount = 2)
 	if(lattice_underneath)
+		var/list/successful_replacement_callbacks = list()
+		SEND_SIGNAL(src, COMSIG_TURF_ATTEMPT_LATTICE_REPLACEMENT, successful_replacement_callbacks)
 		var/turf/new_turf = ScrapeAway(amount, flags = CHANGETURF_INHERIT_AIR)
 		if(!istype(new_turf, /turf/open/floor))
-			new /obj/structure/lattice(src)
+			var/new_lattice = new /obj/structure/lattice(src)
+			for(var/datum/callback/callback as anything in successful_replacement_callbacks)
+				callback.Invoke(new_lattice)
 	else
 		ScrapeAway(amount, flags = CHANGETURF_INHERIT_AIR)
