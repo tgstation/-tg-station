@@ -2392,10 +2392,7 @@
 /area/awaymission/cabin/caves)
 "my" = (
 /obj/effect/decal/cleanable/dirt,
-/obj/item/gun/ballistic/automatic/surplus{
-	desc = "Uses 10mm ammo and its bulky frame prevents one-hand firing. It has the word CHEKOV engraved on the stock.";
-	name = "chekov's rifle"
-	},
+/obj/item/gun/ballistic/automatic/sks/chekhov,
 /turf/open/floor/mineral/plastitanium/red{
 	name = "soviet floor"
 	},

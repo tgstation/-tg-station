@@ -98,3 +98,7 @@
 /obj/item/weaponcrafting/gunkit/photon
 	name = "photon cannon parts kit (nonlethal)"
 	desc = "A suitcase containing the necessary gun parts to construct a photon cannon around a stabilized flux anomaly. Harness the power of the sun, in the palms of your hands."
+
+/obj/item/weaponcrafting/gunkit/sks
+	name = "\improper Sakhno SKS semi-automatic rifle parts kit (lethal)"
+	desc = "A suitcase containing the necessary gun parts to construct a Sakhno SKS semi-automatic rifle. These things are all over the frontier worlds."

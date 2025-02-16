@@ -427,3 +427,15 @@
 	)
 	time = 10 SECONDS
 	category = CAT_WEAPON_RANGED
+
+/datum/crafting_recipe/sks
+	name = "Sakhno SKS semi-automatic rifle"
+	result = /obj/item/gun/ballistic/automatic/sks/empty
+	reqs = list(
+		/obj/item/weaponcrafting/stock = 1,
+		/obj/item/weaponcrafting/receiver = 1,
+		/obj/item/weaponcrafting/gunkit/sks = 1,
+	)
+	tool_behaviors = list(TOOL_SCREWDRIVER)
+	time = 10 SECONDS
+	category = CAT_WEAPON_RANGED

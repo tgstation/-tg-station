@@ -318,23 +318,48 @@
 		return
 	..()
 
-// Old Semi-Auto Rifle //
+// SKS semi-automatic rifle //
 
-/obj/item/gun/ballistic/automatic/surplus
-	name = "surplus rifle"
-	desc = "One of countless obsolete ballistic rifles that still sees use as a cheap deterrent. Uses 10mm ammo and its bulky frame prevents one-hand firing."
-	icon_state = "surplus"
-	worn_icon_state = null
-	weapon_weight = WEAPON_HEAVY
-	accepted_magazine_type = /obj/item/ammo_box/magazine/sr10mm
-	fire_delay = 30
+/obj/item/gun/ballistic/automatic/sks
+	name = "\improper Sakhno SKS semi-automatic rifle"
+	desc = "A revival of the ancient SKS semi-automatic rifle, redesigned to utilize .310 Strilka rounds. Produced to celebrate the \
+		establishment of the Third Soviet Union in the Spinward Sector. In the wake of the union's collapse, these weapons now hold a \
+		unique place in history amongst the populace of the sector. However, they are strangely rarer than the Sakhno M2442 Army. \
+		Frontier settlers are known for owning one of these for hunting purposes. Or fighting off annoying tax collectors."
+	icon = 'icons/obj/weapons/guns/wide_guns.dmi'
+	icon_state = "sks"
+	worn_icon_state = "sks"
+	inhand_icon_state = "sks"
 	burst_size = 1
-	can_unsuppress = TRUE
-	can_suppress = TRUE
-	w_class = WEIGHT_CLASS_HUGE
+	fire_delay = 0
+	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/sks
+	internal_magazine = TRUE
+	bolt_type = BOLT_TYPE_NO_BOLT
+	can_suppress = FALSE
+	tac_reloads = FALSE
+	w_class = WEIGHT_CLASS_BULKY
 	slot_flags = ITEM_SLOT_BACK
+	weapon_weight = WEAPON_HEAVY
+	projectile_damage_multiplier = 0.5
+	fire_sound = 'sound/items/weapons/gun/rifle/shot_heavy.ogg'
+	fire_sound_volume = 90
+	drop_sound = 'sound/items/handling/gun/ballistics/rifle/rifle_drop1.ogg'
+	pickup_sound = 'sound/items/handling/gun/ballistics/rifle/rifle_pickup1.ogg'
 	actions_types = list()
-	mag_display = TRUE
+
+	SET_BASE_PIXEL(-8, 0)
+
+/obj/item/gun/ballistic/automatic/sks/add_bayonet_point()
+	AddComponent(/datum/component/bayonet_attachable, offset_x = 38, offset_y = 12)
+
+/obj/item/gun/ballistic/automatic/sks/chekhov
+	name = "\improper Chekhov's SKS semi-automatic rifle"
+	desc = "A revival of the ancient SKS semi-automatic rifle, redesigned to utilize .310 Strilka rounds. The name \
+		'Chekhov' is engraved in the side of the stock. You feel like this had some kind of significance at one point, \
+		but you cannot be sure as to what that might have been. Or whether that true meaning has yet to reveal itself."
+
+/obj/item/gun/ballistic/automatic/sks/empty
+	spawn_magazine_type = /obj/item/ammo_box/magazine/internal/sks/empty
 
 // Laser rifle (rechargeable magazine) //
 
