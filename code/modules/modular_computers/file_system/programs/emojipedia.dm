@@ -27,5 +27,5 @@
 
 /datum/computer_file/program/emojipedia/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/emojipedia),
+		get_asset_datum(/datum/asset/spritesheet_batched/emojipedia),
 	)

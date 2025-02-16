@@ -142,11 +142,11 @@ Choiced preferences can generate icons. This is how the clothing/species prefere
 /datum/preference/choiced/favorite_drink/icon_for(value)
 	switch (value)
 		if ("Milk")
-			return icon('drinks.dmi', "milk")
+			return uni_icon('drinks.dmi', "milk")
 		if ("Cola")
-			return icon('drinks.dmi', "cola")
+			return uni_icon('drinks.dmi', "cola")
 		if ("Water")
-			return icon('drinks.dmi', "water")
+			return uni_icon('drinks.dmi', "water")
 ```
 
 Then, change your `.tsx` file to look like:

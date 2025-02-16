@@ -161,7 +161,7 @@
 
 /obj/item/construction/rtd/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/rtd),
+		get_asset_datum(/datum/asset/spritesheet_batched/rtd),
 	)
 
 /obj/item/construction/rtd/attack_self(mob/user)

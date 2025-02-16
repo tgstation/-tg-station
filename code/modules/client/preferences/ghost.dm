@@ -74,7 +74,7 @@
 	return assoc_to_keys(ghost_forms)
 
 /datum/preference/choiced/ghost_form/icon_for(value)
-	return icon('icons/mob/simple/mob.dmi', value)
+	return uni_icon('icons/mob/simple/mob.dmi', value)
 
 /datum/preference/choiced/ghost_form/create_default_value()
 	return "ghost"

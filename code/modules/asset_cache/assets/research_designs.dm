@@ -1,15 +1,15 @@
 // Representative icons for each research design
-/datum/asset/spritesheet/research_designs
+/datum/asset/spritesheet_batched/research_designs
 	name = "design"
 
-/datum/asset/spritesheet/research_designs/create_spritesheets()
+/datum/asset/spritesheet_batched/research_designs/create_spritesheets()
 	for (var/datum/design/path as anything in subtypesof(/datum/design))
 		if(initial(path.id) == DESIGN_ID_IGNORE)
 			continue
 
 		var/icon_file
 		var/icon_state
-		var/icon/I
+		var/datum/icon_transformer/transform = null
 
 		if(initial(path.research_icon) && initial(path.research_icon_state)) //If the design has an icon replacement skip the rest
 			icon_file = initial(path.research_icon)
@@ -18,8 +18,6 @@
 				if(!icon_exists(icon_file, icon_state))
 					stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
 					continue
-			I = icon(icon_file, icon_state, SOUTH)
-
 		else
 			// construct the icon and slap it into the resource cache
 			var/atom/item = initial(path.build_path)
@@ -38,30 +36,32 @@
 				if (machine)
 					item = machine
 
-			// Check for GAGS support where necessary
-			var/greyscale_config = initial(item.greyscale_config)
-			var/greyscale_colors = initial(item.greyscale_colors)
-			if (greyscale_config && greyscale_colors)
-				icon_file = SSgreyscale.GetColoredIconByType(greyscale_config, greyscale_colors)
+			// GAGS icon short-circuit the rest of the checks
+			if (initial(item.greyscale_config) && initial(item.greyscale_colors))
+				insert_icon(initial(path.id), gags_to_universal_icon(item))
+				continue
 			else
 				icon_file = initial(item.icon)
 
 			icon_state = initial(item.icon_state)
+			if(initial(item.color))
+				transform = color_transform(initial(item.color))
 			if (PERFORM_ALL_TESTS(focus_only/invalid_research_designs))
 				if(!icon_exists(icon_file, icon_state))
 					stack_trace("design [path] with icon '[icon_file]' missing state '[icon_state]'")
 					continue
-			I = icon(icon_file, icon_state, SOUTH)
 
 			// computers (and snowflakes) get their screen and keyboard sprites
 			if (ispath(item, /obj/machinery/computer) || ispath(item, /obj/machinery/power/solar_control))
+				if(!transform)
+					transform = new()
 				var/obj/machinery/computer/C = item
 				var/screen = initial(C.icon_screen)
 				var/keyboard = initial(C.icon_keyboard)
 				var/all_states = icon_states(icon_file)
 				if (screen && (screen in all_states))
-					I.Blend(icon(icon_file, screen, SOUTH), ICON_OVERLAY)
+					transform.blend_icon(uni_icon(icon_file, screen), ICON_OVERLAY)
 				if (keyboard && (keyboard in all_states))
-					I.Blend(icon(icon_file, keyboard, SOUTH), ICON_OVERLAY)
+					transform.blend_icon(uni_icon(icon_file, keyboard), ICON_OVERLAY)
 
-		Insert(initial(path.id), I)
+		insert_icon(initial(path.id), uni_icon(icon_file, icon_state, transform=transform))

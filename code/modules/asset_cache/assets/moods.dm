@@ -1,27 +1,18 @@
-/datum/asset/spritesheet/moods
+/datum/asset/spritesheet_batched/moods
 	name = "moods"
-	var/iconinserted = 1
 
-/datum/asset/spritesheet/moods/create_spritesheets()
-	for(var/i in 1 to 9)
-		var/target_to_insert = "mood"+"[iconinserted]"
-		Insert(target_to_insert, 'icons/hud/screen_gen.dmi', target_to_insert)
-		iconinserted++
-
-/datum/asset/spritesheet/moods/ModifyInserted(icon/pre_asset)
-	var/blended_color
-	switch(iconinserted)
-		if(1)
-			blended_color = "#f15d36"
-		if(2 to 3)
-			blended_color = "#f38943"
-		if(4)
-			blended_color = "#dfa65b"
-		if(5)
-			blended_color = "#4b96c4"
-		if(6)
-			blended_color = "#86d656"
-		else
-			blended_color = "#2eeb9a"
-	pre_asset.Blend(blended_color, ICON_MULTIPLY)
-	return pre_asset
+/datum/asset/spritesheet_batched/moods/create_spritesheets()
+	var/list/mood_colors = list(
+		"mood1" = "#f15d36",
+		"mood2" = "#f38943",
+		"mood3" = "#f38943",
+		"mood4" = "#dfa65b",
+		"mood5" = "#4b96c4",
+		"mood6" = "#86d656",
+		"mood7" = "#2eeb9a",
+		"mood8" = "#2eeb9a",
+		"mood9" = "#2eeb9a",
+	)
+	for(var/target_to_insert in mood_colors)
+		var/blended_color = mood_colors[target_to_insert]
+		insert_icon(target_to_insert, uni_icon('icons/hud/screen_gen.dmi', target_to_insert, color=blended_color))

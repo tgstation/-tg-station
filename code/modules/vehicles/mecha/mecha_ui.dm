@@ -29,7 +29,7 @@
 
 /obj/vehicle/sealed/mecha/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/mecha_equipment),
+		get_asset_datum(/datum/asset/spritesheet_batched/mecha_equipment),
 	)
 
 /obj/vehicle/sealed/mecha/ui_static_data(mob/user)

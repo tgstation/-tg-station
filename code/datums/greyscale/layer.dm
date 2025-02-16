@@ -76,9 +76,26 @@
 	var/icon/copy_of_new_icon = icon(new_icon) // Layers shouldn't be modifying it directly, this is just for them to reference
 	return InternalGenerate(processed_colors, render_steps, copy_of_new_icon)
 
+/// Used to actualy create the layer using the given colors
+/// Do not override, use InternalGenerate instead
+/datum/greyscale_layer/proc/Generate_universal_icon(list/colors, datum/universal_icon/new_icon)
+	var/list/processed_colors = list()
+	for(var/i in color_ids)
+		if(isnum(i))
+			processed_colors += colors[i]
+		else
+			processed_colors += i
+	var/datum/universal_icon/copy_of_new_icon = isnull(new_icon) ? uni_icon('icons/effects/effects.dmi', "nothing") : new_icon.copy() // Layers shouldn't be modifying it directly, this is just for them to reference
+	return InternalGenerate_universal_icon(processed_colors, copy_of_new_icon)
+
 /// Override this to implement layers.
 /// The colors var will only contain colors that this layer is configured to use.
 /datum/greyscale_layer/proc/InternalGenerate(list/colors, list/render_steps, icon/new_icon)
+
+/// Override this to implement layers.
+/// The colors var will only contain colors that this layer is configured to use.
+/datum/greyscale_layer/proc/InternalGenerate_universal_icon(list/colors, datum/universal_icon/new_icon)
+	return new_icon
 
 ////////////////////////////////////////////////////////
 // Subtypes
@@ -86,6 +103,7 @@
 /// The most basic greyscale layer; a layer which is created from a single icon_state in the given icon file
 /datum/greyscale_layer/icon_state
 	layer_type = "icon_state"
+	var/icon_file
 	var/icon_state
 	var/icon/icon
 	var/color_id
@@ -94,6 +112,7 @@
 	. = ..()
 	if(!icon_exists(icon_file, icon_state))
 		CRASH("Configured icon state \[[icon_state]\] was not found in [icon_file]. Double check your json configuration.")
+	src.icon_file = icon_file
 	icon = new(icon_file, icon_state)
 
 	if(length(color_ids) > 1)
@@ -108,6 +127,13 @@
 	var/icon/generated_icon = icon(icon)
 	if(length(colors))
 		generated_icon.Blend(colors[1], ICON_MULTIPLY)
+	return generated_icon
+
+/datum/greyscale_layer/icon_state/InternalGenerate_universal_icon(list/colors, datum/universal_icon/new_icon)
+	. = ..()
+	var/datum/universal_icon/generated_icon = uni_icon(icon_file, icon_state)
+	if(length(colors))
+		generated_icon.blend_color(colors[1], ICON_MULTIPLY)
 	return generated_icon
 
 /// A layer to modify the previous layer's colors with a color matrix
@@ -153,3 +179,8 @@
 	else
 		generated_icon = reference_type.Generate(colors.Join(), new_icon)
 	return icon(generated_icon, icon_state)
+
+/datum/greyscale_layer/reference/InternalGenerate_universal_icon(list/colors, datum/universal_icon/new_icon)
+	var/datum/universal_icon/generated_icon = reference_type.Generate_universal_icon(colors.Join(), icon_state, new_icon)
+	generated_icon = generated_icon.copy()
+	return generated_icon

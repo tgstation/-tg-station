@@ -198,7 +198,7 @@ GLOBAL_LIST_EMPTY(light_debugged_atoms)
 		ui.open()
 
 /atom/movable/screen/light_button/edit/ui_assets(mob/user)
-	return list(get_asset_datum(/datum/asset/spritesheet/lights))
+	return list(get_asset_datum(/datum/asset/spritesheet_batched/lights))
 
 /atom/movable/screen/light_button/edit/ui_data()
 	var/list/data = list()
@@ -371,7 +371,7 @@ GLOBAL_LIST_EMPTY(light_debugged_atoms)
 		ui.open()
 
 /datum/action/spawn_light/ui_assets(mob/user)
-	return list(get_asset_datum(/datum/asset/spritesheet/lights))
+	return list(get_asset_datum(/datum/asset/spritesheet_batched/lights))
 
 /datum/action/spawn_light/ui_data()
 	var/list/data = list()

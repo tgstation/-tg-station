@@ -77,7 +77,7 @@
 
 /datum/mafia_controller/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/mafia),
+		get_asset_datum(/datum/asset/spritesheet_batched/mafia),
 	)
 
 /datum/mafia_controller/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)

@@ -23,7 +23,7 @@
 
 		var/icon/dummy_icon = getFlatIcon(dummy)
 		dummy_icon.Scale(64, 64)
-		dummy_icon.Crop(15, 64, 15 + 31, 64 - 31)
+		dummy_icon.Crop(15, 64 - 31, 15 + 31, 64)
 		dummy_icon.Scale(64, 64)
 		to_insert[sanitize_css_class_name(initial(species_type.name))] = dummy_icon
 

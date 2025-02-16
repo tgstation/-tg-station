@@ -64,7 +64,7 @@ export type Design = {
 
   /**
    * The icon used to represent this design, generated in
-   * /datum/asset/spritesheet/research_designs. **The image within may not be
+   * /datum/asset/spritesheet_batched/research_designs. **The image within may not be
    * 32x32.**
    */
   icon: string;

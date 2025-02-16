@@ -111,5 +111,5 @@
 
 /obj/item/book/manual/fish_catalog/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/fish)
+		get_asset_datum(/datum/asset/spritesheet_batched/fish)
 	)

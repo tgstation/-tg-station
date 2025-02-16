@@ -9,19 +9,19 @@
 	return assoc_to_keys_features(SSaccessories.moth_antennae_list)
 
 /datum/preference/choiced/moth_antennae/icon_for(value)
-	var/static/icon/moth_head
+	var/static/datum/universal_icon/moth_head
 
 	if (isnull(moth_head))
-		moth_head = icon('icons/mob/human/species/moth/bodyparts.dmi', "moth_head")
-		moth_head.Blend(icon('icons/mob/human/human_face.dmi', "motheyes_l"), ICON_OVERLAY)
-		moth_head.Blend(icon('icons/mob/human/human_face.dmi', "motheyes_r"), ICON_OVERLAY)
+		moth_head = uni_icon('icons/mob/human/species/moth/bodyparts.dmi', "moth_head")
+		moth_head.blend_icon(uni_icon('icons/mob/human/human_face.dmi', "motheyes_l"), ICON_OVERLAY)
+		moth_head.blend_icon(uni_icon('icons/mob/human/human_face.dmi', "motheyes_r"), ICON_OVERLAY)
 
 	var/datum/sprite_accessory/antennae = SSaccessories.moth_antennae_list[value]
 
-	var/icon/icon_with_antennae = new(moth_head)
-	icon_with_antennae.Blend(icon(antennae.icon, "m_moth_antennae_[antennae.icon_state]_FRONT"), ICON_OVERLAY)
-	icon_with_antennae.Scale(64, 64)
-	icon_with_antennae.Crop(15, 64, 15 + 31, 64 - 31)
+	var/datum/universal_icon/icon_with_antennae = moth_head.copy()
+	icon_with_antennae.blend_icon(uni_icon(antennae.icon, "m_moth_antennae_[antennae.icon_state]_FRONT"), ICON_OVERLAY)
+	icon_with_antennae.scale(64, 64)
+	icon_with_antennae.crop(15, 64 - 31, 15 + 31, 64)
 
 	return icon_with_antennae
 
@@ -47,33 +47,31 @@
 		/obj/item/bodypart/arm/right/moth,
 	)
 
-	var/static/icon/moth_body
+	var/static/datum/universal_icon/moth_body
 	if (isnull(moth_body))
-		moth_body = icon('icons/blanks/32x32.dmi', "nothing")
-
-		moth_body.Blend(icon('icons/mob/human/species/moth/moth_wings.dmi', "m_moth_wings_plain_BEHIND"), ICON_OVERLAY)
+		moth_body = uni_icon('icons/blanks/32x32.dmi', "nothing")
 
 		for (var/obj/item/bodypart/body_part as anything in body_parts)
-			moth_body.Blend(icon('icons/mob/human/species/moth/bodyparts.dmi', initial(body_part.icon_state)), ICON_OVERLAY)
+			moth_body.blend_icon(uni_icon('icons/mob/human/species/moth/bodyparts.dmi', initial(body_part.icon_state)), ICON_OVERLAY)
 
-		moth_body.Blend(icon('icons/mob/human/human_face.dmi', "motheyes_l"), ICON_OVERLAY)
-		moth_body.Blend(icon('icons/mob/human/human_face.dmi', "motheyes_r"), ICON_OVERLAY)
+		moth_body.blend_icon(uni_icon('icons/mob/human/human_face.dmi', "motheyes_l"), ICON_OVERLAY)
+		moth_body.blend_icon(uni_icon('icons/mob/human/human_face.dmi', "motheyes_r"), ICON_OVERLAY)
 
 	var/datum/sprite_accessory/markings = SSaccessories.moth_markings_list[value]
-	var/icon/icon_with_markings = new(moth_body)
+	var/datum/universal_icon/icon_with_markings = moth_body.copy()
 
-	if (value != "None")
+	if (value != SPRITE_ACCESSORY_NONE)
 		for (var/obj/item/bodypart/body_part as anything in body_parts)
-			var/icon/body_part_icon = icon(markings.icon, "[markings.icon_state]_[initial(body_part.body_zone)]")
-			body_part_icon.Crop(1, 1, 32, 32)
-			icon_with_markings.Blend(body_part_icon, ICON_OVERLAY)
+			var/datum/universal_icon/body_part_icon = uni_icon(markings.icon, "[markings.icon_state]_[initial(body_part.body_zone)]")
+			body_part_icon.crop(1, 1, 32, 32)
+			icon_with_markings.blend_icon(body_part_icon, ICON_OVERLAY)
 
-	icon_with_markings.Blend(icon('icons/mob/human/species/moth/moth_wings.dmi', "m_moth_wings_plain_FRONT"), ICON_OVERLAY)
-	icon_with_markings.Blend(icon('icons/mob/human/species/moth/moth_antennae.dmi', "m_moth_antennae_plain_FRONT"), ICON_OVERLAY)
+	icon_with_markings.blend_icon(uni_icon('icons/mob/human/species/moth/moth_wings.dmi', "m_moth_wings_plain_FRONT"), ICON_OVERLAY)
+	icon_with_markings.blend_icon(uni_icon('icons/mob/human/species/moth/moth_antennae.dmi', "m_moth_antennae_plain_FRONT"), ICON_OVERLAY)
 
 	// Zoom in on the top of the head and the chest
-	icon_with_markings.Scale(64, 64)
-	icon_with_markings.Crop(15, 64, 15 + 31, 64 - 31)
+	icon_with_markings.scale(64, 64)
+	icon_with_markings.crop(15, 64 - 31, 15 + 31, 64)
 
 	return icon_with_markings
 
@@ -92,9 +90,7 @@
 
 /datum/preference/choiced/moth_wings/icon_for(value)
 	var/datum/sprite_accessory/moth_wings = SSaccessories.moth_wings_list[value]
-	var/icon/final_icon = icon(moth_wings.icon, "m_moth_wings_[moth_wings.icon_state]_BEHIND")
-	final_icon.Blend(icon(moth_wings.icon, "m_moth_wings_[moth_wings.icon_state]_FRONT"), ICON_OVERLAY)
-	return final_icon
+	return uni_icon(moth_wings.icon, "m_moth_wings_[moth_wings.icon_state]_BEHIND")
 
 /datum/preference/choiced/moth_wings/apply_to_human(mob/living/carbon/human/target, value)
 	target.dna.features["moth_wings"] = value

@@ -1,9 +1,7 @@
-/datum/asset/spritesheet/rtd
+/datum/asset/spritesheet_batched/rtd
 	name = "rtd"
 
-/datum/asset/spritesheet/rtd/create_spritesheets()
-	//some tiles may share the same icon but have different properties to animate that icon
-	//so we keep track of what icons we registered
+/datum/asset/spritesheet_batched/rtd/create_spritesheets()
 	var/list/registered = list()
 
 	for(var/main_root in GLOB.floor_designs)
@@ -14,7 +12,7 @@
 				if(registered[icon_state])
 					continue
 
-				Insert(sprite_name = icon_state, I = 'icons/obj/tiles.dmi', icon_state = icon_state)
+				insert_icon(icon_state, uni_icon('icons/obj/tiles.dmi', icon_state))
 				registered[icon_state] = TRUE
 
 				var/list/tile_directions = design["tile_rotate_dirs"]
@@ -26,29 +24,4 @@
 					if(direction in GLOB.tile_dont_rotate)
 						continue
 
-					//but for these directions we have to do some hacky stuff
-					var/icon/img = icon(icon = 'icons/obj/tiles.dmi', icon_state = icon_state)
-					switch(direction)
-						if(NORTHEAST)
-							img.Turn(-180)
-							var/icon/east_rotated = icon(icon = 'icons/obj/tiles.dmi', icon_state = icon_state)
-							east_rotated.Turn(-90)
-							img.Blend(east_rotated,ICON_MULTIPLY)
-							img.SetIntensity(2,2,2)
-						if(NORTHWEST)
-							img.Turn(-180)
-							var/icon/west_rotated = icon(icon = 'icons/obj/tiles.dmi', icon_state = icon_state)
-							west_rotated.Turn(90)
-							img.Blend(west_rotated,ICON_MULTIPLY)
-							img.SetIntensity(2,2,2)
-						if(SOUTHEAST)
-							var/icon/east_rotated = icon(icon = 'icons/obj/tiles.dmi', icon_state = icon_state)
-							east_rotated.Turn(-90)
-							img.Blend(east_rotated,ICON_MULTIPLY)
-							img.SetIntensity(2,2,2)
-						if(SOUTHWEST)
-							var/icon/west_rotated = icon(icon = 'icons/obj/tiles.dmi', icon_state = icon_state)
-							west_rotated.Turn(90)
-							img.Blend(west_rotated,ICON_MULTIPLY)
-							img.SetIntensity(2,2,2)
-					Insert(sprite_name = "[icon_state]-[dir2text(direction)]", I = img)
+					insert_icon("[icon_state]-[dir2text(direction)]", uni_icon('icons/obj/tiles.dmi', icon_state, direction))

@@ -9,11 +9,11 @@
 	return assoc_to_keys(GLOB.available_ui_styles)
 
 /datum/preference/choiced/ui_style/icon_for(value)
-	var/icon/icons = GLOB.available_ui_styles[value]
+	var/ui_icons = GLOB.available_ui_styles[value]
 
-	var/icon/icon = icon(icons, "hand_r")
-	icon.Crop(1, 1, ICON_SIZE_X * 2, ICON_SIZE_Y)
-	icon.Blend(icon(icons, "hand_l"), ICON_OVERLAY, ICON_SIZE_X)
+	var/datum/universal_icon/icon = uni_icon(ui_icons, "hand_l")
+	icon.crop(1 - ICON_SIZE_X, 1, ICON_SIZE_Y, ICON_SIZE_X)
+	icon.blend_icon(uni_icon(ui_icons, "hand_r"), ICON_OVERLAY)
 
 	return icon
 

@@ -27,7 +27,7 @@
 
 /obj/machinery/computer/telecomms/monitor/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/telecomms),
+		get_asset_datum(/datum/asset/spritesheet_batched/telecomms),
 	)
 
 /obj/machinery/computer/telecomms/monitor/ui_interact(mob/user, datum/tgui/ui)

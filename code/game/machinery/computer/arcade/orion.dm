@@ -146,7 +146,7 @@
 
 /obj/machinery/computer/arcade/orion_trail/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/moods),
+		get_asset_datum(/datum/asset/spritesheet_batched/moods),
 	)
 
 /obj/machinery/computer/arcade/orion_trail/ui_data(mob/user)

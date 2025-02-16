@@ -311,5 +311,5 @@
 
 /obj/machinery/seed_extractor/ui_assets(mob/user)
 	return list(
-		get_asset_datum(/datum/asset/spritesheet/seeds)
+		get_asset_datum(/datum/asset/spritesheet_batched/seeds)
 	)

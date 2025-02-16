@@ -1,8 +1,8 @@
 ///Icons for containers printed in ChemMaster
-/datum/asset/spritesheet/chemmaster
+/datum/asset/spritesheet_batched/chemmaster
 	name = "chemmaster"
 
-/datum/asset/spritesheet/chemmaster/create_spritesheets()
+/datum/asset/spritesheet_batched/chemmaster/create_spritesheets()
 	var/list/ids = list()
 	for(var/category in GLOB.reagent_containers)
 		for(var/obj/item/reagent_containers/container as anything in GLOB.reagent_containers[category])
@@ -12,4 +12,4 @@
 			if(id in ids) // exclude duplicate containers
 				continue
 			ids += id
-			Insert(id, icon_file, icon_state)
+			insert_icon(id, uni_icon(icon_file, icon_state))

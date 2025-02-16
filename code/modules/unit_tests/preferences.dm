@@ -65,7 +65,7 @@
 		if (choiced_preference.should_generate_icons)
 			for (var/value in values)
 				var/icon = choiced_preference.icon_for(value)
-				TEST_ASSERT(istype(icon, /icon) || ispath(icon), "[preference_type] gave [icon] as an icon for [value], which is not a valid value")
+				TEST_ASSERT(istype(icon, /datum/universal_icon) || ispath(icon), "[preference_type] gave [icon] as an icon for [value], which is not a valid value")
 		else
 			var/errored = FALSE
 

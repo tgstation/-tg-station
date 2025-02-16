@@ -1,5 +1,5 @@
-/datum/asset/spritesheet/emojipedia
+/datum/asset/spritesheet_batched/emojipedia
 	name = "emojipedia"
 
-/datum/asset/spritesheet/emojipedia/create_spritesheets()
-	InsertAll("", EMOJI_SET)
+/datum/asset/spritesheet_batched/emojipedia/create_spritesheets()
+	insert_all_icons("", EMOJI_SET)

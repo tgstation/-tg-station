@@ -56,7 +56,7 @@
 
 /// Returns the icon to display in the chat window when speaking this language.
 /datum/language/proc/get_icon()
-	var/datum/asset/spritesheet/sheet = get_asset_datum(/datum/asset/spritesheet/chat)
+	var/datum/asset/spritesheet_batched/sheet = get_asset_datum(/datum/asset/spritesheet_batched/chat)
 	return sheet.icon_tag("language-[icon_state]")
 
 /// Simple helper for getting a default firstname lastname
