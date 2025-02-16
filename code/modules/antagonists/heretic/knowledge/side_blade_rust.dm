@@ -6,7 +6,7 @@
 
 	tier1 = /datum/heretic_knowledge/armor
 	tier2 = list(/datum/heretic_knowledge/crucible, /datum/heretic_knowledge/rifle)
-	tier3 = /datum/heretic_knowledge/spell/rust_charge
+	tier3 = list(/datum/heretic_knowledge/spell/rust_charge, /datum/heretic_knowledge/greaves_of_the_prophet)
 
 // Sidepaths for knowledge between Rust and Blade.
 /datum/heretic_knowledge/armor
@@ -115,4 +115,22 @@
 	action_to_add = /datum/action/cooldown/mob_cooldown/charge/rust
 	cost = 1
 
-
+/datum/heretic_knowledge/greaves_of_the_prophet
+	name = "Greaves Of The Prophet"
+	desc = "Conjures a pair of Armored Greaves, they confer to the user fully immunity to slips and the ability resist gravity at will."
+	gain_text = " \
+		Gristle churns into joint, a pop, and the fool twists a blackened foot from the \
+		jaws of another. At their game for centuries, this mangled tree of limbs twists, \
+		thrashing snares buried into snarling gums, seeking to shred the weight of grafted \
+		neighbors. Weighed down by lacerated feet, this canopy of rancid idiots ever seeks \
+		the undoing of its own bonds. I dread the thought of walking in their wake, but \
+		I must press on all the same. Their rhythms keep the feud fresh with indifference \
+		to barrier or border. Pulling more into their turmoil as they waltz."
+	cost = 1
+	required_atoms = list(
+		/obj/item/clothing/shoes/jackboots = 1,
+		/obj/item/stack/sheet/mineral/titanium = 2,
+	)
+	result_atoms = list(/obj/item/clothing/shoes/greaves_of_the_prophet)
+	research_tree_icon_path = 'icons/obj/clothing/shoes.dmi'
+	research_tree_icon_state = "hereticgreaves"

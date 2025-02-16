@@ -1041,7 +1041,6 @@
 	// I mean is it really that bad if they don't even know half this stuff is added to them.
 	// It's like, forbidden knowledge. It fits with the mansus theme - great excuse for poor design!
 	knowledge_to_grant = list(
-		/datum/heretic_knowledge/duel_stance,
 		/datum/heretic_knowledge/blade_grasp,
 		/datum/heretic_knowledge/blade_dance,
 		/datum/heretic_knowledge/blade_upgrade/blade,

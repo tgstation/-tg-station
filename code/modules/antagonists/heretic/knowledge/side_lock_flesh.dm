@@ -4,15 +4,27 @@
 
 	route = PATH_SIDE
 
-	tier1 = /datum/heretic_knowledge/dummy_lock_to_flesh
+	tier1 = /datum/heretic_knowledge/phylactery
 	tier2 = /datum/heretic_knowledge/spell/opening_blast
 	tier3 = /datum/heretic_knowledge/spell/apetra_vulnera
 
-/datum/heretic_knowledge/dummy_lock_to_flesh
-	name = "Flesh and Lock ways"
-	desc = "Research this to gain access to the other path"
-	gain_text = "There are ways from feasting to wounding, the power of birth is close to the power of opening."
+/**
+ * Phylactery of Damnation
+ */
+/datum/heretic_knowledge/phylactery
+	name = "Phylactery of Damnation"
+	desc = "Allows you to transmute a sheet of glass and a poppy into a Phylactery that can instantly draw blood, even from long distances. \
+		Be warned, your target may still feel a prick."
+	gain_text = "A tincture twisted into the shape of a bloodsucker vermin. \
+		Whether it chose the shape for itself, or this is the humor of the sickened mind that conjured this vile implement into being is something best not pondered."
+	required_atoms = list(
+		/obj/item/stack/sheet/glass = 1,
+		/obj/item/food/grown/poppy = 1,
+	)
+	result_atoms = list(/obj/item/reagent_containers/cup/phylactery)
 	cost = 1
+	research_tree_icon_path = 'icons/obj/antags/eldritch.dmi'
+	research_tree_icon_state = "phylactery_2"
 
 // Sidepaths for knowledge between Knock and Flesh.
 /datum/heretic_knowledge/spell/opening_blast

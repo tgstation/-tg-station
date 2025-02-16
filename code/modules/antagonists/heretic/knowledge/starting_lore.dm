@@ -271,7 +271,7 @@ GLOBAL_LIST_INIT(heretic_start_knowledge, initialize_starting_knowledge())
 	result_atoms = list(/obj/item/codex_cicatrix)
 	cost = 1
 	is_starting_knowledge = TRUE
-	priority = MAX_KNOWLEDGE_PRIORITY - 3 // Least priority out of the starting knowledges, as it's an optional boon.
+	priority = MAX_KNOWLEDGE_PRIORITY - 4 // Least priority out of the starting knowledges, as it's an optional boon.
 	var/static/list/non_mob_bindings = typecacheof(list(/obj/item/stack/sheet/leather, /obj/item/stack/sheet/animalhide, /obj/item/food/deadmouse))
 	research_tree_icon_path = 'icons/obj/antags/eldritch.dmi'
 	research_tree_icon_state = "book"
@@ -374,3 +374,42 @@ GLOBAL_LIST_INIT(heretic_start_knowledge, initialize_starting_knowledge())
 	var/drain_message = pick_list(HERETIC_INFLUENCE_FILE, "drain_message")
 	to_chat(user, span_hypnophrase(span_big("[drain_message]")))
 	return .
+
+/**
+ * Warren King's Welcome
+ * Ritual available at the start. So that heretics can easily gain access to maintenance airlocks without having to rely on a HoP or having to off some poor assistant.
+ * Gives access to solars since those doors are especially useful to get in or out of space.
+ */
+/datum/heretic_knowledge/bookworm
+	name = "Warren King's Welcome"
+	desc = "Allows you to transmute 5 wires and a piece of paper to infuse any ID with maintenace and external airlock access."
+	gain_text = "Gnawed into vicious-stained fingerbones, my grim invitation snaps my nauseous and clouded mind towards the heavy-set door. \
+	Slowly, the light dances between a crawling darkness, blanketing the fetid promenade with infinite machinations. \
+	But the King will soon take his pound of flesh. Even here, the taxman takes their cut. For there are a thousands mouths to feed."
+	required_atoms = list(
+		/obj/item/stack/cable_coil = 5,
+		/obj/item/paper = 1,
+	)
+	cost = 1
+	is_starting_knowledge = TRUE
+	priority = MAX_KNOWLEDGE_PRIORITY - 3
+	research_tree_icon_path = 'icons/obj/card.dmi'
+	research_tree_icon_state = "eldritch"
+
+/datum/heretic_knowledge/bookworm/recipe_snowflake_check(mob/living/user, list/atoms, list/selected_atoms, turf/loc)
+	. = ..()
+	for(var/obj/item/card/id/used_id in atoms)
+		if((ACCESS_MAINT_TUNNELS in used_id.access) && (ACCESS_EXTERNAL_AIRLOCKS in used_id.access)) // If we can't give any access we aren't elligible
+			continue
+		selected_atoms += used_id
+		return TRUE
+
+	user.balloon_alert(user, "ritual failed, no ID lacking access!")
+	return FALSE
+
+/datum/heretic_knowledge/bookworm/on_finished_recipe(mob/living/user, list/selected_atoms, turf/loc)
+	. = ..()
+	var/obj/item/card/id/improved_id = locate() in selected_atoms
+	improved_id.add_access(list(ACCESS_MAINT_TUNNELS, ACCESS_EXTERNAL_AIRLOCKS), mode = FORCE_ADD_ALL)
+	selected_atoms -= improved_id
+	return TRUE

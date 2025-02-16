@@ -6,17 +6,9 @@
 
 	tier1 = /datum/heretic_knowledge/spell/mind_gate
 	tier2 = list(/datum/heretic_knowledge/unfathomable_curio, /datum/heretic_knowledge/painting)
-	tier3 = /datum/heretic_knowledge/dummy_moon_to_lock
+	tier3 = /datum/heretic_knowledge/codex_morbus
 
 // Sidepaths for knowledge between Knock and Moon.
-
-/datum/heretic_knowledge/dummy_moon_to_lock
-	name = "Lock and Moon ways"
-	desc = "Research this to gain access to the other path"
-	gain_text = "The powers of Madness are like a wound in one's soul, and every wound can be opened and closed."
-	cost = 1
-
-
 
 /datum/heretic_knowledge/spell/mind_gate
 	name = "Mind Gate"
@@ -111,3 +103,36 @@
 
 	user.balloon_alert(user, "no additional atom present!")
 	return FALSE
+
+/**
+ * Codex Morbus, an upgrade to the base codex
+ * Functionally an upgraded version of the codex, but it also has the ability to cast curses by right clicking at a rune.
+ * Requires you to have the blood of your victim in your off-hand
+ */
+/datum/heretic_knowledge/codex_morbus
+	name = "Codex Morbus"
+	desc = "Allows you to use a codex cicatrix, and a body upgrades your Codex Cicactrix into a Codex Morbus. \
+		It draws runes and siphons essences a bit faster. \
+		Right Click on a rune to curse crewmembers, the target's blood is required for a curse to take effect."
+	gain_text = "The spine of this leather-bound tome creaks with an eerily pained sigh. \
+		To ply page from place takes considerable effort, and I dare not linger on the suggestions the book makes for longer than necessary. \
+		It speaks of coming plagues, of waiting supplicants of dead and forgotten gods, and the undoing of mortal kind. \
+		It speaks of needles to peel the skin of the world back and leaving it to fester. And it speaks to me by name."
+	required_atoms = list(
+		/obj/item/codex_cicatrix = 1,
+		/mob/living/carbon/human = 1,
+	)
+	result_atoms = list(/obj/item/codex_cicatrix/morbus)
+	cost = 1
+	research_tree_icon_path = 'icons/obj/antags/eldritch.dmi'
+	research_tree_icon_state = "book_morbus"
+
+/datum/heretic_knowledge/codex_morbus/on_finished_recipe(mob/living/user, list/selected_atoms, turf/loc)
+	. = ..()
+	var/mob/living/carbon/human/to_fuck_up = locate() in selected_atoms
+	for(var/_limb in to_fuck_up.bodyparts)
+		var/obj/item/bodypart/limb = _limb
+		limb.force_wound_upwards(/datum/wound/slash/flesh/critical)
+	for(var/obj/item/bodypart/limb as anything in to_fuck_up.bodyparts)
+		to_fuck_up.cause_wound_of_type_and_severity(WOUND_BLUNT, limb, WOUND_SEVERITY_CRITICAL)
+	return TRUE
