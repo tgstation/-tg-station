@@ -130,6 +130,8 @@
 /obj/effect/mapping_helpers/airlock
 	layer = DOOR_HELPER_LAYER
 	late = TRUE
+	/// If TRUE we will apply to every windoor in the loc if we can't find an airlock.
+	var/apply_to_windoors = FALSE
 
 /obj/effect/mapping_helpers/airlock/Initialize(mapload)
 	. = ..()
@@ -139,9 +141,19 @@
 
 	var/obj/machinery/door/airlock/airlock = locate(/obj/machinery/door/airlock) in loc
 	if(!airlock)
+		if(apply_to_windoors)
+			var/any_found = FALSE
+			for(var/obj/machinery/door/window/windoor in loc)
+				payload(windoor)
+				any_found = TRUE
+			if(!any_found)
+				log_mapping("[src] failed to find an airlock at [AREACOORD(src)], AND no windoors were found.")
+			return
+
 		log_mapping("[src] failed to find an airlock at [AREACOORD(src)]")
-	else
-		payload(airlock)
+		return
+
+	payload(airlock)
 
 /obj/effect/mapping_helpers/airlock/LateInitialize()
 	var/obj/machinery/door/airlock/airlock = locate(/obj/machinery/door/airlock) in loc
@@ -276,6 +288,14 @@
 		log_mapping("[src] at [AREACOORD(src)] tried to set req_access, but req__one_access was already set!")
 	else
 		airlock.req_access += list(ACCESS_INACCESSIBLE)
+
+/obj/effect/mapping_helpers/airlock/red_alert_access
+	name = "airlock red alert access helper"
+	icon_state = "airlock_red_alert_access"
+	apply_to_windoors = TRUE
+
+/obj/effect/mapping_helpers/airlock/red_alert_access/payload(obj/machinery/door/airlock)
+	airlock.red_alert_access = TRUE
 
 //air alarm helpers
 /obj/effect/mapping_helpers/airalarm

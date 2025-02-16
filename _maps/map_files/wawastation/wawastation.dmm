@@ -32074,6 +32074,7 @@
 /obj/effect/mapping_helpers/airlock/access/any/command/eva,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/scrubbers/hidden/layer2,
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron,
 /area/station/ai_monitored/command/storage/eva)
 "lny" = (
@@ -37354,6 +37355,7 @@
 	pixel_y = -3
 	},
 /obj/machinery/camera/autoname/directional/west,
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/white,
 /area/station/medical/storage)
 "nfe" = (
@@ -55127,6 +55129,7 @@
 	pixel_x = -3;
 	pixel_y = -3
 	},
+/obj/effect/mapping_helpers/airlock/red_alert_access,
 /turf/open/floor/iron/white,
 /area/station/medical/storage)
 "trs" = (
