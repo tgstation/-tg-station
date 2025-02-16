@@ -304,6 +304,14 @@
 		.[length(.)] += "</span>"
 	return .
 
+/mob/living/carbon/examine_more(mob/user)
+	. = ..()
+	if(HAS_TRAIT(src, TRAIT_INVISIBLE_MAN))
+		return
+	for(var/datum/scar/iter_scar as anything in all_scars)
+		if(iter_scar.is_visible(user))
+			. += iter_scar.get_examine_description(user)
+
 /**
  * Shows any and all examine text related to any status effects the user has.
  */
@@ -567,10 +575,18 @@
 
 /mob/living/carbon/human/examine_more(mob/user)
 	. = ..()
-	if((wear_mask && (wear_mask.flags_inv & HIDEFACE)) || (head && (head.flags_inv & HIDEFACE)))
-		return
+
+	if(istype(w_uniform, /obj/item/clothing/under) && !(check_obscured_slots() & ITEM_SLOT_ICLOTHING) && !HAS_TRAIT(w_uniform, TRAIT_EXAMINE_SKIP))
+		var/obj/item/clothing/under/undershirt = w_uniform
+		if(undershirt.has_sensor == BROKEN_SENSORS)
+			. += list(span_notice("\The [undershirt]'s medical sensors are sparking."))
+
 	if(HAS_TRAIT(src, TRAIT_UNKNOWN) || HAS_TRAIT(src, TRAIT_INVISIBLE_MAN))
 		return
+
+	if((wear_mask && (wear_mask.flags_inv & HIDEFACE)) || (head && (head.flags_inv & HIDEFACE)))
+		return
+
 	var/age_text
 	switch(age)
 		if(-INFINITY to 25)
@@ -586,15 +602,6 @@
 		if(101 to INFINITY)
 			age_text = "withering away"
 	. += list(span_notice("[p_They()] appear[p_s()] to be [age_text]."))
-
-	if(istype(w_uniform, /obj/item/clothing/under))
-		var/obj/item/clothing/under/undershirt = w_uniform
-		if(undershirt.has_sensor == BROKEN_SENSORS)
-			. += list(span_notice("The [undershirt]'s medical sensors are sparking."))
-
-	for(var/datum/scar/iter_scar as anything in all_scars)
-		if(iter_scar.is_visible(user))
-			. += iter_scar.get_examine_description(user)
 
 #undef ADD_NEWLINE_IF_NECESSARY
 #undef CARBON_EXAMINE_EMBEDDING_MAX_DIST
