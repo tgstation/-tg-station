@@ -5663,6 +5663,7 @@
 #include "code\modules\projectiles\boxes_magazines\internal\_internal.dm"
 #include "code\modules\projectiles\boxes_magazines\internal\grenade.dm"
 #include "code\modules\projectiles\boxes_magazines\internal\meathook.dm"
+#include "code\modules\projectiles\boxes_magazines\internal\pistol.dm"
 #include "code\modules\projectiles\boxes_magazines\internal\revolver.dm"
 #include "code\modules\projectiles\boxes_magazines\internal\rifle.dm"
 #include "code\modules\projectiles\boxes_magazines\internal\shotgun.dm"

@@ -560,6 +560,15 @@
 	build_path = /obj/item/melee/cleric_mace
 	category = list(RND_CATEGORY_IMPORTED)
 
+/datum/design/liberator_gun
+	name = "The Liberator"
+	desc = "A dirt cheap 3D printed gun. Only holds one bullet, and is infamous for sometimes exploding on it's user."
+	id = "liberator_gun"
+	build_type = AUTOLATHE
+	materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 2, /datum/material/iron = SMALL_MATERIAL_AMOUNT * 15)
+	build_path = /obj/item/gun/ballistic/automatic/pistol/doorhickey
+	category = list(RND_CATEGORY_IMPORTED)
+
 /datum/design/stun_boomerang
 	name = "OZtek Boomerang"
 	desc = "Uses reverse flow gravitodynamics to flip its personal gravity back to the thrower mid-flight. Also functions similar to a stun baton."

@@ -399,58 +399,74 @@
 /obj/item/gun/ballistic/can_shoot()
 	return chambered?.loaded_projectile
 
-/obj/item/gun/ballistic/attackby(obj/item/A, mob/user, params)
+/obj/item/gun/ballistic/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	. = ..()
 	if (.)
 		return
-	if (!internal_magazine && istype(A, /obj/item/ammo_box/magazine))
-		var/obj/item/ammo_box/magazine/AM = A
+
+	if (!internal_magazine && istype(tool, /obj/item/ammo_box/magazine))
 		if (!magazine)
-			insert_magazine(user, AM)
-		else
-			if (tac_reloads)
-				eject_magazine(user, FALSE, AM)
-			else
-				balloon_alert(user, "already loaded!")
-		return
-	if (isammocasing(A) || istype(A, /obj/item/ammo_box))
+			insert_magazine(user, tool)
+			return ITEM_INTERACT_SUCCESS
+
+		if (tac_reloads)
+			eject_magazine(user, FALSE, tool)
+			return ITEM_INTERACT_SUCCESS
+
+		balloon_alert(user, "already loaded!")
+		return ITEM_INTERACT_FAILURE
+
+	if (isammocasing(tool) || istype(tool, /obj/item/ammo_box))
 		if (must_hold_to_load && !check_if_held(user))
-			return
+			return NONE
+
 		if (bolt_type == BOLT_TYPE_NO_BOLT || internal_magazine)
-			if (chambered && !chambered.loaded_projectile)
-				chambered.forceMove(drop_location())
-				if(chambered != magazine?.stored_ammo[1])
-					magazine.stored_ammo -= chambered
-				chambered = null
-			var/num_loaded = magazine?.attackby(A, user, params, TRUE)
-			if (num_loaded)
-				balloon_alert(user, "[num_loaded] [cartridge_wording]\s loaded")
-				playsound(src, load_sound, load_sound_volume, load_sound_vary)
-				if (chambered == null && bolt_type == BOLT_TYPE_NO_BOLT)
-					chamber_round()
-				A.update_appearance()
-				update_appearance()
-			return
-	if(istype(A, /obj/item/suppressor))
-		var/obj/item/suppressor/S = A
+			if (load_gun(tool, user))
+				return ITEM_INTERACT_SUCCESS
+			return ITEM_INTERACT_FAILURE
+
+	if(istype(tool, /obj/item/suppressor))
 		if(!can_suppress)
-			balloon_alert(user, "[S.name] doesn't fit!")
-			return
+			balloon_alert(user, "[tool.name] doesn't fit!")
+			return ITEM_INTERACT_FAILURE
+
 		if(!user.is_holding(src))
 			balloon_alert(user, "not in hand!")
-			return
+			return ITEM_INTERACT_FAILURE
+
 		if(suppressed)
 			balloon_alert(user, "already has a supressor!")
-			return
-		if(user.transferItemToLoc(A, src))
-			balloon_alert(user, "[S.name] attached")
-			install_suppressor(A)
-			return
-	if (can_be_sawn_off)
-		if (sawoff(user, A))
-			return
+			return ITEM_INTERACT_FAILURE
 
-	return FALSE
+		if(!user.transferItemToLoc(tool, src))
+			balloon_alert(user, "cannot attach!")
+			return ITEM_INTERACT_FAILURE
+
+		balloon_alert(user, "[tool.name] attached")
+		install_suppressor(tool)
+		return ITEM_INTERACT_SUCCESS
+
+	if (can_be_sawn_off && sawoff(user, tool))
+		return ITEM_INTERACT_SUCCESS
+
+/obj/item/gun/ballistic/proc/load_gun(obj/item/ammo, mob/living/user)
+	if (chambered && !chambered.loaded_projectile)
+		chambered.forceMove(drop_location())
+		if(chambered != magazine?.stored_ammo[1])
+			magazine.stored_ammo -= chambered
+		chambered = null
+
+	var/num_loaded = magazine?.attackby(ammo, user, silent = TRUE)
+	if (!num_loaded)
+		return FALSE
+
+	balloon_alert(user, "[num_loaded] [cartridge_wording]\s loaded")
+	playsound(src, load_sound, load_sound_volume, load_sound_vary)
+	if (chambered == null && bolt_type == BOLT_TYPE_NO_BOLT)
+		chamber_round()
+	ammo.update_appearance()
+	update_appearance()
+	return TRUE
 
 /obj/item/gun/ballistic/proc/check_if_held(mob/user)
 	if(src != user.get_inactive_held_item())
@@ -540,20 +556,7 @@
 			eject_magazine(user)
 			return
 	if(bolt_type == BOLT_TYPE_NO_BOLT)
-		var/num_unloaded = 0
-		for(var/obj/item/ammo_casing/casing as anything in get_ammo_list(FALSE))
-			casing.forceMove(drop_location())
-			casing.bounce_away(FALSE, NONE)
-			num_unloaded++
-			var/turf/T = get_turf(drop_location())
-			if(T && is_station_level(T.z))
-				SSblackbox.record_feedback("tally", "station_mess_created", 1, casing.name)
-		if (num_unloaded)
-			balloon_alert(user, "[num_unloaded] [cartridge_wording]\s unloaded")
-			playsound(user, eject_sound, eject_sound_volume, eject_sound_vary)
-			update_appearance()
-		else
-			balloon_alert(user, "it's empty!")
+		unload_ammo(user)
 		return
 	if(bolt_type == BOLT_TYPE_LOCKING && bolt_locked)
 		drop_bolt(user)
@@ -564,6 +567,25 @@
 	rack(user)
 	return
 
+/obj/item/gun/ballistic/proc/unload_ammo(mob/living/user, forced = FALSE)
+	var/num_unloaded = 0
+	var/turf/drop_turf = get_turf(drop_location())
+	for(var/obj/item/ammo_casing/casing as anything in get_ammo_list(FALSE))
+		casing.forceMove(drop_location())
+		casing.bounce_away(FALSE, NONE)
+		num_unloaded++
+		if(drop_turf && is_station_level(drop_turf.z))
+			SSblackbox.record_feedback("tally", "station_mess_created", 1, casing.name)
+
+	if (!num_unloaded)
+		if (!forced)
+			balloon_alert(user, "it's empty!")
+		return
+
+	if (!forced)
+		balloon_alert(user, "[num_unloaded] [cartridge_wording]\s unloaded")
+	playsound(user, eject_sound, eject_sound_volume, eject_sound_vary)
+	update_appearance()
 
 /obj/item/gun/ballistic/examine(mob/user)
 	. = ..()

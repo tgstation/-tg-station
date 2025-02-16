@@ -212,3 +212,117 @@
 	else
 		to_chat(user, span_notice("..and falls into view. Whew, that was a close one."))
 		user.dropItemToGround(src)
+
+#define DOORHICKEY_GUN_MIN_DAMAGE 70
+#define DOORHICKEY_GUN_MAX_DAMAGE 140
+
+/obj/item/gun/ballistic/automatic/pistol/doorhickey
+	name = "\improper Liberator"
+	desc = "A poorly made 3D printed \"gun\", only capable of firing a single shot. Well-known throughout the Spinward Sector \
+		after an incident where 3 assistants were killed by shrapnel from such a device exploding while attempting to shoot a mouse."
+	icon_state = "doorhickey"
+	custom_materials = list(/datum/material/plastic = SHEET_MATERIAL_AMOUNT * 2)
+	bolt_type = BOLT_TYPE_NO_BOLT
+	internal_magazine = TRUE
+	casing_ejector = FALSE
+	force = 10
+	max_integrity = 100
+	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/doorhickey
+	can_suppress = FALSE
+	semi_auto = FALSE
+	show_bolt_icon = FALSE
+	projectile_damage_multiplier = 0.5
+	spread = 10
+
+/obj/item/gun/ballistic/automatic/pistol/doorhickey/unload_ammo(mob/living/user, forced = FALSE)
+	if (forced)
+		return ..()
+
+	balloon_alert(user, "unscrewing the barrel...")
+	playsound(user, 'sound/items/tools/screwdriver_operating.ogg', 75, FALSE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+	if (!do_after(user, 2 SECONDS, src))
+		balloon_alert(user, "interrupted!")
+		return
+	. = ..()
+
+/obj/item/gun/ballistic/automatic/pistol/doorhickey/load_gun(obj/item/ammo, mob/living/user)
+	. = ..()
+	if (!.)
+		return
+
+	balloon_alert(user, "screwing the barrel on...")
+	playsound(user, 'sound/items/tools/screwdriver_operating.ogg', 75, FALSE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+	if (do_after(user, 2 SECONDS, src))
+		return TRUE
+
+	balloon_alert(user, "interrupted!")
+	unload_ammo(user, forced = TRUE)
+	return FALSE
+
+/obj/item/gun/ballistic/automatic/pistol/doorhickey/fire_gun(atom/target, mob/living/user, flag, params)
+	var/dmg_multiplier = 1
+
+	if (get_dist(target, user) <= 1)
+		dmg_multiplier *= 2
+
+	if (isliving(target))
+		var/mob/living/victim = target
+		var/datum/status_effect/grouped/heldup/gunpoint = victim.has_status_effect(/datum/status_effect/grouped/heldup)
+		if (gunpoint)
+			for (var/datum/weakref/pointer_ref as anything in gunpoint.sources)
+				if (pointer_ref.resolve() == user)
+					dmg_multiplier *= 1.5 // Caps at 60 damage
+					break
+
+	projectile_damage_multiplier *= dmg_multiplier
+	. = ..()
+	projectile_damage_multiplier /= dmg_multiplier
+
+/obj/item/gun/ballistic/automatic/pistol/doorhickey/shoot_live_shot(mob/living/user, pointblank = FALSE, atom/pbtarget = null, message = TRUE)
+	. = ..()
+	if (!.)
+		return
+
+	var/damage_to_take = rand(DOORHICKEY_GUN_MIN_DAMAGE, DOORHICKEY_GUN_MAX_DAMAGE)
+	if (atom_integrity > damage_to_take)
+		take_damage(damage_to_take)
+		return
+
+	playsound(loc, SFX_SHATTER, 75, TRUE)
+	if (loc != user)
+		take_damage(damage_to_take)
+		return
+
+	var/shrapnel_bomb = FALSE
+	var/obj/item/bodypart/arm/poor_sod = user.get_active_hand()
+	if (prob(damage_to_take - atom_integrity) && poor_sod)
+		shrapnel_bomb = TRUE
+
+	user.visible_message(span_danger("[src] explodes into small pieces[shrapnel_bomb ? ", chunk of it embedding in [user]'s [user.parse_zone_with_bodypart(poor_sod.body_zone)]" : ""]!"),
+		span_userdanger("[src] explodes into small pieces[shrapnel_bomb ? ", chunk of it embedding in your [poor_sod]!" : ""]!"),
+		span_hear("You can hear sound of plastic shattering."))
+
+	if (poor_sod)
+		poor_sod.receive_damage((damage_to_take - atom_integrity) * 0.5, wound_bonus = -10, bare_wound_bonus = 20, sharpness = SHARP_EDGED, damage_source = src)
+	else
+		user.take_bodypart_damage((damage_to_take - atom_integrity) * 0.5, wound_bonus = -10, bare_wound_bonus = 20, sharpness = SHARP_EDGED)
+
+	if (shrapnel_bomb)
+		var/obj/item/shrapnel/plastic/shrapnel = new(user.loc)
+		if (!shrapnel.force_embed(user, poor_sod))
+			qdel(shrapnel)
+		else if(!HAS_TRAIT(user, TRAIT_ANALGESIA))
+			user.emote("scream")
+
+	new /obj/effect/decal/cleanable/plastic(get_turf(src))
+	take_damage(damage_to_take)
+
+/obj/item/disk/design_disk/liberator
+	name = "illegal 3D printer design disk"
+
+/obj/item/disk/design_disk/liberator/Initialize(mapload)
+	. = ..()
+	blueprints += new /datum/design/liberator_gun
+
+#undef DOORHICKEY_GUN_MIN_DAMAGE
+#undef DOORHICKEY_GUN_MAX_DAMAGE

@@ -111,3 +111,12 @@
 	price_max = CARGO_CRATE_VALUE * 5
 	stock_max = 1
 	availability_prob = 25
+
+/datum/market_item/weapon/liberator
+	name = "illegal 3D printer designs"
+	desc = "Designs for a dirt cheap 3D printable gun, well known for exploding in unfortunate assistants' hands."
+	item = /obj/item/disk/design_disk/liberator
+	price_min = CARGO_CRATE_VALUE * 2
+	price_max = CARGO_CRATE_VALUE * 5
+	stock_max = 1
+	availability_prob = 35
