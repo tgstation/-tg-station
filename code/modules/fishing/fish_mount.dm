@@ -31,12 +31,8 @@
 	var/obj/item/fish/mounted_fish
 	/// The identifier for mounts that carry the trophy between rounds.
 	var/persistence_id
-	/// Trophies from persistence are dusted if removed to be safe.
+	/// Trophies from persistence have a good chance to be dusted if removal is attempted, though rarely it pays off.
 	var/persistence_loaded_fish = FALSE
-	/// String containing the name of whoever caught the fish
-	var/catcher_name
-	/// The date of when the fish was mounted (which should coincide with the day when it was actually caught)
-	var/catch_date
 
 /obj/structure/fish_mount/Initialize(mapload, floor_to_wall_dir)
 	. = ..()
@@ -121,20 +117,21 @@
 	fish.vis_flags |= (VIS_INHERIT_PLANE|VIS_INHERIT_LAYER)
 	fish.interaction_flags_item &= ~INTERACT_ITEM_ATTACK_HAND_PICKUP
 	fish.obj_flags &= ~UNIQUE_RENAME
+	fish.remove_fillet_type()
 	fish.anchored = TRUE
 	mounted_fish = fish
 
-	catcher_name = catcher
-	catch_date = "[time2text(world.realtime, "Day, Month DD")], [CURRENT_STATION_YEAR]"
+	if(!fish.catcher_name)
+		fish.catcher_name = catcher
+	if(!fish.catch_date)
+		fish.catch_date = "[time2text(world.realtime, "Day, Month DD")], [CURRENT_STATION_YEAR]"
 
 	AddElement(/datum/element/beauty, get_fish_beauty())
-	RegisterSignal(fish, COMSIG_ATOM_EXAMINE, PROC_REF(on_fish_examined))
 	RegisterSignals(fish, list(COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_ATTACK_PAW), PROC_REF(on_fish_attack_hand))
 	rotate_fish(dir)
 	if(from_persistence)
 		persistence_loaded_fish = TRUE
-		fish.remove_fillet_type()
-		fish.fillet_type = null
+		fish.add_traits(list(TRAIT_NO_FISHING_ACHIEVEMENT, TRAIT_FISH_LOW_PRICE), INNATE_TRAIT)
 	else if(persistence_id)
 		SSpersistence.save_trophy_fish(src)
 
@@ -159,10 +156,6 @@
 	. = ..()
 	rotate_fish(dir, old_dir)
 
-/obj/structure/fish_mount/proc/on_fish_examined(datum/source, mob/user, list/examine_list)
-	SIGNAL_HANDLER
-	examine_list += span_boldnicegreen("Caught by [catcher_name] on [catch_date].")
-
 /obj/structure/fish_mount/proc/on_fish_attack_hand(datum/source, mob/living/user)
 	SIGNAL_HANDLER
 	INVOKE_ASYNC(src, PROC_REF(remove_fish), user)
@@ -178,11 +171,13 @@
 
 /obj/structure/fish_mount/proc/remove_fish(mob/living/user)
 	balloon_alert(user, "removing fish...")
-	if(!do_after(user, 3 SECONDS, src) || !mounted_fish)
+	if(!do_after(user, (persistence_loaded_fish ? 6 : 3) SECONDS, src) || !mounted_fish)
 		return
+
 	var/obj/item/fish/fish_reference = mounted_fish
-	//remove it before trying to put it in hands so we don't end up with a lingering in-hand overlay if the fish is deleted.
-	fish_reference.moveToNullspace()
+	if(persistence_loaded_fish)
+		roll_for_safe_removal(user)
+
 	if(QDELETED(fish_reference))
 		var/ash_type = /obj/effect/decal/cleanable/ash
 		if(fish_reference.w_class >= WEIGHT_CLASS_BULKY)
@@ -197,22 +192,33 @@
 	if(gone != mounted_fish)
 		return ..()
 	RemoveElement(/datum/element/beauty, get_fish_beauty())
-	if(persistence_loaded_fish)
-		if(!QDELETED(mounted_fish))
-			qdel(mounted_fish)
-	else
+	if(!QDELETED(mounted_fish) && (!persistence_loaded_fish || roll_for_safe_removal()))
 		rotate_fish(0, dir)
-		UnregisterSignal(mounted_fish, list(COMSIG_ATOM_EXAMINE, COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_ATTACK_PAW))
+		UnregisterSignal(mounted_fish, list(COMSIG_ATOM_ATTACK_HAND, COMSIG_ATOM_ATTACK_PAW))
 		mounted_fish.flags_1 &= ~IS_ONTOP_1
 		mounted_fish.vis_flags &= ~(VIS_INHERIT_PLANE|VIS_INHERIT_LAYER)
 		mounted_fish.interaction_flags_item |= INTERACT_ITEM_ATTACK_HAND_PICKUP
 		mounted_fish.obj_flags |= UNIQUE_RENAME
+		mounted_fish.add_fillet_type()
 		mounted_fish.anchored = FALSE
 	persistence_loaded_fish = FALSE
-	catcher_name = null
-	catch_date = null
 	mounted_fish = null
 	return ..()
+
+/obj/structure/fish_mount/proc/roll_for_safe_removal(mob/living/user)
+	if(isnull(mounted_fish))
+		return FALSE
+
+	///the base success rate is calculated considering the item inventory size and the heaviness of the fish.
+	var/success_prob = 100/(mounted_fish.w_class + GET_FISH_WEIGHT_RANK(mounted_fish.weight))
+	var/fishing_prowess = user?.mind?.get_skill_level(/datum/skill/fishing)
+	success_prob += fishing_prowess * 4 // up to 28% fixed bonus chance to safely retrieve the trophy depending on skill.
+	if(!prob(success_prob))
+		qdel(mounted_fish)
+		return FALSE
+
+	persistence_loaded_fish = FALSE //this way we don't roll again on Exited()
+	return TRUE
 
 /obj/structure/fish_mount/bar
 	persistence_id = "Bar"
