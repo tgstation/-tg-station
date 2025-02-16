@@ -1383,7 +1383,7 @@
 	if (embed_data)
 		return embed_data
 	if (embed_type)
-		embed_data = new embed_type(src)
+		embed_data = new embed_type()
 	return embed_data
 
 /// Sets our embedding datum to a different one. Can also take types

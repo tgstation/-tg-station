@@ -8,29 +8,45 @@
 /obj/item/ammo_casing/syringegun/ready_proj(atom/target, mob/living/user, quiet, zone_override = "")
 	if(!loaded_projectile)
 		return
+
 	if(istype(loc, /obj/item/gun/syringe))
-		var/obj/item/gun/syringe/SG = loc
-		if(!SG.syringes.len)
+		var/obj/item/gun/syringe/syringegun = loc
+		if(!syringegun.syringes.len)
 			return
 
-		var/obj/item/reagent_containers/syringe/S = SG.syringes[1]
+		var/obj/item/reagent_containers/syringe/syringe = syringegun.syringes[1]
+		var/obj/projectile/bullet/dart/dart = loaded_projectile
+		dart.name = syringe.name
+		dart.inject_flags = syringe.inject_flags
+		dart.armour_penetration = syringe.armour_penetration
+		syringegun.syringes.Remove(syringe)
+		if (syringegun.low_power)
+			insert_syringe(syringe)
+			return ..()
 
-		S.reagents.trans_to(loaded_projectile, S.reagents.total_volume, transferred_by = user)
-		loaded_projectile.name = S.name
-		var/obj/projectile/bullet/dart/D = loaded_projectile
-		D.inject_flags = S.inject_flags
-		SG.syringes.Remove(S)
-		qdel(S)
-	else if(istype(loc, /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun))
-		var/obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/syringe_gun = loc
-		var/obj/item/reagent_containers/syringe/loaded_syringe = syringe_gun.syringes[1]
-		var/obj/projectile/bullet/dart/shot_dart = loaded_projectile
-		syringe_gun.reagents.trans_to(shot_dart, min(loaded_syringe.volume, syringe_gun.reagents.total_volume), transferred_by = user)
-		shot_dart.name = loaded_syringe.name
-		shot_dart.inject_flags = loaded_syringe.inject_flags
-		LAZYREMOVE(syringe_gun.syringes, loaded_syringe)
-		qdel(loaded_syringe)
+		syringe.reagents.trans_to(dart, syringe.reagents.total_volume, transferred_by = user)
+		qdel(syringe)
+		return ..()
+
+	if(!istype(loc, /obj/item/mecha_parts/mecha_equipment/medical/syringe_gun))
+		return ..()
+
+	var/obj/item/mecha_parts/mecha_equipment/medical/syringe_gun/syringe_gun = loc
+	var/obj/item/reagent_containers/syringe/loaded_syringe = syringe_gun.syringes[1]
+	var/obj/projectile/bullet/dart/shot_dart = loaded_projectile
+	syringe_gun.reagents.trans_to(shot_dart, min(loaded_syringe.volume, syringe_gun.reagents.total_volume), transferred_by = user)
+	shot_dart.name = loaded_syringe.name
+	shot_dart.inject_flags = loaded_syringe.inject_flags
+	LAZYREMOVE(syringe_gun.syringes, loaded_syringe)
+	qdel(loaded_syringe)
 	return ..()
+
+/obj/item/ammo_casing/syringegun/proc/insert_syringe(obj/item/reagent_containers/syringe/syringe)
+	var/obj/projectile/bullet/dart/syringe/dart = loaded_projectile
+	dart.set_embed(syringe.get_embed()?.create_copy())
+	dart.get_embed().embed_chance = 100 // Don't want to fail the shot here
+	syringe.forceMove(dart)
+	dart.inner_syringe = syringe
 
 /obj/item/ammo_casing/chemgun
 	name = "dart synthesiser"

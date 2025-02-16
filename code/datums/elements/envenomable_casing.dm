@@ -12,7 +12,7 @@
 
 /datum/element/envenomable_casing/Attach(datum/target, amount_allowed = 5)
 	. = ..()
-	if(!istype(target, /obj/item/ammo_casing))
+	if(!isammocasing(target))
 		return ELEMENT_INCOMPATIBLE
 	src.amount_allowed = amount_allowed
 	RegisterSignal(target, COMSIG_ITEM_INTERACTING_WITH_ATOM, PROC_REF(handle_interaction))

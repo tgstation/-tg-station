@@ -142,7 +142,7 @@
 /mob/living/carbon/proc/has_embedded_objects(include_harmless = FALSE)
 	for(var/obj/item/bodypart/bodypart as anything in bodyparts)
 		for(var/obj/item/embedded as anything in bodypart.embedded_objects)
-			if(!include_harmless && embedded.get_embed().is_harmless())
+			if(!include_harmless && embedded.get_embed().is_harmless(consider_stamina = TRUE))
 				continue
 			return TRUE
 

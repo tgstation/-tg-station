@@ -60,7 +60,7 @@
 	pain_stam_pct = 0.4
 	pain_mult = 5
 	jostle_pain_mult = 6
-	rip_time = 10
+	rip_time = 1 SECONDS
 
 // Rebar (Rebar Crossbow)
 /obj/projectile/bullet/rebar
@@ -85,7 +85,7 @@
 	pain_stam_pct = 0.4
 	pain_mult = 4
 	jostle_pain_mult = 2
-	rip_time = 10
+	rip_time = 1 SECONDS
 
 /obj/projectile/bullet/rebar/proc/handle_drop(datum/source, obj/item/ammo_casing/rebar/newcasing)
 
@@ -109,7 +109,7 @@
 	pain_stam_pct = 0.4
 	pain_mult = 3
 	jostle_pain_mult = 2
-	rip_time = 14
+	rip_time = 1.4 SECONDS
 
 /obj/projectile/bullet/rebar/zaukerite
 	name = "zaukerite shard"
@@ -134,7 +134,7 @@
 	pain_stam_pct = 0.8
 	pain_mult = 6
 	jostle_pain_mult = 2
-	rip_time = 30
+	rip_time = 3 SECONDS
 
 /obj/projectile/bullet/rebar/hydrogen
 	name = "metallic hydrogen bolt"

@@ -16,14 +16,18 @@
 	force = 6
 	base_pixel_x = -4
 	pixel_x = -4
-	custom_materials = list(/datum/material/iron=SHEET_MATERIAL_AMOUNT)
+	custom_materials = list(/datum/material/iron = SHEET_MATERIAL_AMOUNT)
 	clumsy_check = FALSE
 	fire_sound = 'sound/items/syringeproj.ogg'
+	gun_flags = NOT_A_REAL_GUN
 	var/load_sound = 'sound/items/weapons/gun/shotgun/insert_shell.ogg'
 	var/list/syringes = list()
-	var/max_syringes = 1 ///The number of syringes it can store.
-	var/has_syringe_overlay = TRUE ///If it has an overlay for inserted syringes. If true, the overlay is determined by the number of syringes inserted into it.
-	gun_flags = NOT_A_REAL_GUN
+	/// The number of syringes it can store.
+	var/max_syringes = 1
+	/// If it has an overlay for inserted syringes. If true, the overlay is determined by the number of syringes inserted into it.
+	var/has_syringe_overlay = TRUE
+	/// In low power mode syringes will instead embed and slowly inject their reagents
+	var/low_power = FALSE
 
 /obj/item/gun/syringe/Initialize(mapload)
 	. = ..()
@@ -58,42 +62,65 @@
 
 /obj/item/gun/syringe/examine(mob/user)
 	. = ..()
-	. += "Can hold [max_syringes] syringe\s. Has [syringes.len] syringe\s remaining."
+	. += span_notice("Can hold [max_syringes] syringe\s. Has [syringes.len] syringe\s remaining.")
+	if (low_power)
+		. += span_notice("Its pressure regulator is set to low power mode, making sure that syringes shot will embed and slowly bleed their reagents into their target.")
+	else
+		. += span_notice("Its pressure regulator is cranked to the max, instantly injecting the reagents at the cost of breaking the syringes fired.")
+	. += span_notice("Right-click [src] in-hand to switch it to [low_power ? "full" : "low"] power.")
 
-/obj/item/gun/syringe/attack_self(mob/living/user)
-	if(!syringes.len)
+/obj/item/gun/syringe/attack_self(mob/living/user, list/modifiers)
+	if (!syringes.len)
 		balloon_alert(user, "it's empty!")
 		return FALSE
 
-	var/obj/item/reagent_containers/syringe/S = syringes[syringes.len]
+	var/obj/item/reagent_containers/syringe/syringe = syringes[syringes.len]
 
-	if(!S)
+	if (!syringe)
 		return FALSE
-	user.put_in_hands(S)
+	user.put_in_hands(syringe)
 
-	syringes.Remove(S)
-	balloon_alert(user, "[S.name] unloaded")
+	syringes.Remove(syringe)
+	balloon_alert(user, "[syringe.name] unloaded")
 	update_appearance()
-
 	return TRUE
+
+/obj/item/gun/syringe/attack_self_secondary(mob/user, modifiers)
+	. = ..()
+	if (.)
+		return
+
+	low_power = !low_power
+	if (low_power)
+		balloon_alert(user, "enabled low power mode")
+		to_chat(user, span_notice("You carefully lower the pressure regulator setting, ensuring that fired syringes embed in your target."))
+	else
+		balloon_alert(user, "enabled high power mode")
+		to_chat(user, span_notice("You crank the pressure regulator to the max, making sure that fired syringes inject their contents instantly."))
+	playsound(user, 'sound/machines/click.ogg', 75, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	return SECONDARY_ATTACK_CANCEL_ATTACK_CHAIN
 
 /obj/item/gun/syringe/item_interaction(mob/living/user, obj/item/tool, list/modifiers)
 	if(istype(tool, /obj/item/reagent_containers/syringe/bluespace))
 		balloon_alert(user, "[tool.name] is too big!")
 		return ITEM_INTERACT_BLOCKING
-	if(istype(tool, /obj/item/reagent_containers/syringe))
-		if(syringes.len < max_syringes)
-			if(!user.transferItemToLoc(tool, src))
-				return ITEM_INTERACT_BLOCKING
-			balloon_alert(user, "[tool.name] loaded")
-			syringes += tool
-			recharge_newshot()
-			update_appearance()
-			playsound(src, load_sound, 40)
-			return ITEM_INTERACT_SUCCESS
+
+	if(!istype(tool, /obj/item/reagent_containers/syringe))
+		return NONE
+
+	if(syringes.len >= max_syringes)
 		balloon_alert(user, "it's full!")
 		return ITEM_INTERACT_BLOCKING
-	return NONE
+
+	if(!user.transferItemToLoc(tool, src))
+		return ITEM_INTERACT_BLOCKING
+
+	balloon_alert(user, "[tool.name] loaded")
+	syringes += tool
+	recharge_newshot()
+	update_appearance()
+	playsound(src, load_sound, 40)
+	return ITEM_INTERACT_SUCCESS
 
 /obj/item/gun/syringe/update_overlays()
 	. = ..()

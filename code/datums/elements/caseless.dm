@@ -13,13 +13,14 @@
 	if(!isammocasing(target))
 		return ELEMENT_INCOMPATIBLE
 	src.reusable = reusable
-	RegisterSignal(target, COMSIG_CASING_READY_PROJECTILE, PROC_REF(on_ready_projectile))
+	if (reusable)
+		RegisterSignal(target, COMSIG_CASING_READY_PROJECTILE, PROC_REF(on_ready_projectile))
 	RegisterSignal(target, COMSIG_FIRE_CASING, PROC_REF(on_fired_casing))
 
 /datum/element/caseless/proc/on_ready_projectile(obj/item/ammo_casing/shell, atom/target, mob/living/user, quiet, zone_override, atom/fired_from)
 	SIGNAL_HANDLER
 	var/obj/projectile/proj = shell.loaded_projectile
-	if(isnull(proj) || !reusable)
+	if(isnull(proj))
 		return
 	if(!ispath(proj.shrapnel_type))
 		proj.shrapnel_type = shell.type

@@ -90,7 +90,7 @@
 	return list(
 		"damage" = max(5, throwforce),
 		"speed" = max(0, throw_speed - 3),
-		"embedding" = get_embed().create_copy(projectile),
+		"embedding" = get_embed().create_copy(),
 		"armour_penetration" = armour_penetration,
 		"wound_bonus" = wound_bonus,
 		"bare_wound_bonus" = bare_wound_bonus,
