@@ -4,7 +4,8 @@
 	icon_state = "pistol"
 	loot = list(
 		/obj/item/gun/ballistic/rifle/boltaction/surplus = 80,
-		/obj/item/gun/ballistic/rifle/boltaction = 10,
+		/obj/item/gun/ballistic/rifle/boltaction = 20,
+		/obj/item/gun/ballistic/rifle/boltaction/mosin_nagant = 10,
 		/obj/item/food/rationpack = 1,
 	)
 /obj/effect/spawner/random/sakhno/ammo

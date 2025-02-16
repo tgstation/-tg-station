@@ -134,7 +134,7 @@
 		There was probably a reason it wasn't manufactured this short to begin with. \
 		Cutting the weapon down seems to have not helped with the moisture problem."
 	icon_state = "sakhno_tactifucked"
-	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/surplus
+	spawn_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/surplus
 	can_jam = TRUE
 
 /obj/item/gun/ballistic/rifle/boltaction/prime
@@ -151,7 +151,7 @@
 		You are now probably one of the few people in the universe to ever hold an \"Obrez Moderna\". \
 		All you had to do was take an allen wrench to the stock to take it off. But no, you just had to \
 		go for the saw."
-	accepted_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/phasic
+	spawn_magazine_type = /obj/item/ammo_box/magazine/internal/boltaction/phasic
 
 /obj/item/gun/ballistic/rifle/boltaction/prime/Initialize(mapload)
 	. = ..()
@@ -161,6 +161,30 @@
 	. = ..()
 	if(.)
 		name = "\improper Obrez Moderna" // wear it loud and proud
+
+/obj/item/gun/ballistic/rifle/boltaction/mosin_nagant
+	name = "\improper Mosin Nagant"
+	desc = "A classic Mosin Nagant. They don't make them like they used to. Well, okay, in all honesty, this one is actually \
+		a refurbished version, chambered in .310 Strilka. There really aren't that many left lying around since the Third Soviet \
+		Union collapsed, and a sizable portion of the weapons were scrapped for parts. If you do find one, cherish it. You have a \
+		rare artifact in your hands at this point. Many of them still have parts back from the original Soviet Union. Perfectly moist."
+	icon_state = "mosin_nagant"
+	inhand_icon_state = "mosin_nagant"
+	worn_icon_state = "mosin_nagant"
+	can_be_sawn_off = TRUE
+	sawn_desc = "A sawn-off Mosin Nagant. They say that destroying such a weapon is tantamount to a mortal sin in the modern era. So \
+		few examples of such a weapon remain. And yet they followed mankind to space all the same. It clings to life. And cruelly, it \
+		was desecrated. Almost certainly, if you were responsible for this, a curse has been laid upon you and your lineage for all \
+		eternity. The moisture is all gone. It is dry as a bone. Ruin has befallen this once great revolution."
+
+/obj/item/gun/ballistic/rifle/boltaction/mosin_nagant/sawoff(mob/user)
+	. = ..()
+	if(.)
+		name = "\improper Obrez"
+
+	if(ishuman(user))
+		var/mob/living/carbon/human/the_bitch_that_did_it = user
+		the_bitch_that_did_it.AddComponent(/datum/component/omen/quirk) // Damns you to a horrible, horrible fate.
 
 /obj/item/gun/ballistic/rifle/boltaction/donkrifle
 	name = "\improper Donk Co. Jezail"
