@@ -3,13 +3,12 @@
 /// A special flag value used to make a nightmare heart not grant a light eater. Appears to be unused.
 #define HEART_SPECIAL_SHADOWIFY 2
 
-
 /obj/item/organ/brain/shadow/nightmare
 	name = "tumorous mass"
 	desc = "A fleshy growth that was dug out of the skull of a Nightmare."
 	icon = 'icons/obj/medical/organs/organs.dmi'
 	icon_state = "brain-x-d"
-	applied_status = /datum/status_effect/shadow_regeneration/nightmare
+
 	///Our associated shadow jaunt spell, for all nightmares
 	var/datum/action/cooldown/spell/jaunt/shadow_walk/our_jaunt
 	///Our associated terrorize spell, for antagonist nightmares
@@ -34,26 +33,35 @@
 	QDEL_NULL(our_jaunt)
 	QDEL_NULL(terrorize_spell)
 
-/atom/movable/screen/alert/status_effect/shadow_regeneration/nightmare
-	name = "Lightless Domain"
-	desc = "Bathed in soothing darkness you will slowly regenerate, even past the point of death. \
-		Heightened reflexes will allow you to dodge projectile weapons."
+/obj/item/organ/brain/shadow/nightmare/on_life(seconds_per_tick, times_fired)
+	. = ..()
 
-/datum/status_effect/shadow_regeneration/nightmare
+	var/turf/owner_turf = owner.loc
+	if(!isturf(owner_turf))
+		return
+	var/light_amount = owner_turf.get_lumcount()
+
+	if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //dodge in the dark
+		owner.apply_status_effect(/datum/status_effect/shadow/nightmare)
+
+/datum/status_effect/shadow/nightmare
+	id = "nightmare"
+	duration = 2 SECONDS
+	status_type = STATUS_EFFECT_REFRESH
 	alert_type = /atom/movable/screen/alert/status_effect/shadow_regeneration/nightmare
 
-/datum/status_effect/shadow_regeneration/nightmare/on_apply()
+/datum/status_effect/shadow/nightmare/on_apply()
 	. = ..()
 	if (!.)
 		return FALSE
 	RegisterSignal(owner, COMSIG_ATOM_PRE_BULLET_ACT, PROC_REF(dodge_bullets))
 	return TRUE
 
-/datum/status_effect/shadow_regeneration/nightmare/on_remove()
+/datum/status_effect/shadow/nightmare/on_remove()
 	UnregisterSignal(owner, COMSIG_ATOM_PRE_BULLET_ACT)
 	return ..()
 
-/datum/status_effect/shadow_regeneration/nightmare/proc/dodge_bullets(mob/living/carbon/human/source, obj/projectile/hitting_projectile, def_zone)
+/datum/status_effect/shadow/nightmare/proc/dodge_bullets(mob/living/carbon/human/source, obj/projectile/hitting_projectile, def_zone)
 	SIGNAL_HANDLER
 	source.visible_message(
 		span_danger("[source] dances in the shadows, evading [hitting_projectile]!"),
@@ -61,6 +69,11 @@
 	)
 	playsound(source, SFX_BULLET_MISS, 75, TRUE)
 	return COMPONENT_BULLET_PIERCED
+
+/atom/movable/screen/alert/status_effect/shadow_regeneration/nightmare
+	name = "Lightless Domain"
+	desc = "Bathed in soothing darkness you will slowly regenerate, even past the point of death. \
+		Heightened reflexes will allow you to dodge projectile weapons."
 
 /obj/item/organ/heart/nightmare
 	name = "heart of darkness"

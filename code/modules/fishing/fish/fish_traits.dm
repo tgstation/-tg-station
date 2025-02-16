@@ -209,7 +209,7 @@ GLOBAL_LIST_INIT(spontaneous_fish_traits, populate_spontaneous_fish_traits())
 	var/light_amount = our_turf.get_lumcount()
 
 	if (light_amount < SHADOW_SPECIES_LIGHT_THRESHOLD) //heal in the dark
-		mob.apply_status_effect(/datum/status_effect/shadow_regeneration)
+		mob.apply_status_effect(/datum/status_effect/shadow/regeneration)
 
 /datum/fish_trait/heavy
 	name = "Demersal"
