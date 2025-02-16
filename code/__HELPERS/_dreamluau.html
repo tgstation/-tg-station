@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__HELPERS/_dreamluau.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__HELPERS/_dreamluau.html#define">Define Details</a></header><main><h1>code/__HELPERS/_dreamluau.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm0"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_USR">DREAMLUAU_SET_USR</a></th><td>All of the following functions will return a string if the underlying rust code returns an error or a wrapped panic.
+The return values specified for each function are what they will return if successful.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_EXECUTION_LIMIT_MILLIS">DREAMLUAU_SET_EXECUTION_LIMIT_MILLIS</a></th><td>Sets the execution limit, in milliseconds.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_EXECUTION_LIMIT_SECS">DREAMLUAU_SET_EXECUTION_LIMIT_SECS</a></th><td>Sets the execution limit, in seconds.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_CLEAR_EXECUTION_LIMIT">DREAMLUAU_CLEAR_EXECUTION_LIMIT</a></th><td>Clears the execution limit, allowing scripts to run as long as they need to.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_NEW_WRAPPER">DREAMLUAU_SET_NEW_WRAPPER</a></th><td>Set the wrapper for instancing new datums with <code>dm.new</code>.
+Clears it if the argument is null.
+If unset, the object will be instantiated using the default <code>new</code> instruction.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_VAR_GET_WRAPPER">DREAMLUAU_SET_VAR_GET_WRAPPER</a></th><td>Set the wrapper for reading the vars of an object.
+Clears it if the argument is null.
+If unset, the var will be read directly, without any safety checks.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_VAR_SET_WRAPPER">DREAMLUAU_SET_VAR_SET_WRAPPER</a></th><td>Set the wrapper for writing the vars of an object.
+Clears it if the argument is null.
+If unset, the var will be modified directly, without any safety checks.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_OBJECT_CALL_WRAPPER">DREAMLUAU_SET_OBJECT_CALL_WRAPPER</a></th><td>Set the wrapper for calling a proc on an object.
+Clears it if the argument is null.
+If unset, the proc will be called directly, without any safety checks.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_GLOBAL_CALL_WRAPPER">DREAMLUAU_SET_GLOBAL_CALL_WRAPPER</a></th><td>Set the wrapper for calling a global proc.
+Clears it if the argument is null.
+If unset, the proc will be called directly, without any safety checks.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_SET_PRINT_WRAPPER">DREAMLUAU_SET_PRINT_WRAPPER</a></th><td>Set the wrapper for printing with the <code>print</code> function.
+Clears it if the argument is null.
+If unset, <code>print</code> will raise an error.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_NEW_STATE">DREAMLUAU_NEW_STATE</a></th><td>Create a new luau state.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_LOAD">DREAMLUAU_LOAD</a></th><td>Some of the following functions return values that cannot be cleanly converted from luau to DM.
+To account for this, these functions also return a list of variant specifiers, equivalent to
+an array of objects of the type described beloe:</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_AWAKEN">DREAMLUAU_AWAKEN</a></th><td>Awaken the thread at the front of the specified state's sleeping thread queue.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_RESUME">DREAMLUAU_RESUME</a></th><td>Resume one of the state's yielded threads.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_CALL_FUNCTION">DREAMLUAU_CALL_FUNCTION</a></th><td>Call a function accessible from the global table.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_GET_GLOBALS">DREAMLUAU_GET_GLOBALS</a></th><td>Obtain a copy of the state's global table, converted to DM.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_LIST_THREADS">DREAMLUAU_LIST_THREADS</a></th><td>List the names of all sleeping or yielded threads for the state.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_COLLECT_GARBAGE">DREAMLUAU_COLLECT_GARBAGE</a></th><td>Run garbage collection on the state.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_KILL_SLEEPING_THREAD">DREAMLUAU_KILL_SLEEPING_THREAD</a></th><td>Remove a sleeping thread from the sleep queue, without executing it.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_KILL_YIELDED_THREAD">DREAMLUAU_KILL_YIELDED_THREAD</a></th><td>Remove a yielded thread from the yield table, without executing it.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_KILL_STATE">DREAMLUAU_KILL_STATE</a></th><td>Delete a state. The state's handle will be freed for any new states created afterwards.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_GET_TRACEBACK">DREAMLUAU_GET_TRACEBACK</a></th><td>Retrieve lua traceback info, containing every lua stack frame between the lua entrypoint and the re-entry to dm code.</td></tr><tr><th><a href="code/__HELPERS/_dreamluau.html#define/DREAMLUAU_CLEAR_REF_USERDATA">DREAMLUAU_CLEAR_REF_USERDATA</a></th><td>Luau userdata corresponding to a ref-counted DM type counts as a hard reference for BYOND's garbage collector.
+If you need to delete a DM object, and you cannot be certain that there are no references to it in any luau state,
+call this function before deleting that object to disassociate it from any userdata in any luau state.</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/DREAMLUAU_AWAKEN"><aside class="declaration">#define </aside>DREAMLUAU_AWAKEN<aside>(state)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L185"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 185"></a></h3><p>Awaken the thread at the front of the specified state's sleeping thread queue.</p>
+<p>@param state the handle to the state</p>
+<p>@return an associative list containing result information as specified above</p><h3 id="define/DREAMLUAU_CALL_FUNCTION"><aside class="declaration">#define </aside>DREAMLUAU_CALL_FUNCTION <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L207"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 207"></a></h3><p>Call a function accessible from the global table.</p>
+<p>@param state the handle to the state
+@param function a list of nested indices from the global table to the specified function
+@param ...arguments arguments to pass to the function</p>
+<p>@return an associative list containing result information as specified above</p><h3 id="define/DREAMLUAU_CLEAR_EXECUTION_LIMIT"><aside class="declaration">#define </aside>DREAMLUAU_CLEAR_EXECUTION_LIMIT <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L52"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 52"></a></h3><p>Clears the execution limit, allowing scripts to run as long as they need to.</p>
+<p>WARNING: This allows infinite loops to block Dream Daemon indefinitely, with no safety checks.
+Do not use this if you have no reason for scripts to run arbitrarily long.</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_CLEAR_REF_USERDATA"><aside class="declaration">#define </aside>DREAMLUAU_CLEAR_REF_USERDATA<aside>(object)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L301"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 301"></a></h3><p>Luau userdata corresponding to a ref-counted DM type counts as a hard reference for BYOND's garbage collector.
+If you need to delete a DM object, and you cannot be certain that there are no references to it in any luau state,
+call this function before deleting that object to disassociate it from any userdata in any luau state.</p>
+<p>Hard deleting an object without clearing userdata corresponding to it leaves the userdata to become associated with
+the next DM object to receive the old object's reference ID, which may be undesirable behavior.</p>
+<p>@param object the object to disassociate from userdata.</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_COLLECT_GARBAGE"><aside class="declaration">#define </aside>DREAMLUAU_COLLECT_GARBAGE<aside>(state)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L246"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 246"></a></h3><p>Run garbage collection on the state.</p>
+<p>This may be necessary to prevent hanging references, as some
+hard references may persist in unreachable luau objects that
+would be collected after a garbage collection cycle or two.</p>
+<p>@param state the handle to the state</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_GET_GLOBALS"><aside class="declaration">#define </aside>DREAMLUAU_GET_GLOBALS<aside>(state)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L220"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 220"></a></h3><p>Obtain a copy of the state's global table, converted to DM.</p>
+<p>@param state the handle to the state</p>
+<p>@return an associative list with the follwing entries:</p>
+<ul>
+<li>&quot;values&quot;: The actual values of the global table</li>
+<li>&quot;variants&quot;: Variant specifiers for &quot;values&quot;</li>
+</ul><h3 id="define/DREAMLUAU_GET_TRACEBACK"><aside class="declaration">#define </aside>DREAMLUAU_GET_TRACEBACK<aside>(index)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L287"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 287"></a></h3><p>Retrieve lua traceback info, containing every lua stack frame between the lua entrypoint and the re-entry to dm code.</p>
+<p>@param level the level of lua execution to get the traceback for,
+with 1 being the lua code that executed the dm code that called this function,
+2 being the lua code that executed the dm code that executed the lua code
+that executed the dm code that called this function, etc.</p>
+<p>@return the callstack of the specified lua level if valid, null if invalid</p><h3 id="define/DREAMLUAU_KILL_SLEEPING_THREAD"><aside class="declaration">#define </aside>DREAMLUAU_KILL_SLEEPING_THREAD<aside>(state, thread)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L256"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 256"></a></h3><p>Remove a sleeping thread from the sleep queue, without executing it.</p>
+<p>@param state the handle to the state
+@param thread the index in the sleep queue to the target thread</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_KILL_STATE"><aside class="declaration">#define </aside>DREAMLUAU_KILL_STATE<aside>(state)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L275"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 275"></a></h3><p>Delete a state. The state's handle will be freed for any new states created afterwards.</p>
+<p>@param state the handle to the state</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_KILL_YIELDED_THREAD"><aside class="declaration">#define </aside>DREAMLUAU_KILL_YIELDED_THREAD<aside>(state, thread)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L266"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 266"></a></h3><p>Remove a yielded thread from the yield table, without executing it.</p>
+<p>@param state the handle to the state
+@param thread the index in the yield table to the target thread</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_LIST_THREADS"><aside class="declaration">#define </aside>DREAMLUAU_LIST_THREADS<aside>(state)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L231"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 231"></a></h3><p>List the names of all sleeping or yielded threads for the state.</p>
+<p>@param state the handle to the state</p>
+<p>@return an associative list with the following entries:</p>
+<ul>
+<li>&quot;sleeps&quot;: A list of sleeping threads</li>
+<li>&quot;yields&quot;: A list of yielded threads</li>
+</ul><h3 id="define/DREAMLUAU_LOAD"><aside class="declaration">#define </aside>DREAMLUAU_LOAD <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L176"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 176"></a></h3><p>Some of the following functions return values that cannot be cleanly converted from luau to DM.
+To account for this, these functions also return a list of variant specifiers, equivalent to
+an array of objects of the type described beloe:</p>
+<pre><code>type Variants = {
+    key?: &quot;error&quot;|Array&lt;Variants?&gt;
+    value?: &quot;error&quot;|Array&lt;Variants?&gt;
+}
+</code></pre>
+<p>The following 4 functions execute luau code and return
+an associative list containing information about the result.
+This list has the following params.</p>
+<ul>
+<li>&quot;status&quot;: either &quot;finished&quot;, &quot;sleep&quot;, &quot;yield&quot;, or &quot;error&quot;</li>
+<li>&quot;return_values&quot;: if &quot;status&quot; is &quot;finished&quot; or &quot;yield&quot;, contains a list of the return values</li>
+<li>&quot;variants&quot;: a list of variant specifiers for the &quot;return_values&quot; param</li>
+<li>&quot;message&quot;: if &quot;status&quot; is &quot;error&quot;, contains the error message</li>
+<li>&quot;name&quot;: the name of the executed code, according to the <code>what</code> field of <code>debug.getinfo</code></li>
+</ul>
+<p>Load and execute a luau script.</p>
+<p>@param state the handle to the state
+@param code the source code of the script to run
+@param name an optional name to give to the script, for debugging purposes</p>
+<p>@return an associative list containing result information as specified above</p><h3 id="define/DREAMLUAU_NEW_STATE"><aside class="declaration">#define </aside>DREAMLUAU_NEW_STATE <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L141"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 141"></a></h3><p>Create a new luau state.</p>
+<p>@return a handle to the created state.</p><h3 id="define/DREAMLUAU_RESUME"><aside class="declaration">#define </aside>DREAMLUAU_RESUME <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L196"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 196"></a></h3><p>Resume one of the state's yielded threads.</p>
+<p>@param state the handle to the state
+@param index the index of the thread in the state's yielded threads list
+@param ...arguments arguments that will be returned by the <code>coroutine.yield</code> that yielded the thread</p>
+<p>@return an associative list containing result information as specified above</p><h3 id="define/DREAMLUAU_SET_EXECUTION_LIMIT_MILLIS"><aside class="declaration">#define </aside>DREAMLUAU_SET_EXECUTION_LIMIT_MILLIS<aside>(limit)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L33"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 33"></a></h3><p>Sets the execution limit, in milliseconds.</p>
+<p>@param limit the new execution limit</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_EXECUTION_LIMIT_SECS"><aside class="declaration">#define </aside>DREAMLUAU_SET_EXECUTION_LIMIT_SECS<aside>(limit)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L42"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 42"></a></h3><p>Sets the execution limit, in seconds.</p>
+<p>@param limit the new execution limit</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_GLOBAL_CALL_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_GLOBAL_CALL_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L119"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 119"></a></h3><p>Set the wrapper for calling a global proc.
+Clears it if the argument is null.
+If unset, the proc will be called directly, without any safety checks.</p>
+<p>The wrapper must be a proc with the signature <code>(procname as text, list/arguments)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_NEW_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_NEW_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L67"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 67"></a></h3><p>Set the wrapper for instancing new datums with <code>dm.new</code>.
+Clears it if the argument is null.
+If unset, the object will be instantiated using the default <code>new</code> instruction.</p>
+<p>The wrapper must be a proc with the signature <code>(type as path, list/arguments)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_OBJECT_CALL_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_OBJECT_CALL_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L106"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 106"></a></h3><p>Set the wrapper for calling a proc on an object.
+Clears it if the argument is null.
+If unset, the proc will be called directly, without any safety checks.</p>
+<p>The wrapper must be a proc with the signature <code>(target, procname as text, list/arguments)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_PRINT_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_PRINT_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L132"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 132"></a></h3><p>Set the wrapper for printing with the <code>print</code> function.
+Clears it if the argument is null.
+If unset, <code>print</code> will raise an error.</p>
+<p>The wrapper must be a proc with the signature <code>(list/arguments)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_USR"><aside class="declaration">#define </aside>DREAMLUAU_SET_USR <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L23"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 23"></a></h3><p>All of the following functions will return a string if the underlying rust code returns an error or a wrapped panic.
+The return values specified for each function are what they will return if successful.</p>
+<p>As of 515.1631, byondapi does not provide direct access to <code>usr</code>.
+Use this function to pass <code>usr</code> into the dreamluau binary so that luau scripts can retrieve it.</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_VAR_GET_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_VAR_GET_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L80"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 80"></a></h3><p>Set the wrapper for reading the vars of an object.
+Clears it if the argument is null.
+If unset, the var will be read directly, without any safety checks.</p>
+<p>The wrapper must be a proc with the signature <code>(target, var)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p><h3 id="define/DREAMLUAU_SET_VAR_SET_WRAPPER"><aside class="declaration">#define </aside>DREAMLUAU_SET_VAR_SET_WRAPPER<aside>(wrapper)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/_dreamluau.dm#L93"><img src="git.png" width="16" height="16" title="code/__HELPERS/_dreamluau.dm 93"></a></h3><p>Set the wrapper for writing the vars of an object.
+Clears it if the argument is null.
+If unset, the var will be modified directly, without any safety checks.</p>
+<p>The wrapper must be a proc with the signature <code>(target, var, value)</code>.</p>
+<p>@param wrapper the path to the proc to use as the new wrapper</p>
+<p>@return null on success</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

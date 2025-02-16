@@ -1,0 +1,12 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/tgs/v5/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>DMAPI V5 <aside>code/modules/tgs/v5/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/tgs/v5/README.md0"><img src="git.png" width="16" height="16" title="code/modules/tgs/v5/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>This DMAPI implements bridge requests using HTTP GET requests to TGS. It has no security restrictions.</p>
+<ul>
+<li><a href="./__interop_version.dm">__interop_version.dm</a> contains the version of the API used between the DMAPI and TGS.</li>
+<li><a href="./_defines.dm">_defines.dm</a> contains constant definitions.</li>
+<li><a href="./api.dm">api.dm</a> contains the bulk of the API code.</li>
+<li><a href="./bridge.dm">bridge.dm</a> contains functions related to making bridge requests.</li>
+<li><a href="./chunking.dm">chunking.dm</a> contains common function for splitting large raw data sets into chunks BYOND can natively process.</li>
+<li><a href="./commands.dm">commands.dm</a> contains functions relating to <code>/datum/tgs_chat_command</code>s.</li>
+<li><a href="./serializers.dm">serializers.dm</a> contains function to help convert interop <code>/datum</code>s into a JSON encodable <code>list()</code> format.</li>
+<li><a href="./topic.dm">topic.dm</a> contains functions related to processing topic requests.</li>
+<li><a href="./undefs.dm">undefs.dm</a> Undoes the work of <code>_defines.dm</code>.</li>
+</ul></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

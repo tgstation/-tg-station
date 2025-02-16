@@ -1,0 +1,17 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/asset_cache/readme.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Asset cache system <aside>code/modules/asset_cache/readme.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/asset_cache/readme.md0"><img src="git.png" width="16" height="16" title="code/modules/asset_cache/readme.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="framework-for-managing-browser-assets-javascript-css-images-etc">Framework for managing browser assets (javascript,css,images,etc)</h2>
+<p>This manages getting the asset to the client without doing unneeded re-sends, as well as utilizing any configured cdns.</p>
+<p>There are two frameworks for using this system:</p>
+<h3 id="asset-datum">Asset datum:</h3>
+<p>Make a datum in asset_list_items.dm with your browser assets for your thing.</p>
+<p>Checkout asset_list.dm for the helper subclasses</p>
+<p>The <code>simple</code> subclass will most likely be of use for most cases.</p>
+<p>Call get_asset_datum() with the type of the datum you created to get your asset cache datum</p>
+<p>Call .send(client|usr) on that datum to send the asset to the client. Depending on the asset transport this may or may not block.</p>
+<p>Call .get_url_mappings() to get an associated list with the urls your assets can be found at.</p>
+<h3 id="manual-backend">Manual backend:</h3>
+<p>See the documentation for <code>/datum/asset_transport</code> for the backend api the asset datums utilize.</p>
+<p>The global variable <code>SSassets.transport</code> contains the currently configured transport. </p>
+<h3 id="notes">Notes:</h3>
+<p>Because byond browse() calls use non-blocking queues, if your code uses output() (which bypasses all of these queues) to invoke javascript functions you will need to first have the javascript announce to the server it has loaded before trying to invoke js functions.</p>
+<p>To make your code work with any CDNs configured by the server, you must make sure assets are referenced from the url returned by <code>get_url_mappings()</code> or by asset_transport's <code>get_asset_url()</code>. (TGUI also has helpers for this.) If this can not be easily done, you can bypass the cdn using legacy assets, see the simple asset datum for details. </p>
+<p>CSS files that use url() can be made to use the CDN without needing to rewrite all url() calls in code by using the namespaced helper datum. See the documentation for <code>/datum/asset/simple/namespaced</code> for details.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>_maps/virtual_domains/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Making new virtual domains <aside>_maps/virtual_domains/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/_maps/virtual_domains/README.md0"><img src="git.png" width="16" height="16" title="_maps/virtual_domains/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="required">REQUIRED:</h2>
+<ol>
+<li>One way that the encrypted cache can spawn. This can be from a mob drop, a landmark (place a few, it'll pick one), or a signal landmark if you have a points system.</li>
+<li>Place a virtual domain baseturf helper in each area.</li>
+<li>If you're using modular safehouses, ensure that the map has ONE tile marked with the safehouse modular map loader (and set the KEY). it will need an open 7x6 area.</li>
+<li>Placing a safehouse area is redundant, but it will ensure there is power in the starting safehouse.</li>
+<li>Create the dm file that defines the map qualities. You can use the existing ones as a template.</li>
+<li>Place a virtual domain baseturf helper in each area.</li>
+</ol>
+<h2 id="converting-an-existing-map">Converting an existing map</h2>
+<ol>
+<li>Create a new map using the existing map's size - give yourself enough room to enclose it with a binary wall. There's no need for any space outside of it, so ensure that it fits and is enclosed, nothing outside of this.</li>
+<li>Copy and paste the existing map into it.</li>
+<li>Find an accessible area for a safehouse, 7x6.</li>
+<li>Place a bottom left safehouse landmark somewhere on the map to load the safehouse.</li>
+</ol>
+<h2 id="notes">Notes</h2>
+<p>You shouldn't need to fully enclose your map in 15 tiles of binary filler. Using one solid wall should do the trick.</p>
+<p>For areas, ideally just one on the map and one for the safehouse. Vdoms should never last so long as to need individual area power and atmos unless you're specifically going for a gimmick.</p>
+<p>Make it modular: Add modular map and mob segments! It adds variety. Just make sure you've set your map to have &quot;is_modular&quot; afterwards.</p>
+<p>Adding some open tile padding around the safehouse is a good touch. About 7 tiles West/East for the visual effect of a larger map.</p>
+<p>If you want to add prep gear, you can do so within the safehouse's area as long you don't overlap with goal turfs or exit spawners. The top left corner is a good spot for this, with respect for the walls, therefore [1, 1], [1, 2], [1, 3]</p>
+<p>You can also create a specific safehouse if you find yourself needing the same gear over and over again. There is a readme for that as well.</p>
+<p>Boss zones should give players pretty ample space, I've been using a 23x23 minimum area.</p>
+<p>While it's not a hard set rule, 75x75 is the guideline for max size. The main issue is keeping them in the domain for too long.</p>
+<p>You have the option of baking in your own safehouse and ignoring the 7x6 guideline. To do this, you will still need a safehouse landmark and a file to load - even if it's empty. Ensure that you have the necessary landmarks placed that normally go in a safehouse on the map itself.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

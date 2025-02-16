@@ -1,0 +1,314 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/game/objects/effects/spawners/random/readme.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Random Spawners <aside>code/game/objects/effects/spawners/random/readme.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/objects/effects/spawners/random/readme.md0"><img src="git.png" width="16" height="16" title="code/game/objects/effects/spawners/random/readme.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="about">About</h2>
+<p>Random spawners are an organized tool primarily for mapping to enhance replayability.  The spawners can create objects, effects, and structures with different tweakable settings to get the desired outcome.  You can make a spawner determine direction, rarity, number of items to spawn, pixel spacing between items, and even spread it over a large tile radius.  This lets you control the atmosphere of a location.  You could for instance spawn different piles of trash in maint or spawn decoration items for a room to give it more randomized flavor.  The choice is yours!</p>
+<p><em>(note the audience of this README is directed towards mappers who lack knowledge of coding)</em></p>
+<h2 id="variables">Variables</h2>
+<p>The following variables are defined in <code>code/game/objects/effects/spawners/random/random.dm</code> that control how a spawner works.</p>
+<ul>
+<li><code>loot</code> - a list of possible items to spawn e.g. list(/obj/item, /obj/structure, /obj/effect)</li>
+<li><code>loot_type_path</code> - this combines the subtypes AND type list with the loot list</li>
+<li><code>loot_subtype_path</code> - this combines ONLY the subtypes (excludes the <code>loot_subtype_path</code>) with the loot list</li>
+<li><code>spawn_loot_count</code> - how many items will be spawned</li>
+<li><code>spawn_loot_double</code> - if the same item can be spawned twice from the loot list</li>
+<li><code>spawn_loot_split</code> - whether the items should be distributed to offsets 0,1,-1,2,-2,3,-3.. This overrides pixel_x/y on the spawner itself</li>
+<li><code>spawn_all_loot</code> - whether the spawner should spawn all the loot in the list (ignores <code>spawn_loot_count</code>)</li>
+<li><code>spawn_loot_chance</code> - the chance for the spawner to create loot (ignores <code>spawn_loot_count</code>)</li>
+<li><code>spawn_scatter_radius</code> - determines how big of a range (in tiles) we should scatter things in</li>
+</ul>
+<p>These variables are set to the following default values for the base <code>random.dm</code> object that all objects inherit from:</p>
+<pre><code class="language-dm">	/// these three loot values are all empty
+	var/list/loot
+	var/loot_type_path
+	var/loot_subtype_path
+
+	var/spawn_loot_count = 1 // by default one item will be selected from the loot list
+	var/spawn_loot_double = TRUE // by default duplicate items CAN be spawned from the loot list
+	var/spawn_loot_split = FALSE // by default items will NOT spread out on the same tile
+	var/spawn_all_loot = FALSE // by default the spawner will only spawn the number of items set in spawn_loot_count
+	var/spawn_loot_chance = 100 // by default the spawner has a 100% chance to spawn the item(s)
+	var/spawn_scatter_radius = 0 // by default the spawner will spawn the items ONLY on the tile it is on
+</code></pre>
+<p>However there are some categories that overwrite these default values so pay attention to the folder or category you group your spawner in.  For instance the <code>obj/effect/spawner/random/techstorage</code> category overwrites the <code>spawn_all_loot</code> and the <code>spawn_loot_split</code> variables.</p>
+<pre><code class="language-dm">// Tech storage circuit board spawners
+/obj/effect/spawner/random/techstorage
+	name = &quot;generic circuit board spawner&quot;
+	spawn_loot_split = TRUE
+	spawn_all_loot = TRUE
+</code></pre>
+<p>This means any spawner you create under the techstorage will also have those variables set to that by default.  This can be overridden quite easily just be resetting the variables back to the normal state like so:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/techstorage/data_disk
+	name = &quot;data disk spawner&quot;
+	spawn_all_loot = FALSE // now our loot won't all be spawned
+	loot = list(
+		/obj/item/disk/data = 49,
+		/obj/item/disk/nuclear/fake/obvious = 1,
+	)
+</code></pre>
+<h2 id="template">Template</h2>
+<p>All the random spawners follow the same template format to keep things consistent and unison.</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/INSERT_SPAWNER_GROUP/INSERT_SPAWNER_NAME
+	name = &quot;INSERT_SPAWNER_NAME spawner&quot;
+	loot = list(
+		/obj/item/PATH/INSERT_OBJ_1,
+		/obj/item/PATH/INSERT_OBJ_2,
+		/obj/item/PATH/INSERT_OBJ_3,
+	)
+</code></pre>
+<p>All the capitalized code is the parts where you are supposed to swap out with your objects like so:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze,
+	)
+</code></pre>
+<p>Find the path to different objects and add them to the list but try to be consistent with the types of the object and the spawner.  For example a medical spawner shouldn't have a emag in the loot list. (use an antag spawner for that instead!)</p>
+<h2 id="probability">Probability</h2>
+<p>Be aware that the <code>loot</code> list uses a <em>weighted chance</em> formula to determine probability.  So if there are no numbers set in the <code>loot</code> list then each object defaults to 1 and has the same probability to be selected. For our above example for the <code>minor_healing</code> spawner each medical item has a 1/3 chance to be spawned.  But if we rearranged the values to this:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture = 2,
+		/obj/item/stack/medical/mesh = 1,
+		/obj/item/stack/medical/gauze = 1,
+	)
+</code></pre>
+<p>Then now <code>suture</code> has a 50% chance of being spawned (2/4), <code>mesh</code> has a 25% chance of being spawned (1/4), and <code>gauze</code> also has a 25% chance of being spawned (1/4).  If we add another item into the mix then we get the following:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture = 2,
+		/obj/item/stack/medical/mesh = 1,
+		/obj/item/stack/medical/gauze = 1,
+		/obj/item/reagent_containers/syringe = 1,
+	)
+</code></pre>
+<p>Suture is 40% (2/5), Mesh is 20% (1/5), Gauze is 20% (1/5), and Syringe is 20% (1/5).  A weighted list has the advantage of not needing to update every item in the list when adding a new item.  If the list was based on a straight percent values, then each new item would require to manually go and edit ALL the items in the list.  For big lists that would become very tedious.  This is why we use weighted lists to determine probability!</p>
+<h2 id="style">Style</h2>
+<p>Here are some simple guidelines that you should stick to when making a new spawner:</p>
+<h3 id="if-all-the-items-have-the-same-chance-we-should-not-set-a-weighted-value-to-the-item">If ALL the items have the same chance, we should not set a weighted value to the item</h3>
+<p>Do not put <code>/obj/item/ = 1</code> unless other items have different spawn chances</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture = 2,
+		/obj/item/stack/medical/mesh = 1,
+		/obj/item/stack/medical/gauze = 1,
+		/obj/item/reagent_containers/syringe = 1,
+	)
+</code></pre>
+<p>Also Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze,
+		/obj/item/reagent_containers/syringe,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture = 1,
+		/obj/item/stack/medical/mesh = 1,
+		/obj/item/stack/medical/gauze = 1,
+		/obj/item/reagent_containers/syringe = 1,
+	)
+</code></pre>
+<h3 id="sort-the-list-from-highest-probability-to-lowest">Sort the list from highest probability to lowest</h3>
+<p>Sort from top to bottom.  The rarest items for your spawner should be at the bottom of the list.</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/contraband/armory
+	name = &quot;armory loot spawner&quot;
+	loot = list(
+		/obj/item/gun/ballistic/automatic/pistol = 8,
+		/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
+		/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
+		/obj/item/grenade/clusterbuster/teargas = 2,
+		/obj/item/grenade/clusterbuster = 2,
+		/obj/item/gun/ballistic/automatic/pistol/deagle = 1,
+		/obj/item/gun/ballistic/revolver/mateba = 1,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/contraband/armory
+	name = &quot;armory loot spawner&quot;
+	loot = list(
+		/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
+		/obj/item/gun/ballistic/automatic/pistol = 8,
+		/obj/item/gun/ballistic/revolver/mateba = 1,
+		/obj/item/grenade/clusterbuster/teargas = 2,
+		/obj/item/gun/ballistic/automatic/pistol/deagle = 1,
+		/obj/item/grenade/clusterbuster = 2,
+		/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
+	)
+</code></pre>
+<h3 id="always-put-the-list-at-the-bottom-of-your-spawner">Always put the <code>loot</code> list at the bottom of your spawner</h3>
+<p>This is just to keep things organized.</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/food_or_drink/donkpockets
+	name = &quot;donk pocket box spawner&quot;
+	spawn_loot_double = FALSE
+	loot = list(
+		/obj/item/storage/box/donkpockets/donkpocketspicy,
+		/obj/item/storage/box/donkpockets/donkpocketteriyaki,
+		/obj/item/storage/box/donkpockets/donkpocketpizza,
+		/obj/item/storage/box/donkpockets/donkpocketberry,
+		/obj/item/storage/box/donkpockets/donkpockethonk,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/food_or_drink/donkpockets
+	name = &quot;donk pocket box spawner&quot;
+	loot = list(
+		/obj/item/storage/box/donkpockets/donkpocketspicy,
+		/obj/item/storage/box/donkpockets/donkpocketteriyaki,
+		/obj/item/storage/box/donkpockets/donkpocketpizza,
+		/obj/item/storage/box/donkpockets/donkpocketberry,
+		/obj/item/storage/box/donkpockets/donkpockethonk,
+	)
+	spawn_loot_double = FALSE
+</code></pre>
+<h3 id="always-put-a-comma-at-the-last-item-in-the-list">Always put a comma at the last item in the <code>loot</code> list</h3>
+<p>This will make it easier for people to add items to your spawner later without getting frustrating code errors.</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze  // if someone adds an item to the list later it will cause an error
+	)
+</code></pre>
+<h3 id="keep-the-same-tab-formatting-for-the-list-unless-there-is-only-one-item">Keep the same tab formatting for the <code>loot</code> list (unless there is only one item)</h3>
+<p>Again, this is just good code organization.  If there is only one item, then encase that item in <code>loot = list(item)</code></p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+		/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze,
+	)
+</code></pre>
+<p>Also Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/structure/crate_abandoned
+	icon = 'icons/effects/landmarks_static.dmi'
+	icon_state = &quot;loot_site&quot;
+	spawn_loot_chance = 20
+	loot = list(/obj/structure/closet/crate/secure/loot)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(
+	/obj/item/stack/medical/suture,
+	/obj/item/stack/medical/mesh,
+	/obj/item/stack/medical/gauze,
+	)
+</code></pre>
+<p>Also Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/medical/minor_healing
+	name = &quot;minor healing spawner&quot;
+	loot = list(/obj/item/stack/medical/suture,
+		/obj/item/stack/medical/mesh,
+		/obj/item/stack/medical/gauze,)
+</code></pre>
+<h3 id="try-to-keep-the-total-combined-weight-of-your-list-to-sane-values-aim-for-5-10-20-50-or-100">Try to keep the total combined weight of your <code>loot</code> list to sane values (Aim for 5, 10, 20, 50, or 100)</h3>
+<p>This makes the math probability easier for people to calculate.  (this is recommended, but not always possible)</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/trash/cigbutt
+	name = &quot;cigarette butt spawner&quot;
+	loot = list(
+		/obj/item/cigbutt = 65,
+		/obj/item/cigbutt/roach = 20,
+		/obj/item/cigbutt/cigarbutt = 15,
+	)
+</code></pre>
+<p>Also Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/trash/botanical_waste
+	name = &quot;botanical waste spawner&quot;
+	loot = list(
+		/obj/item/grown/bananapeel = 6,
+		/obj/item/grown/corncob = 3,
+		/obj/item/food/grown/bungopit = 1,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/entertainment/money_large
+	name = &quot;large money spawner&quot;
+	loot = list(
+		/obj/item/stack/spacecash/c1 = 521,
+		/obj/item/stack/spacecash/c10 = 378,
+		/obj/item/stack/spacecash/c20 = 212,
+		/obj/item/stack/spacecash/c50 = 205,
+		/obj/item/stack/spacecash/c100 = 71,
+		/obj/item/stack/spacecash/c200 = 60,
+		/obj/item/stack/spacecash/c500 = 57,
+		/obj/item/stack/spacecash/c1000 = 41,
+		/obj/item/stack/spacecash/c10000 = 12,
+	)
+</code></pre>
+<h3 id="do-not-put-empty-items-in-the-loot-list">Do not put empty items in the loot list</h3>
+<p>Instead use the <code>spawn_loot_chance</code> var to control the chance for the spawner to spawn nothing.</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/structure/crate_abandoned
+	name = &quot;locked crate spawner&quot;
+	spawn_loot_chance = 20
+	loot = list(/obj/structure/closet/crate/secure/loot)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/lootdrop/crate_spawner
+	name = &quot;lootcrate spawner&quot;
+	loot = list(
+		&quot;&quot; = 80
+		/obj/structure/closet/crate/secure/loot = 20,
+	)
+</code></pre>
+<h3 id="avoid-making-a-spawner-that-is-a-duplicate">Avoid making a spawner that is a duplicate</h3>
+<p>We don't want copy-cat spawners that are almost identical.  Instead merge spawners together if possible.</p>
+<p>Good:</p>
+<pre><code class="language-dm">/obj/effect/spawner/random/contraband/armory
+	name = &quot;armory loot spawner&quot;
+	icon_state = &quot;pistol&quot;
+	loot = list(
+		/obj/item/gun/ballistic/automatic/pistol = 8,
+		/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
+		/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
+		/obj/item/grenade/clusterbuster/teargas = 2,
+		/obj/item/grenade/clusterbuster = 2,
+		/obj/item/gun/ballistic/automatic/pistol/deagle,
+		/obj/item/gun/ballistic/revolver/mateba,
+	)
+</code></pre>
+<p>Bad:</p>
+<pre><code class="language-dm">/obj/effect/spawner/lootdrop/armory_contraband
+	loot = list(
+		/obj/item/gun/ballistic/automatic/pistol = 8,
+		/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
+		/obj/item/gun/ballistic/automatic/pistol/deagle,
+		/obj/item/gun/ballistic/revolver/mateba
+	)
+
+/obj/effect/spawner/lootdrop/armory_contraband/metastation
+	loot = list(
+		/obj/item/gun/ballistic/automatic/pistol = 8,
+		/obj/item/gun/ballistic/shotgun/automatic/combat = 5,
+		/obj/item/storage/box/syndie_kit/throwing_weapons = 3,
+		/obj/item/gun/ballistic/automatic/pistol/deagle,
+		/obj/item/gun/ballistic/revolver/mateba
+	)
+
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

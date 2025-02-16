@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/tgs/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>DMAPI Internals <aside>code/modules/tgs/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/tgs/README.md0"><img src="git.png" width="16" height="16" title="code/modules/tgs/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>This folder should be placed on its own inside a codebase that wishes to use the TGS DMAPI. Warranty void if modified.</p>
+<ul>
+<li><a href="./includes.dm">includes.dm</a> is the file that should be included by DM code, it handles including the rest.</li>
+<li>The <a href="./core">core</a> folder includes all code not directly part of any API version.</li>
+<li>The other versioned folders contain code for the different DMAPI versions.
+<ul>
+<li><a href="./v3210">v3210</a> contains the final TGS3 API.</li>
+<li><a href="./v4">v4</a> is the legacy DMAPI 4 (Used in TGS 4.0.X versions).</li>
+<li><a href="./v5">v5</a> is the current DMAPI version used by TGS &gt;=4.1.</li>
+</ul>
+</li>
+<li><a href="./LICENSE">LICENSE</a> is the MIT license for the DMAPI.</li>
+</ul>
+<p>APIs communicate with TGS in two ways. All versions implement TGS -&gt; DM communication using /world/Topic. DM -&gt; TGS communication, called the bridge method, is different for each version.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

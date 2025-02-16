@@ -1,0 +1,147 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/move_manager - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/move_manager.html#proc">Proc Details</a></header><main><h1>move_manager <aside>/<a href="datum.html">datum</a>/<a href="datum/move_manager.html">move_manager</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/move_manager.dm#L23"><img src="git.png" width="16" height="16" title="code/datums/move_manager.dm 23"></a></h1><p>Acts as a namespace for movement packet/type related procs</p>
+<p>Exists to provide an in code implementation of movement looping
+Replaces things like walk() or walk_to(), among others</p>
+<p>Because we're doing things in engine, we have a lot more control over how different operations are performed
+We also get more say in when things happen, so we can subject movements to the whims of the master controller
+Rather then using a fuck ton of cpu just moving mobs or meteors</p>
+<p>The goal is to keep the loops themselves reasonably barebone, and implement more advanced behavior and control via the signals</p>
+<p>This may be bypassed in cases where snowflakes are nessesary, or where performance is important. S not a hard and fast thing</p>
+<p>Every atom can have a movement packet, which contains information and behavior about currently active loops, and queuing info
+Loops control how movement actually happens. So there's a &quot;move in this direction&quot; loop, a &quot;move randomly&quot; loop</p>
+<p>You can find the logic for this control in this file</p>
+<p>Specifics of how different loops operate can be found in the movement_types.dm file, alongside the <a href="datum/move_manager.html#proc/add_to_loop" title="/datum/move_manager">add to loop</a> helper procs that use them</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/move_manager.html#proc/add_to_loop">add_to_loop</a></th><td>Adds a movable thing to a movement subsystem. Returns TRUE if it all worked, FALSE if it failed somehow</td></tr><tr><th><a href="datum/move_manager.html#proc/force_move">force_move</a></th><td>Used for force-move loops, similar to move_towards_legacy() but not quite the same</td></tr><tr><th><a href="datum/move_manager.html#proc/force_move_dir">force_move_dir</a></th><td>Like move(), but we don't care about collision at all</td></tr><tr><th><a href="datum/move_manager.html#proc/freeze">freeze</a></th><td>Assigns a target to a move loop that immediately freezes for a set duration of time.</td></tr><tr><th><a href="datum/move_manager.html#proc/home_onto">home_onto</a></th><td>Helper proc for homing onto something with move_towards</td></tr><tr><th><a href="datum/move_manager.html#proc/jps_move">jps_move</a></th><td>Used for following jps defined paths. The proc signature here's a bit long, I'm sorry</td></tr><tr><th><a href="datum/move_manager.html#proc/move">move</a></th><td>Replacement for walk()</td></tr><tr><th><a href="datum/move_manager.html#proc/move_away">move_away</a></th><td>Wrapper around walk_away()</td></tr><tr><th><a href="datum/move_manager.html#proc/move_disposals">move_disposals</a></th><td>Snowflake disposal movement. Moves a disposal holder along a chain of disposal pipes</td></tr><tr><th><a href="datum/move_manager.html#proc/move_rand">move_rand</a></th><td>Helper proc for the move_rand datum</td></tr><tr><th><a href="datum/move_manager.html#proc/move_to">move_to</a></th><td>Wrapper around walk_to()</td></tr><tr><th><a href="datum/move_manager.html#proc/move_to_rand">move_to_rand</a></th><td>Wrapper around walk_rand(), doesn't actually result in a random walk, it's more like moving to random places in viewish</td></tr><tr><th><a href="datum/move_manager.html#proc/move_towards">move_towards</a></th><td>Helper proc for the move_towards datum</td></tr><tr><th><a href="datum/move_manager.html#proc/move_towards_legacy">move_towards_legacy</a></th><td>Wrapper for walk_towards, not reccomended, as its movement ends up being a bit stilted</td></tr><tr><th><a href="datum/move_manager.html#proc/processing_on">processing_on</a></th><td>Returns the subsystem's loop if we're processing on it, null otherwise</td></tr><tr><th><a href="datum/move_manager.html#proc/smooth_move">smooth_move</a></th><td>Helper proc for the smooth_move datum</td></tr><tr><th><a href="datum/move_manager.html#proc/stop_looping">stop_looping</a></th><td>Removes the atom from some movement subsystem. Defaults to SSmovement</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/add_to_loop"><aside class="declaration">proc </aside>add_to_loop<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/thing_to_add, /<a href="datum.html">datum</a>/<a href="datum/controller/subsystem.html">controller/subsystem</a>/<a href="datum/controller/subsystem/movement.html">movement</a>/subsystem, /<a href="datum.html">datum</a>/<a href="datum/move_loop.html">move_loop</a>/loop_type, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/move_manager.dm#L28"><img src="git.png" width="16" height="16" title="code/datums/move_manager.dm 28"></a></aside></h3><p>Adds a movable thing to a movement subsystem. Returns TRUE if it all worked, FALSE if it failed somehow</p><h3 id="proc/force_move"><aside class="declaration">proc </aside>force_move<aside>(moving, chasing, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L284"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 284"></a></aside></h3><p>Used for force-move loops, similar to move_towards_legacy() but not quite the same</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/force_move_dir"><aside class="declaration">proc </aside>force_move_dir<aside>(moving, direction, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L227"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 227"></a></aside></h3><p>Like move(), but we don't care about collision at all</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+direction - The direction we want to move in
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/freeze"><aside class="declaration">proc </aside>freeze<aside>(moving, halted_turf, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L746"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 746"></a></aside></h3><p>Assigns a target to a move loop that immediately freezes for a set duration of time.</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+halted_turf - The turf we want to freeze on. This should typically be the loc of moving.
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. This should be considered extremely non-optional as it will completely stun out the movement loop <i>forever</i> if unset.
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/home_onto"><aside class="declaration">proc </aside>home_onto<aside>(moving, chasing, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L584"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 584"></a></aside></h3><p>Helper proc for homing onto something with move_towards</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+home - Should we move towards the object at all times? Or launch towards them, but allow walls and such to take us off track. Defaults to FALSE
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to INFINITY
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/jps_move"><aside class="declaration">proc </aside>jps_move<aside>(moving, chasing, delay, timeout, repath_delay, max_path_length, minimum_distance, /list/access, simulated_only, /<a href="turf.html">turf</a>/avoid, skip_first, subsystem, diagonal_handling, priority, flags, /<a href="datum.html">datum</a>/extra_info, initial_path)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L318"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 318"></a></aside></h3><p>Used for following jps defined paths. The proc signature here's a bit long, I'm sorry</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+repath_delay - How often we're allowed to recalculate our path
+max_path_length - The maximum number of steps we can take in a given path to search (default: 30, 0 = infinite)
+miminum_distance - Minimum distance to the target before path returns, could be used to get near a target, but not right to it - for an AI mob with a gun, for example
+access - A list representing what access we have and what doors we can open
+simulated_only -  Whether we consider turfs without atmos simulation (AKA do we want to ignore space)
+avoid - If we want to avoid a specific turf, like if we're a mulebot who already got blocked by some turf
+skip_first -  Whether or not to delete the first item in the path. This would be done because the first item is the starting tile, which can break things
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move"><aside class="declaration">proc </aside>move<aside>(moving, direction, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L186"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 186"></a></aside></h3><p>Replacement for walk()</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+direction - The direction we want to move in
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_away"><aside class="declaration">proc </aside>move_away<aside>(moving, chasing, max_dist, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L530"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 530"></a></aside></h3><p>Wrapper around walk_away()</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+max_dist - the furthest away from the target we're allowed to get
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_disposals"><aside class="declaration">proc </aside>move_disposals<aside>(moving, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L848"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 848"></a></aside></h3><p>Snowflake disposal movement. Moves a disposal holder along a chain of disposal pipes</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_rand"><aside class="declaration">proc </aside>move_rand<aside>(moving, directions, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L770"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 770"></a></aside></h3><p>Helper proc for the move_rand datum</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+directions - A list of acceptable directions to try and move in. Defaults to GLOB.alldirs
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_to"><aside class="declaration">proc </aside>move_to<aside>(moving, chasing, min_dist, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L496"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 496"></a></aside></h3><p>Wrapper around walk_to()</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+min_dist - the closest we're allower to get to the target
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_to_rand"><aside class="declaration">proc </aside>move_to_rand<aside>(moving, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L822"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 822"></a></aside></h3><p>Wrapper around walk_rand(), doesn't actually result in a random walk, it's more like moving to random places in viewish</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_towards"><aside class="declaration">proc </aside>move_towards<aside>(moving, chasing, delay, home, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L565"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 565"></a></aside></h3><p>Helper proc for the move_towards datum</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+home - Should we move towards the object at all times? Or launch towards them, but allow walls and such to take us off track. Defaults to FALSE
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to INFINITY
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/move_towards_legacy"><aside class="declaration">proc </aside>move_towards_legacy<aside>(moving, chasing, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L720"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 720"></a></aside></h3><p>Wrapper for walk_towards, not reccomended, as its movement ends up being a bit stilted</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+chasing - The atom we want to move towards
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to infinity
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/processing_on"><aside class="declaration">proc </aside>processing_on<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/packet_owner, /<a href="datum.html">datum</a>/<a href="datum/controller/subsystem.html">controller/subsystem</a>/<a href="datum/controller/subsystem/movement.html">movement</a>/subsystem)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/move_manager.dm#L37"><img src="git.png" width="16" height="16" title="code/datums/move_manager.dm 37"></a></aside></h3><p>Returns the subsystem's loop if we're processing on it, null otherwise</p><h3 id="proc/smooth_move"><aside class="declaration">proc </aside>smooth_move<aside>(moving, angle, delay, timeout, subsystem, priority, flags, /<a href="datum.html">datum</a>/extra_info)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L890"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 890"></a></aside></h3><p>Helper proc for the smooth_move datum</p>
+<p>Returns TRUE if the loop sucessfully started, or FALSE if it failed</p>
+<p>Arguments:
+moving - The atom we want to move
+angle - Angle at which we want to move
+delay - How many deci-seconds to wait between fires. Defaults to the lowest value, 0.1
+timeout - Time in deci-seconds until the moveloop self expires. Defaults to INFINITY
+subsystem - The movement subsystem to use. Defaults to SSmovement. Only one loop can exist for any one subsystem
+priority - Defines how different move loops override each other. Lower numbers beat higher numbers, equal defaults to what currently exists. Defaults to MOVEMENT_DEFAULT_PRIORITY
+flags - Set of bitflags that effect move loop behavior in some way. Check _DEFINES/movement.dm</p><h3 id="proc/stop_looping"><aside class="declaration">proc </aside>stop_looping<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/moving, /<a href="datum.html">datum</a>/<a href="datum/controller/subsystem.html">controller/subsystem</a>/<a href="datum/controller/subsystem/movement.html">movement</a>/subsystem)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/movement/movement_types.dm#L165"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/movement/movement_types.dm 165"></a></aside></h3><p>Removes the atom from some movement subsystem. Defaults to SSmovement</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

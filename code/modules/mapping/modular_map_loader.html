@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/mapping/modular_map_loader/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Modular Map Loader <aside>code/modules/mapping/modular_map_loader/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mapping/modular_map_loader/README.md0"><img src="git.png" width="16" height="16" title="code/modules/mapping/modular_map_loader/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="concept">Concept</h2>
+<p>Modular map loading is a system to allow maps to be generated with random variants by selecting from a set of pre-made modules. The system is designed to be as simple as possible for mappers to use, with a minimum of interaction with the code required.</p>
+<h2 id="implementation">Implementation</h2><h3 id="obj-modular-map-root">/obj/modular_map_root</h3>
+<p>This root object handled picking and loading in map modules. It has two variables, and one proc.</p>
+<ul>
+<li><code>var/config_file</code> - A string, points to a TOML configuration file, which is used to hold the information necessary to pull the correct map files and place them on the correct roots. This will be the same for all roots on a map.</li>
+<li><code>var/key</code> - A string, used to pull a list of <code>.dmm</code> files from the configuration file.</li>
+<li><code>load_map()</code> - Called asynchronously in the root's <code>Initialize()</code>. This proc creates a new instance of <code>/datum/map_template/map_module</code>, ingests the configuration file <code>config_file</code> points to, and picks a <code>.dmm</code> file path which maps to the root's <code>key</code>, by picking a random filename from among those which <code>key</code> maps to, and appending it to a folder path. This file path is passed into the map templace instance's <code>load()</code>, and the template takes over.</li>
+</ul>
+<p>INITIALIZE_IMMEDIATE is used to ensure the ruins are loaded at the right time to avoid runtime errors related to lighting.</p>
+<h3 id="datum-map-template-map-module">/datum/map_template/map_module</h3>
+<p>This map templace subtype is responsible for loading in the module, it has two variables and two relevant procs.</p>
+<ul>
+<li><code>var/x_offset</code> and <code>var/y_offset</code> - Integers, used to store the offsets used to correctly align the module when it is loaded.</li>
+<li><code>load()</code> - Extends the functionality of the general map template's <code>load()</code> to allow a map to be specified at runtime. This means <code>preload_size()</code> must be called again here as the template's map file has been changed. The origin turf for the map to be loaded from is set using the offsets, and the map is loaded as per the parent.</li>
+<li><code>preload_size()</code> - Extends the functionality of the general map template's <code>preload_size()</code> to run the <code>discover_offset</code> proc, calculating the offset of <code>/obj/modular_map_connector</code> and setting the offset variables accordingly.</li>
+</ul>
+<h3 id="obj-modular-map-connector">/obj/modular_map_connector</h3>
+<p>This object is used only to determine the offsets to be used on loading, and has no other functionality.</p>
+<h3 id="toml-configuration">TOML configuration</h3>
+<p>This TOML file is used to map between a list of <code>.dmm</code> files and a string key. The file consists of two parts. The first is a line </p>
+<pre><code>directory = &quot;_maps/etc/&quot;
+</code></pre>
+<p>which points at a folder containing the <code>.dmm</code> files of the modules used in the map. The second is a series of tables</p>
+<pre><code>[rooms.example]
+modules = [&quot;example_1.dmm&quot;, &quot;example_2.dmm&quot;]
+</code></pre>
+<p>which contains the mapping between the key <code>&quot;example&quot;</code> and the list of filenames <code>[&quot;example_1.dmm&quot;, &quot;example_2.dmm&quot;]</code>.</p>
+<h3 id="datum-unit-test-modular-map-loader">/datum/unit_test/modular_map_loader</h3>
+<p>This is the unit test for modular map loading. It performs two checks on every subtype of <code>/obj/modular_map_root</code>. First it checks if the file <code>config_file</code> points at, and if it does not the test is failed because the file does not exist. If it does exist, it then attempts to read the file, if this is null it means the fild is not valid TOML, and the test is failed because the TOML file is invalid.</p>
+<h2 id="how-to">How-To</h2>
+<p>This section will cover the basics of how to use map modules as a mapper. If you want a concrete example to look at, the space ruin <code>_maps/RandomRuins/SpaceRuins/DJstation.dmm</code> and its associated code, configuration and modules employ all the techniques covered in this tutorial.</p>
+<h3 id="the-main-map">The Main Map</h3>
+<p>First we need to create a map, as we usually would. Let's say we want to create a new space ruin <code>foobar.dmm</code>, and we put it in the appropriate folder as usual, <code>_maps/RandomRuins/SpaceRuins/foobar.dmm</code>. We now need to create three more things.</p>
+<ul>
+<li><code>code/modules/ruins/spaceruin_code/foobar.dm</code> - A code file like would be used to store any code specific to this map.</li>
+<li><code>strings/modular_maps/foobar.toml</code>- A configuration file, this will be looked at in more detail later.</li>
+<li><code>_maps/RandomRuins/SpaceRuins/foobar/</code> - A new subfolder, which is where we will put the <code>.dmm</code> files for the modules.</li>
+</ul>
+<p>In <code>code/modules/ruins/spaceruin_code/foobar.dm</code> we need to add a small piece of code to define a new modular map root type for our map, which should look like this</p>
+<pre><code>/obj/modular_map_root/foobar
+	config_file = &quot;strings/modular_maps/foobar.toml&quot;
+</code></pre>
+<p>This means when we place root objects <code>/obj/modular_map_root</code> in our new map, we use this subtype that points to the correct configuration file.</p>
+<p>When creating our main map, we place one of these roots in the location we want to generate a module at. Typically this would be placed at a natural landmark, such as a doorway. We then edit the varaibles of the placed root object, and set the <code>key</code> var to some string, let's use <code>key = vault</code>. Make the rest of the map, ensuring that every root you want to use a unique set of modules has a unique <code>key</code>.</p>
+<h3 id="module-maps">Module Maps</h3>
+<p>Now we need to make the modules to be placed on our roots. These will be saved in the folder we created earlier, <code>_maps/RandomRuins/SpaceRuins/foobar/</code>. Modules do not have to be the same size, so long as all modules will fit properly on the root without running into other parts of the map.</p>
+<p>When making a module, you need to include a connector object <code>/obj/modular_map_connector</code>. When the module is loaded, it will be offset so this connector is placed on top of the root on the main map.</p>
+<p>We will be making the first variant of our vault module, so we save this as <code>vault_1.dmm</code>, following the format <code>[key]_[number].dmm</code>. Keep doing this until all your modules have been made.</p>
+<p>If you wish, you can also place another root on a module, if for some reason that module's position is dependent on the current one. IF you do this, make sure you've placed a root with the same key on every variant of the current module (unless you only want it to appear on certain varaints of this one.)</p>
+<h3 id="configuration">Configuration</h3>
+<p>Now we go back to our configuration file <code>strings/modular_maps/foobar.toml</code>. Say we ended up using three different sets of modules in our map, <code>vault</code>, <code>airlock</code> and <code>bathroom</code>, each of which have two variants. We want our <code>.toml</code> file to look like this</p>
+<pre><code>directory = &quot;_maps/RandomRuins/SpaceRuins/foobar/&quot;
+
+[rooms.vault]
+modules = [&quot;vault_1.dmm&quot;, &quot;vault_2.dmm&quot;]
+
+[rooms.airlock]
+modules = [&quot;airlock_1.dmm&quot;, &quot;airlock_2.dmm&quot;]
+
+[rooms.bathroom]
+modules = [&quot;bathroom_1.dmm&quot;, &quot;bathroom_2.dmm&quot;]
+</code></pre>
+<p>Let's break down what is happening here.</p>
+<p><code>directory = &quot;_maps/RandomRuins/SpaceRuins/foobar/&quot;</code> points to the folder where our modules are stored.</p>
+<p><code>[rooms.vault]</code> identifies the following line as being the modules for a root with <code>key = vault</code>.</p>
+<p><code>modules = [&quot;vault_1.dmm&quot;, &quot;vault_2.dmm&quot;]</code> specifies which map files within the folder are to be associated with this key.</p>
+<p>Once this configuration is done, the map should be fully functional. Compile and run, place your map somewhere, and continue doing this until you have satisfied yourself that everything looks how you expected it to. Remember to do everything else you need to do when adding any new ruin, or whatever kind of map you made.</p>
+<h3 id="common-mistakes">Common Mistakes</h3>
+<blockquote>
+<p>My map has modules that didn't load!</p>
+</blockquote>
+<p>Check your configuration is correct. Do the filenames given for the problem root match the names of the map files? Is the key specified in the configuration file the same as the one on the root in the map?</p>
+<blockquote>
+<p>A module is loading in the wrong location!</p>
+</blockquote>
+<p>Check the positioning of the connector is correct, and that only one is placed on the module.</p>
+<blockquote>
+<p>My ruin is spawning too close to or overlapping with something!</p>
+</blockquote>
+<p>Make sure your main map is large enough to fully contain the most expansive variation that can possibly be chosen.</p>
+<blockquote>
+<p>Parts of my map are overlapping with each other!</p>
+</blockquote>
+<p>Make sure modules placed adjacent or close to each other have no combination of variants which can overlap with each other, this may take some trial and error in complicated cases.</p>
+<blockquote>
+<p>My map still isn't working and I don't know what's wrong!</p>
+</blockquote>
+<p>Ping Thunder12345#9999 in the #coding-general channel of our discord if you need help with any problems.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

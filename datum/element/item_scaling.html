@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/element/item_scaling - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/element/item_scaling.html#var">Var Details</a> - <a href="datum/element/item_scaling.html#proc">Proc Details</a></header><main><h1>item_scaling <aside>/<a href="datum.html">datum</a>/<a href="datum/element.html">element</a>/<a href="datum/element/item_scaling.html">item_scaling</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L10"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 10"></a></h1><p>Element for scaling item appearances in the overworld or in inventory/storage.</p>
+<p>This bespoke element allows for items to have varying sizes depending on their location.
+The overworld simply refers to items being on a turf.  Inventory includes HUD item slots,
+and storage is anywhere a storage component is used.
+Scaling should affect the item's icon and all attached overlays (such as blood decals).</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr><tr><th><a href="datum/element/item_scaling.html#var/overworld_scaling">overworld_scaling</a></th><td>Scaling value when the attached item is in the overworld (on a turf).</td></tr><tr><th><a href="datum/element/item_scaling.html#var/storage_scaling">storage_scaling</a></th><td>Scaling value when the attached item is in a storage component or inventory slot.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/element/item_scaling.html#proc/Attach">Attach</a></th><td>Attach proc for the item_scaling element</td></tr><tr><th><a href="datum/element/item_scaling.html#proc/Detach">Detach</a></th><td>Detach proc for the item_scaling element.</td></tr><tr><th><a href="datum/element/item_scaling.html#proc/scale">scale</a></th><td>Scales the attached item's matrix.</td></tr><tr><th><a href="datum/element/item_scaling.html#proc/scale_overworld">scale_overworld</a></th><td>Shrinks when inworld</td></tr><tr><th><a href="datum/element/item_scaling.html#proc/scale_storage">scale_storage</a></th><td>Enlarges when inhand or in storage.</td></tr></table><h2 id="var">Var Details</h2><h3 id="var/overworld_scaling"><aside class="declaration">var </aside>overworld_scaling <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L14"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 14"></a></h3><p>Scaling value when the attached item is in the overworld (on a turf).</p><h3 id="var/storage_scaling"><aside class="declaration">var </aside>storage_scaling <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L18"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 18"></a></h3><p>Scaling value when the attached item is in a storage component or inventory slot.</p><h2 id="proc">Proc Details</h2><h3 id="proc/Attach"><aside class="parent"><a title="/datum/element" href="datum/element.html#proc/Attach">↑</a></aside>Attach<aside>(/<a href="atom.html">atom</a>/target, overworld_scaling, storage_scaling)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L31"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 31"></a></aside></h3><p>Attach proc for the item_scaling element</p>
+<p>The proc checks the target's type before attaching.  It then initializes
+the target to overworld scaling.  The target should then rescale if it is placed
+in inventory/storage on initialization.  Relevant signals are registered to listen
+for pickup/drop or storage events.  Scaling values of 1 will result in items
+returning to their original size.
+Arguments:</p>
+<ul>
+<li>target - Datum to attach the element to.</li>
+<li>overworld_scaling - Integer or float to scale the item in the overworld.</li>
+<li>storage_scaling - Integer or float to scale the item in storage/inventory.</li>
+</ul><h3 id="proc/Detach"><aside class="parent"><a title="/datum/element" href="datum/element.html#proc/Detach">↑</a></aside>Detach<aside>(/<a href="atom.html">atom</a>/target)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L55"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 55"></a></aside></h3><p>Detach proc for the item_scaling element.</p>
+<p>All registered signals are unregistered, and the attached element is removed from the target datum.
+Arguments:</p>
+<ul>
+<li>target - Datum which the element is attached to.</li>
+</ul><h3 id="proc/scale"><aside class="declaration">proc </aside>scale<aside>(/<a href="datum.html">datum</a>/source, scaling)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L72"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 72"></a></aside></h3><p>Scales the attached item's matrix.</p>
+<p>The proc first narrows the type of the source to (datums do not have a transform matrix).
+It then creates an identity matrix, M, which is transformed by the scaling value.
+The object's transform variable (matrix) is then set to the resulting value of M.
+Arguments:</p>
+<ul>
+<li>source - Source datum which sent the signal.</li>
+<li>scaling - Integer or float to scale the item's matrix.</li>
+</ul><h3 id="proc/scale_overworld"><aside class="declaration">proc </aside>scale_overworld<aside>(/<a href="datum.html">datum</a>/source)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L92"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 92"></a></aside></h3><p>Shrinks when inworld</p>
+<p>Longer detailed paragraph about the proc
+including any relevant detail
+Arguments:</p>
+<ul>
+<li>source - Source datum which sent the signal.</li>
+</ul><h3 id="proc/scale_storage"><aside class="declaration">proc </aside>scale_storage<aside>(/<a href="datum.html">datum</a>/source)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/item_scaling.dm#L105"><img src="git.png" width="16" height="16" title="code/datums/elements/item_scaling.dm 105"></a></aside></h3><p>Enlarges when inhand or in storage.</p>
+<p>Longer detailed paragraph about the proc
+including any relevant detail
+Arguments:</p>
+<ul>
+<li>source - Source datum which sent the signal.</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

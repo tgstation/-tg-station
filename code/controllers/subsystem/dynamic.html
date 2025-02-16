@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/controllers/subsystem/dynamic/readme.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Dynamic Mode <aside>code/controllers/subsystem/dynamic/readme.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/dynamic/readme.md0"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/dynamic/readme.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="roundstart">Roundstart</h2>
+<p>Dynamic rolls threat based on a special sauce formula:</p>
+<blockquote>
+<p>[dynamic_curve_width][/datum/controller/global_vars/var/dynamic_curve_width] * tan((3.1416 * (rand() - 0.5) * 57.2957795)) + [dynamic_curve_centre][/datum/controller/global_vars/var/dynamic_curve_centre]</p>
+</blockquote>
+<p>This threat is split into two separate budgets--<code>round_start_budget</code> and <code>mid_round_budget</code>. For example, a round with 50 threat might be split into a 30 roundstart budget, and a 20 midround budget. The roundstart budget is used to apply antagonists applied on readied players when the roundstarts (<code>/datum/dynamic_ruleset/roundstart</code>). The midround budget is used for two types of rulesets:</p>
+<ul>
+<li><code>/datum/dynamic_ruleset/midround</code> - Rulesets that apply to either existing alive players, or to ghosts. Think Blob or Space Ninja, which poll ghosts asking if they want to play as these roles.</li>
+<li><code>/datum/dynamic_ruleset/latejoin</code> - Rulesets that apply to the next player that joins. Think Syndicate Infiltrator, which converts a player just joining an existing round into traitor.</li>
+</ul>
+<p>This split is done with a similar method, known as the <a href="https://en.wikipedia.org/wiki/Cauchy_distribution">&quot;lorentz distribution&quot;</a>, exists to create a bell curve that ensures that while most rounds will have a threat level around ~50, chaotic and tame rounds still exist for variety.</p>
+<p>The process of creating these numbers occurs in <code>/datum/controller/subsystem/dynamic/proc/generate_threat</code> (for creating the threat level) and <code>/datum/controller/subsystem/dynamic/proc/generate_budgets</code> (for splitting the threat level into budgets).</p>
+<h2 id="deciding-roundstart-threats">Deciding roundstart threats</h2>
+<p>In <code>/datum/controller/subsystem/dynamic/proc/roundstart()</code> (called when no admin chooses the rulesets explicitly), Dynamic uses the available roundstart budget to pick threats. This is done through the following system:</p>
+<ul>
+<li>All roundstart rulesets (remember, <code>/datum/dynamic_ruleset/roundstart</code>) are put into an associative list with their weight as the values (<code>drafted_rules</code>).</li>
+<li>Until there is either no roundstart budget left, or until there is no ruleset we can choose from with the available threat, a <code>pickweight</code> is done based on the drafted_rules. If the same threat is picked twice, it will &quot;scale up&quot;. The meaning of this depends on the ruleset itself, using the <code>scaled_times</code> variable; traitors for instance will create more the higher they scale.
+<ul>
+<li>If a ruleset is chosen with the <code>HIGH_IMPACT_RULESET</code> in its <code>flags</code>, then all other <code>HIGH_IMPACT_RULESET</code>s will be removed from <code>drafted_rules</code>. This is so that only one can ever be chosen.</li>
+<li>If a ruleset has <code>LONE_RULESET</code> in its <code>flags</code>, then it will be removed from <code>drafted_rules</code>. This is to ensure it will only ever be picked once. An example of this in use is Wizard, to avoid creating multiple wizards.</li>
+</ul>
+</li>
+<li>After all roundstart threats are chosen, <code>/datum/dynamic_ruleset/proc/picking_roundstart_rule</code> is called for each, passing in the ruleset and the number of times it is scaled.
+<ul>
+<li>In this stage, <code>pre_execute</code> is called, which is the function that will determine what players get what antagonists. If this function returns FALSE for whatever reason (in the case of an error), then its threat is refunded.</li>
+</ul>
+</li>
+</ul>
+<p>After this process is done, any leftover roundstart threat will be given to the existing midround budget (done in <code>/datum/controller/subsystem/dynamic/pre_setup()</code>).</p>
+<h2 id="deciding-midround-threats">Deciding midround threats</h2><h3 id="frequency">Frequency</h3>
+<p>The frequency of midround threats is based on the midround threat of the round. The number of midround threats that will roll is <code>threat_level</code> / <code>threat_per_midround_roll</code> (configurable), rounded up. For example, if <code>threat_per_midround_roll</code> is set to 5, then for every 5 threat, one midround roll will be added. If you have 6 threat, with this configuration, you will get 2 midround rolls.</p>
+<p>These midround roll points are then equidistantly spaced across the round, starting from <code>midround_lower_bound</code> (configurable) to <code>midround_upper_bound</code> (configurable), with a +/- of <code>midround_roll_distance</code> (configurable).</p>
+<p>For example, if:</p>
+<ol>
+<li><code>midround_lower_bound</code> is <code>10 MINUTES</code></li>
+<li><code>midround_upper_bound</code> is <code>100 MINUTES</code></li>
+<li><code>midround_roll_distance</code> is <code>3 MINUTES</code></li>
+<li>You have 5 midround rolls for the round</li>
+</ol>
+<p>...then those 5 midround rolls will be placed equidistantly (meaning equally apart) across the first 10-100 minutes of the round. Every individual roll will then be adjusted to either be 3 minutes earlier, or 3 minutes later.</p>
+<h3 id="threat-variety">Threat variety</h3>
+<p>Threats are split between <strong>heavy</strong> rulesets and <strong>light</strong> rulesets. A heavy ruleset includes major threats like space dragons or blobs, while light rulesets are ones that don't often cause shuttle calls when rolled, such as revenants or traitors (sleeper agents).</p>
+<p>When a midround roll occurs, the decision to choose between light or heavy depends on the current round time. If it is less than <code>midround_light_upper_bound</code> (configurable), then it is guaranteed to be a light ruleset. If it is more than <code>midround_heavy_lower_bound</code>, then it is guaranteed to be a heavy ruleset. If it is any point in between, it will interpolate the value between those. This means that the longer the round goes on, the more likely you are to get a heavy ruleset.</p>
+<p>If no heavy ruleset can run, such as not having enough threat, then a light ruleset is guaranteed to run.</p>
+<h2 id="rule-processing">Rule Processing</h2>
+<p>Calls <a href="datum/dynamic_ruleset.html#proc/rule_process" title="/datum/dynamic_ruleset">rule_process</a> on every rule which is in the current_rules list.
+Every sixty seconds, update_playercounts()
+Midround injection time is checked against world.time to see if an injection should happen.
+If midround injection time is lower than world.time, it updates playercounts again, then tries to inject and generates a new cooldown regardless of whether a rule is picked.</p>
+<h2 id="latejoin">Latejoin</h2>
+<p>make_antag_chance(newPlayer) -&gt; (For each latespawn rule...)
+-&gt; acceptable(living players, threat_level) -&gt; trim_candidates() -&gt; ready(forced=FALSE)
+**If true, add to drafted rules
+**NOTE that acceptable uses threat_level not threat!
+**NOTE Latejoin timer is ONLY reset if at least one rule was drafted.
+**NOTE the new_player.dm AttemptLateSpawn() calls OnPostSetup for all roles (unless assigned role is MODE)</p>
+<p>(After collecting all draftble rules...)
+-&gt; picking_latejoin_ruleset(drafted_rules) -&gt; spend threat -&gt; ruleset.execute()</p>
+<h2 id="midround">Midround</h2>
+<p>process() -&gt; (For each midround rule...
+-&gt; acceptable(living players, threat_level) -&gt; trim_candidates() -&gt; ready(forced=FALSE)
+(After collecting all draftble rules...)
+-&gt; picking_midround_ruleset(drafted_rules) -&gt; spend threat -&gt; ruleset.execute()</p>
+<h2 id="forced">Forced</h2>
+<p>For latejoin, it simply sets forced_latejoin_rule
+make_antag_chance(newPlayer) -&gt; trim_candidates() -&gt; ready(forced=TRUE) **NOTE no acceptable() call</p>
+<p>For midround, calls the below proc with forced = TRUE
+picking_specific_rule(ruletype,forced) -&gt; forced OR acceptable(living_players, threat_level) -&gt; trim_candidates() -&gt; ready(forced) -&gt; spend threat -&gt; execute()
+**NOTE specific rule can be called by RS traitor-&gt;MR autotraitor w/ forced=FALSE
+**NOTE that due to short circuiting acceptable() need not be called if forced.</p>
+<h2 id="ruleset">Ruleset</h2>
+<p>acceptable(population,threat) just checks if enough threat_level for population indice.
+**NOTE that we currently only send threat_level as the second arg, not threat.
+ready(forced) checks if enough candidates and calls the map's map_ruleset(dynamic_ruleset) at the parent level</p>
+<p>trim_candidates() varies significantly according to the ruleset type
+Roundstart: All candidates are new_player mobs. Check them for standard stuff: connected, desire role, not banned, etc.
+**NOTE Roundstart deals with both candidates (trimmed list of valid players) and mode.candidates (everyone readied up). Don't confuse them!
+Latejoin: Only one candidate, the latejoiner. Standard checks.
+Midround: Instead of building a single list candidates, candidates contains four lists: living, dead, observing, and living antags. Standard checks in trim_list(list).</p>
+<p>Midround - Rulesets have additional types
+/from_ghosts: execute() -&gt; send_applications() -&gt; review_applications() -&gt; finish_applications() -&gt; finish_setup(mob/newcharacter, index) -&gt; setup_role(role)
+**NOTE: execute() here adds dead players and observers to candidates list</p>
+<h2 id="configuration-and-variables">Configuration and variables</h2><h3 id="configuration">Configuration</h3>
+<p>Configuration can be done through a <code>config/dynamic.json</code> file. One is provided as example in the codebase. This config file, loaded in <code>/datum/controller/subsystem/dynamic/pre_setup()</code>, directly overrides the values in the codebase, and so is perfect for making some rulesets harder/easier to get, turning them off completely, changing how much they cost, etc.</p>
+<p>The format of this file is:</p>
+<pre><code class="language-json">{
+	&quot;Dynamic&quot;: {
+		/* Configuration in here will directly override `/datum/controller/subsystem/dynamic` itself. */
+		/* Keys are variable names, values are their new values. */
+	},
+
+	&quot;Roundstart&quot;: {
+		/* Configuration in here will apply to `/datum/dynamic_ruleset/roundstart` instances. */
+		/* Keys are the ruleset names, values are another associative list with keys being variable names and values being new values. */
+		&quot;Wizard&quot;: {
+			/* I, a head admin, have died to wizard, and so I made it cost a lot more threat than it does in the codebase. */
+			&quot;cost&quot;: 80
+		}
+	},
+
+	&quot;Midround&quot;: {
+		/* Same as &quot;Roundstart&quot;, but for `/datum/dynamic_ruleset/midround` instead. */
+	},
+
+	&quot;Latejoin&quot;: {
+		/* Same as &quot;Roundstart&quot;, but for `/datum/dynamic_ruleset/latejoin` instead. */
+	},
+
+	&quot;Station&quot;: {
+		/* Special threat reductions for dangerous station traits. Traits are selected before dynamic, so traits will always  */
+		/* reduce threat even if there's no threat for it available. Only &quot;cost&quot; can be modified */
+	}
+}
+</code></pre>
+<p>Note: Comments are not possible in this format, and are just in this document for the sake of readability.</p>
+<h3 id="rulesets">Rulesets</h3>
+<p>Rulesets have the following variables notable to developers and those interested in tuning.</p>
+<ul>
+<li><code>required_candidates</code> - The number of people that <em>must be willing</em> (in their preferences) to be an antagonist with this ruleset. If the candidates do not meet this requirement, then the ruleset will not bother to be drafted.</li>
+<li><code>antag_cap</code> - Judges the amount of antagonists to apply, for both solo and teams. Note that some antagonists (such as traitors, lings, heretics, etc) will add more based on how many times they've been scaled. Written as a linear equation--ceil(x/denominator) + offset, or as a fixed constant. If written as a linear equation, will be in the form of <code>list(&quot;denominator&quot; = denominator, &quot;offset&quot; = offset)</code>.
+<ul>
+<li>Examples include:
+<ul>
+<li>Traitor: <code>antag_cap = list(&quot;denominator&quot; = 24)</code>. This means that for every 24 players, 1 traitor will be added (assuming no scaling).</li>
+<li>Nuclear Emergency: <code>antag_cap = list(&quot;denominator&quot; = 18, &quot;offset&quot; = 1)</code>. For every 18 players, 1 nuke op will be added. Starts at 1, meaning at 30 players, 3 nuke ops will be created, rather than 2.</li>
+<li>Revolution: <code>antag_cap = 3</code>. There will always be 3 rev-heads, no matter what.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>minimum_required_age</code> - The minimum age in order to apply for the ruleset.</li>
+<li><code>weight</code> - How likely this ruleset is to be picked. A higher weight results in a higher chance of drafting.</li>
+<li><code>cost</code> - The initial cost of the ruleset. This cost is taken from either the roundstart or midround budget, depending on the ruleset.</li>
+<li><code>scaling_cost</code> - Cost for every <em>additional</em> application of this ruleset.
+<ul>
+<li>Suppose traitors has a <code>cost</code> of 8, and a <code>scaling_cost</code> of 5. This means that buying 1 application of the traitor ruleset costs 8 threat, but buying two costs 13 (8 + 5). Buying it a third time is 18 (8 + 5 + 5), etc.</li>
+</ul>
+</li>
+<li><code>pop_per_requirement</code> - The range of population each value in <code>requirements</code> represents. By default, this is 6.
+<ul>
+<li>If the value is five the range is 0-4, 5-9, 10-14, 15-19, 20-24, 25-29, 30-34, 35-39, 40-54, 45+.</li>
+<li>If it is six the range is 0-5, 6-11, 12-17, 18-23, 24-29, 30-35, 36-41, 42-47, 48-53, 54+.</li>
+<li>If it is seven the range is 0-6, 7-13, 14-20, 21-27, 28-34, 35-41, 42-48, 49-55, 56-62, 63+.</li>
+</ul>
+</li>
+<li><code>requirements</code> - A list that represents, per population range (see: <code>pop_per_requirement</code>), how much threat is required to <em>consider</em> this ruleset. This is independent of how much it'll actually cost. This uses <em>threat level</em>, not the budget--meaning if a round has 50 threat level, but only 10 points of round start threat, a ruleset with a requirement of 40 can still be picked if it can be bought.
+<ul>
+<li>Suppose wizard has a <code>requirements</code> of <code>list(90,90,70,40,30,20,10,10,10,10)</code>. This means that, at 0-5 and 6-11 players, A station must have 90 threat in order for a wizard to be possible. At 12-17, 70 threat is required instead, etc.</li>
+</ul>
+</li>
+<li><code>restricted_roles</code> - A list of jobs that <em>can't</em> be drafted by this ruleset. For example, cyborgs cannot be changelings, and so are in the <code>restricted_roles</code>.</li>
+<li><code>protected_roles</code> - Serves the same purpose of <code>restricted_roles</code>, except it can be turned off through configuration (<code>protect_roles_from_antagonist</code>). For example, security officers <em>shouldn't</em> be made traitor, so they are in Traitor's <code>protected_roles</code>.
+<ul>
+<li>When considering putting a role in <code>protected_roles</code> or <code>restricted_roles</code>, the rule of thumb is if it is <em>technically infeasible</em> to support that job in that role. There's no <em>technical</em> reason a security officer can't be a traitor, and so they are simply in <code>protected_roles</code>. There <em>are</em> technical reasons a cyborg can't be a changeling, so they are in <code>restricted_roles</code> instead.</li>
+</ul>
+</li>
+</ul>
+<p>This is not a complete list--search &quot;configurable&quot; in this README to learn more.</p>
+<h3 id="dynamic">Dynamic</h3>
+<p>The &quot;Dynamic&quot; key has the following configurable values:</p>
+<ul>
+<li><code>pop_per_requirement</code> - The default value of <code>pop_per_requirement</code> for any ruleset that does not explicitly set it. Defaults to 6.</li>
+<li><code>latejoin_delay_min</code>, <code>latejoin_delay_max</code> - The time range, in deciseconds (take your seconds, and multiply by 10), for a latejoin to attempt rolling. Once this timer is finished, a new one will be created within the same range.
+<ul>
+<li>Suppose you have a <code>latejoin_delay_min</code> of 600 (60 seconds, 1 minute) and a <code>latejoin_delay_max</code> of 1800 (180 seconds, 3 minutes). Once the round starts, a random number in this range will be picked--let's suppose 1.5 minutes. After 1.5 minutes, Dynamic will decide if a latejoin threat should be created (a probability of <code>/datum/controller/subsystem/dynamic/proc/get_injection_chance()</code>). Regardless of its decision, a new timer will be started within the range of 1 to 3 minutes, repeatedly.</li>
+</ul>
+</li>
+<li><code>threat_curve_centre</code> - A number between -5 and +5. A negative value will give a more peaceful round and a positive value will give a round with higher threat.</li>
+<li><code>threat_curve_width</code> - A number between 0.5 and 4. Higher value will favour extreme rounds and lower value rounds closer to the average.</li>
+<li><code>roundstart_split_curve_centre</code> - A number between -5 and +5. Equivalent to threat_curve_centre, but for the budget split. A negative value will weigh towards midround rulesets, and a positive value will weight towards roundstart ones.</li>
+<li><code>roundstart_split_curve_width</code> - A number between 0.5 and 4. Equivalent to threat_curve_width, but for the budget split. Higher value will favour more variance in splits and lower value rounds closer to the average.</li>
+<li><code>random_event_hijack_minimum</code> - The minimum amount of time for antag random events to be hijacked. (See <a href="#random-event-hijacking">Random Event Hijacking</a>)</li>
+<li><code>random_event_hijack_maximum</code> - The maximum amount of time for antag random events to be hijacked. (See <a href="#random-event-hijacking">Random Event Hijacking</a>)</li>
+<li><code>hijacked_random_event_injection_chance</code> - The amount of injection chance to give to Dynamic when a random event is hijacked. (See <a href="#random-event-hijacking">Random Event Hijacking</a>)</li>
+<li><code>max_threat_level</code> - Sets the maximum amount of threat that can be rolled. Defaults to 100. You should only use this to <em>lower</em> the maximum threat, as raising it higher will not do anything.</li>
+</ul>
+<h2 id="random-event-hijacking">Random Event &quot;Hijacking&quot;</h2>
+<p>Random events have the potential to be hijacked by Dynamic to keep the pace of midround injections, while also allowing greenshifts to contain some antagonists.</p>
+<p><code>/datum/round_event_control/dynamic_should_hijack</code> is a variable to random events to allow Dynamic to hijack them, and defaults to FALSE. This is set to TRUE for random events that spawn antagonists.</p>
+<p>In <code>/datum/controller/subsystem/dynamic/on_pre_random_event</code> (in <code>dynamic_hijacking.dm</code>), Dynamic hooks to random events. If the <code>dynamic_should_hijack</code> variable is TRUE, the following sequence of events occurs:</p>
+<p><img src="https://github.com/tgstation/documentation-assets/blob/main/dynamic/random_event_hijacking.png" alt="Flow chart to describe the chain of events for Dynamic 2021 to take" /></p>
+<p><code>n</code> is a random value between <code>random_event_hijack_minimum</code> and <code>random_event_hijack_maximum</code>. Heavy injection chance, should it need to be raised, is increased by <code>hijacked_random_event_injection_chance_modifier</code>.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/tlv - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/tlv.html#proc">Proc Details</a></header><main><h1>tlv <aside>/<a href="datum.html">datum</a>/<a href="datum/tlv.html">tlv</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm#L2"><img src="git.png" width="16" height="16" title="code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm 2"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/tlv.html#proc/New">New</a></th><td></td></tr><tr><th><a href="datum/tlv.html#proc/reset_value">reset_value</a></th><td></td></tr><tr><th><a href="datum/tlv.html#proc/set_value">set_value</a></th><td></td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/New">New<aside>(min2, min1, max1, max2)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm#L12"><img src="git.png" width="16" height="16" title="code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm 12"></a></aside></h3><ul>
+<li>Initialize a TLV and set its values if given arguments, mostly for map varedits.</li>
+<li>We provide this functionality but please consider not doing this and making proper subtypes.</li>
+<li>Only by doing the latter will <a href="datum/tlv.html#proc/reset_value" title="/datum/tlv">datum/tlv/proc/reset_value</a> work.</li>
+</ul><h3 id="proc/reset_value"><aside class="declaration">proc </aside>reset_value<aside>(threshold_type)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm#L55"><img src="git.png" width="16" height="16" title="code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm 55"></a></aside></h3><ul>
+<li>
+<p>Reset this particular TLV to its original value.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+<li>
+<ul>
+<li>threshold_type: What kind of variable do we want to set. Accepts bitfield subsets of <a href="code/__DEFINES/atmospherics/atmos_machinery.html#define/TLV_VAR_ALL" title="TLV_VAR_ALL">TLV_VAR_ALL</a>.</li>
+</ul>
+</li>
+</ul><h3 id="proc/set_value"><aside class="declaration">proc </aside>set_value<aside>(threshold_type, value)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm#L40"><img src="git.png" width="16" height="16" title="code/modules/atmospherics/machinery/air_alarm/air_alarm_thresholds.dm 40"></a></aside></h3><ul>
+<li>
+<p>Set this particular TLV</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+<li>
+<ul>
+<li>threshold_type: What kind of variable do we want to set. Accepts bitfield subsets of <a href="code/__DEFINES/atmospherics/atmos_machinery.html#define/TLV_VAR_ALL" title="TLV_VAR_ALL">TLV_VAR_ALL</a>.</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>value: How much to set it to. Accepts a number or <a href="code/__DEFINES/atmospherics/atmos_machinery.html#define/TLV_VALUE_IGNORE" title="TLV_VALUE_IGNORE">TLV_VALUE_IGNORE</a></li>
+</ul>
+</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

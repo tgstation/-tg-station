@@ -1,0 +1,135 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/datums/greyscale/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Greyscale Auto-Generated Sprites (GAGS) <aside>code/datums/greyscale/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/greyscale/README.md0"><img src="git.png" width="16" height="16" title="code/datums/greyscale/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>If you're wanting to add easy recolors for your sprite then this is the system for you. Features include:</p>
+<ul>
+<li>Multiple color layers so your sprite can be generated from more than one color.</li>
+<li>Mixed greyscale and colored sprite layers; You can choose to only greyscale a part of the sprite or have premade filters applied to layers.</li>
+<li>Blend modes; Instead of just putting layers of sprites on top of each other you can use the more advanced blend modes.</li>
+<li>Reusable configurations; You can reference greyscale sprites from within the configuration of another, allowing you to have a bunch of styles with minimal additional configuration.</li>
+</ul>
+<h2 id="other-documents">Other Documents</h2>
+<ul>
+<li><a href="https://hackmd.io/@tgstation/GAGS-Troubleshooting">Troubleshooting help</a></li>
+<li><a href="https://hackmd.io/@tgstation/GAGS-Walkthrough">Basic follow along guide on hackmd</a></li>
+<li><a href="https://hackmd.io/@tgstation/GAGS-Layer-Types">Layer types list</a></li>
+</ul>
+<h2 id="broad-overview">Broad overview</h2>
+<p>There are three main parts to GAGS that you'll need to be aware of when adding a new greyscale sprite:</p>
+<ul>
+<li>The json configuration</li>
+</ul>
+<p>All configuration files can be found in <a href="./json_configs">code/datums/greyscale/json_configs</a> and is where you control how your icons are combined together along with the colors specified from in code.</p>
+<ul>
+<li>The dmi file</li>
+</ul>
+<p>It contains the sprites that will be used as the basis for the rest of the generation process. You can only have one dmi file specified per configuration but if you want to split up your sprites you can reference other configurations instead.</p>
+<ul>
+<li>The configuration type</li>
+</ul>
+<p>This is simply some pointers in the code linking together your dmi and the json configuration.</p>
+<h2 id="json-configuration-file">Json Configuration File</h2>
+<p>The json is made up of some metadata and a list of layers used while creating the sprite. Inner lists are processed as their own chunk before being applied elsewhere, this is useful when you start using more advanced blend modes. Most of the time though you're just going to want a list of icons overlaid on top of each other.</p>
+<pre><code class="language-json">{
+	&quot;icon_state_name&quot;: [
+		{
+			&quot;type&quot;: &quot;reference&quot;,
+			&quot;reference_type&quot;: &quot;/datum/greyscale_config/some_other_config&quot;,
+			&quot;blend_mode&quot;: &quot;overlay&quot;,
+			&quot;color_ids&quot;: [ 1 ]
+		},
+		[
+			{
+				&quot;type&quot;: &quot;icon_state&quot;,
+				&quot;icon_state&quot;: &quot;highlights&quot;,
+				&quot;blend_mode&quot;: &quot;overlay&quot;,
+				&quot;color_ids&quot;: [ 2 ]
+			},
+			{
+				&quot;type&quot;: &quot;reference&quot;,
+				&quot;reference_type&quot;: &quot;/datum/greyscale_config/sparkle_effect&quot;,
+				&quot;blend_mode&quot;: &quot;add&quot;
+			}
+		]
+	]
+}
+</code></pre>
+<p>In this example, we start off by creating a sprite specified by a different configuration. The &quot;type&quot; key is required to specify the kind of layer you defining. Once that is done, the next two layers are grouped together, so they will be generated into one sprite before being applied to any sprites outside their group. You can think of it as an order of operations.</p>
+<p>The first of the two in the inner group is an &quot;icon_state&quot;, this means that the icon will be retrieved from the associated dmi file using the &quot;icon_state&quot; key.</p>
+<p>Note that you don't need to give colors to every layer if the layer does not need any colors applied to it, such as if it's a pre-colored component.
+In this example, the last layer is one such example, referencing a separately colored config.</p>
+<p>&quot;blend_mode&quot; and &quot;color_ids&quot; are special, all layer types have them. The blend mode is what controls how that layer's finished product gets merged together with the rest of the sprite. The color ids control what colors are passed in to the layer.</p>
+<p>Once it is done generating it will be placed in an icon file with the icon state of &quot;icon_state_name&quot;. You can use any name you like here.</p>
+<p>Most commonly, we'll only use the &quot;icon_state&quot; type...
+Thus, <strong>this will be the most common layout</strong>:</p>
+<pre><code class="language-json">{
+	&quot;full_icon_state_name&quot;: [
+		{
+			&quot;type&quot;: &quot;icon_state&quot;,
+			&quot;icon_state&quot;: &quot;component_state_1&quot;,
+			&quot;blend_mode&quot;: &quot;overlay&quot;,
+			&quot;color_ids&quot;: [ 1 ]
+		},
+		{
+			&quot;type&quot;: &quot;icon_state&quot;,
+			&quot;icon_state&quot;: &quot;component_state_2&quot;,
+			&quot;blend_mode&quot;: &quot;overlay&quot;,
+			&quot;color_ids&quot;: [ 2 ]
+		},
+		{
+			&quot;type&quot;: &quot;icon_state&quot;,
+			&quot;icon_state&quot;: &quot;non_colorable_component_state&quot;,
+			&quot;blend_mode&quot;: &quot;overlay&quot;,
+		}
+	]
+}
+</code></pre>
+<h2 id="dmi-file">Dmi File</h2>
+<p>There are no special requirements from the dmi file to work with this system. You just need to specify the icon file in code and the icon_state in the json configuration.
+Additionally, for the sake of mappers, it's appreciated if there's a pre-made obj icon of the same name as the item's icon_state; this way, the item will appear in mapping software.</p>
+<h2 id="dm-code">Dm Code</h2>
+<p>While the amount of dm code required to make a greyscale sprite was minimized as much as possible, some small amount is required anyway if you want anything to use it.</p>
+<p>As an example:</p>
+<pre><code class="language-c">/datum/greyscale_config/canister
+	name = &quot;Canister&quot; //Required for debugging, will runtime without one!
+	icon_file = 'icons/obj/pipes_n_cables/canisters/default.dmi'
+	json_config = 'code/datums/greyscale/json_configs/canister_default.json'
+</code></pre>
+<p>And that's all you need to make it usable by other code:</p>
+<pre><code class="language-c">/obj/machinery/portable_atmospherics/canister
+	...
+	greyscale_config = /datum/greyscale_config/canister
+	greyscale_colors = &quot;#ee4242&quot;
+</code></pre>
+<p>More configurations can be found in the greyscale_configs folder [code/datums/greyscale/config_types/greyscale_configs/greyscale_unsorted.dm] (./config_types/greyscale_configs/greyscale_unsorted.dm)</p>
+<p>While creating a greyscale config, be sure to take subtypes into account! Rather than create several unique configs that all link to the same icon file, you can make the variants all a subtype of one base config:</p>
+<pre><code class="language-c">/datum/greyscale_config/tablet
+	name = &quot;PDA&quot;
+	icon_file = 'icons/obj/devices/modular_pda.dmi'
+	json_config = 'code/datums/greyscale/json_configs/pda.json'
+
+/datum/greyscale_config/tablet/chaplain
+	name = &quot;Chaplain PDA&quot;
+	json_config = 'code/datums/greyscale/json_configs/pda_chaplain.json'
+</code></pre>
+<p>Building on this, if your obj and worn sprites have the same amount of component states, then instead of making separate .json configs for obj and worn, link to two separate .dmi's while still using the same .json config! For example:</p>
+<pre><code class="language-c">/datum/greyscale_config/trek
+	name = &quot;Trek Uniform&quot;
+	icon_file = 'icons/obj/clothing/under/trek.dmi'
+	json_config = 'code/datums/greyscale/json_configs/trek.json'
+
+/datum/greyscale_config/trek/worn
+	name = &quot;Worn Trek Uniform&quot;
+	icon_file = 'icons/mob/clothing/under/trek.dmi'
+	//The worn json is exactly the same, and both icon files use identically-named component states; so, we can just inherit the json!
+</code></pre>
+<p>If you want your item to be colorable in a vending machine (or other places if there's ever any support added for that), you should do it like this:</p>
+<pre><code class="language-c">/obj/item/clothing/head/beret
+	...
+	flags_1 = IS_PLAYER_COLORABLE_1
+</code></pre>
+<p>However, <strong>be extremely careful</strong>, as this <em>requires</em> that you put <em>all</em> of the object's <code>flags_1</code> flags in that statement all over again. It's ugly, I know, but there's no
+better way to do this with BYOND just yet. You can put multiple flags like this (not real flags):</p>
+<pre><code class="language-c">/obj/item/clothing/head/beret
+	...
+	flags_1 = IS_PLAYER_COLORABLE_1 | THIS_IS_A_FAKE_FLAG | THIS_IS_ANOTHER_FAKE_FLAG
+</code></pre>
+<h2 id="debugging">Debugging</h2>
+<p>If you're making a new greyscale sprite you sometimes want to be able to see how layers got generated or maybe you're just tweaking some colors. Rather than rebooting the server with every change there is a greyscale modification menu that can be found in the vv dropdown menu for the greyscale object. Here you can change colors, preview the results, and reload everything from their files.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

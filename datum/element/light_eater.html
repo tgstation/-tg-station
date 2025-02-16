@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/element/light_eater - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/element/light_eater.html#proc">Proc Details</a></header><main><h1>light_eater <aside>/<a href="datum.html">datum</a>/<a href="datum/element.html">element</a>/<a href="datum/element/light_eater.html">light_eater</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L6"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 6"></a></h1><p>Makes anything it attaches to capable of permanently removing something's ability to produce light.</p>
+<p>The temporary equivalent is <a href="datum/component/light_eater.html" title="/datum/component/light_eater">/datum/component/light_eater</a></p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/element/light_eater.html#proc/devour">devour</a></th><td>Consumes the light on the target, permanently rendering it incapable of producing light</td></tr><tr><th><a href="datum/element/light_eater.html#proc/eat_lights">eat_lights</a></th><td>Makes the light eater consume all of the lights attached to the target atom.</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_expose_atom">on_expose_atom</a></th><td>Called when a source reagent exposes a target atom</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_hit_reaction">on_hit_reaction</a></th><td>Called when a source object is used to block a thrown object, projectile, or attack</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_interacting_with">on_interacting_with</a></th><td>Called when a target is interacted with by a source item</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_projectile_hit">on_projectile_hit</a></th><td>Called when a produced projectile strikes a target atom</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_projectile_self_hit">on_projectile_self_hit</a></th><td>Called when a source projectile strikes a target atom</td></tr><tr><th><a href="datum/element/light_eater.html#proc/on_throw_impact">on_throw_impact</a></th><td>Called when a movable source is thrown and strikes a target</td></tr><tr><th><a href="datum/element/light_eater.html#proc/table_buffet">table_buffet</a></th><td>Aggregates a list of the light sources attached to the target atom.</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/devour"><aside class="declaration">proc </aside>devour<aside>(/<a href="atom.html">atom</a>/morsel, /<a href="datum.html">datum</a>/eater)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L89"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 89"></a></aside></h3><p>Consumes the light on the target, permanently rendering it incapable of producing light</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="atom.html" title="/atom">morsel</a>: The light-producing thing we are eating</li>
+<li><a href="datum.html" title="/datum">eater</a>: The light eater eating the morsel. This is the datum that the element is attached to that started this chain.</li>
+</ul><h3 id="proc/eat_lights"><aside class="declaration">proc </aside>eat_lights<aside>(/<a href="atom.html">atom</a>/food, /<a href="datum.html">datum</a>/eater)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L51"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 51"></a></aside></h3><p>Makes the light eater consume all of the lights attached to the target atom.</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="atom.html" title="/atom">food</a>: The atom to start the search for lights at.</li>
+<li><a href="datum.html" title="/datum">eater</a>: The light eater being used in this case.</li>
+</ul><h3 id="proc/on_expose_atom"><aside class="declaration">proc </aside>on_expose_atom<aside>(/<a href="datum.html">datum</a>/<a href="datum/reagent.html">reagent</a>/source, /<a href="atom.html">atom</a>/target, reac_volume)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L198"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 198"></a></aside></h3><p>Called when a source reagent exposes a target atom</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="datum/reagent.html" title="/datum/reagent">source</a>: The reagents that exposed the target atom</li>
+<li><a href="atom.html" title="/atom">target</a>: The atom that was exposed to the light reater reagents</li>
+<li>reac_volume: The volume of the reagents the target was exposed to</li>
+</ul><h3 id="proc/on_hit_reaction"><aside class="declaration">proc </aside>on_hit_reaction<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a>/<a href="mob/living/carbon/human.html">human</a>/owner, /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/hitby, attack_text, final_block_chance, damage, attack_type, damage_type)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L155"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 155"></a></aside></h3><p>Called when a source object is used to block a thrown object, projectile, or attack</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="obj/item.html" title="/obj/item">source</a>: The item what was used to block the target</li>
+<li><a href="mob/living/carbon/human.html" title="/mob/living/carbon/human">owner</a>: The mob that blocked the target with the source</li>
+<li><a href="atom/movable.html" title="/atom/movable">hitby</a>: The movable that was blocked by the owner with the source</li>
+<li>attack_text: The text tring that will be used to report that the target was blocked</li>
+<li>final_block_chance: The probability of blocking the target with the source</li>
+<li>attack_type: The type of attack that was blocked</li>
+</ul><h3 id="proc/on_interacting_with"><aside class="declaration">proc </aside>on_interacting_with<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, /<a href="atom.html">atom</a>/target)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L128"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 128"></a></aside></h3><p>Called when a target is interacted with by a source item</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="obj/item.html" title="/obj/item">source</a>: The item what was used to strike the target</li>
+<li><a href="mob/living.html" title="/mob/living">user</a>: The mob using the source to strike the target</li>
+<li><a href="atom.html" title="/atom">target</a>: The atom being struck by the user with the source</li>
+</ul><h3 id="proc/on_projectile_hit"><aside class="declaration">proc </aside>on_projectile_hit<aside>(/<a href="datum.html">datum</a>/source, /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/firer, /<a href="atom.html">atom</a>/target, angle)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L170"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 170"></a></aside></h3><p>Called when a produced projectile strikes a target atom</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="datum.html" title="/datum">source</a>: The thing that created the projectile</li>
+<li><a href="atom/movable.html" title="/atom/movable">firer</a>: The movable atom that fired the projectile</li>
+<li><a href="atom.html" title="/atom">target</a>: The atom that was struck by the projectile</li>
+<li>angle: The angle the target was struck at</li>
+</ul><h3 id="proc/on_projectile_self_hit"><aside class="declaration">proc </aside>on_projectile_self_hit<aside>(/<a href="obj.html">obj</a>/<a href="obj/projectile.html">projectile</a>/source, /<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/firer, /<a href="atom.html">atom</a>/target, angle, hit_limb)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L185"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 185"></a></aside></h3><p>Called when a source projectile strikes a target atom</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="obj/projectile.html" title="/obj/projectile">source</a>: The projectile striking the target atom</li>
+<li><a href="atom/movable.html" title="/atom/movable">firer</a>: The movable atom that fired the projectile</li>
+<li><a href="atom.html" title="/atom">target</a>: The atom that was struck by the projectile</li>
+<li>angle: The angle the target was struck at</li>
+<li>hit_limb: The limb that was hit, if the target was a carbon</li>
+</ul><h3 id="proc/on_throw_impact"><aside class="declaration">proc </aside>on_throw_impact<aside>(/<a href="atom.html">atom</a>/<a href="atom/movable.html">movable</a>/source, /<a href="atom.html">atom</a>/hit_atom, /<a href="datum.html">datum</a>/<a href="datum/thrownthing.html">thrownthing</a>/thrownthing)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L115"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 115"></a></aside></h3><p>Called when a movable source is thrown and strikes a target</p>
+<p>Arugments:</p>
+<ul>
+<li><a href="atom/movable.html" title="/atom/movable">source</a>: The movable atom that was thrown</li>
+<li><a href="atom.html" title="/atom">hit_atom</a>: The target atom that was struck by the source in flight</li>
+<li><a href="datum/thrownthing.html" title="/datum/thrownthing">thrownthing</a>: A datum containing the information for the throw</li>
+</ul><h3 id="proc/table_buffet"><aside class="declaration">proc </aside>table_buffet<aside>(/<a href="atom.html">atom</a>/commisary, /<a href="datum.html">datum</a>/devourer)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/light_eater.dm#L76"><img src="git.png" width="16" height="16" title="code/datums/elements/light_eater.dm 76"></a></aside></h3><p>Aggregates a list of the light sources attached to the target atom.</p>
+<p>Arguments:</p>
+<ul>
+<li><a href="atom.html" title="/atom">comissary</a>: The origin node of all of the light sources to search through.</li>
+<li><a href="datum.html" title="/datum">devourer</a>: The light eater this element is attached to. Since the element is compatible with reagents this needs to be a datum.</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

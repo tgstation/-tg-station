@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/highlander_controller - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/highlander_controller.html#proc">Proc Details</a></header><main><h1>highlander_controller <aside>/<a href="datum.html">datum</a>/<a href="datum/highlander_controller.html">highlander_controller</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/admin/verbs/highlander_datum.dm#L8"><img src="git.png" width="16" height="16" title="code/modules/admin/verbs/highlander_datum.dm 8"></a></h1><p>The highlander controller handles the admin highlander mode, if enabled.
+It is first created when &quot;there can only be one&quot; triggers it, and it can be referenced from GLOB.highlander_controller</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/highlander_controller.html#proc/new_highlander">new_highlander</a></th><td>Triggers at beginning of the game when there is a confirmed list of valid, ready players.
+Creates a 100% ready game that has NOT started (no players in bodies)
+Followed by start game</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/new_highlander"><aside class="declaration">proc </aside>new_highlander<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/new_crewmember, rank)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/admin/verbs/highlander_datum.dm#L59"><img src="git.png" width="16" height="16" title="code/modules/admin/verbs/highlander_datum.dm 59"></a></aside></h3><p>Triggers at beginning of the game when there is a confirmed list of valid, ready players.
+Creates a 100% ready game that has NOT started (no players in bodies)
+Followed by start game</p>
+<p>Does the following:</p>
+<ul>
+<li>Picks map, and loads it</li>
+<li>Grabs landmarks if it is the first time it's loading</li>
+<li>Sets up the role list</li>
+<li>Puts players in each role randomly
+Arguments:</li>
+<li>setup_list: list of all the datum setups (fancy list of roles) that would work for the game</li>
+<li>ready_players: list of filtered, sane players (so not playing or disconnected) for the game to put into roles</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>_maps/safehouses/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Safe House <aside>_maps/safehouses/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/_maps/safehouses/README.md0"><img src="git.png" width="16" height="16" title="_maps/safehouses/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="creating-a-new-safe-house">Creating a new safe house</h2>
+<ol>
+<li>Create a new map inside the <code>_maps\safe_houses</code> folder using the TGM format.</li>
+<li>Create a new dm file inside <code>modules\bitrunning\virtual_domain\safe_houses</code> folder..</li>
+<li>Place exit and goal landmarks (obj/effect/landmark/bitrunning/..). Generally, 3 exits and 2 goals are ok.</li>
+<li>Ideally, leave 3 spaces for gear. This has usually been xy [1x1] [1x2] [1x3]</li>
+<li>Place the modular map connector at the bottom left tile.</li>
+</ol>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>Safe houses are intended to be 7x6 in size. You're not technically limited to this, but consider maps other maps might be using this size if you want it to be modular.</li>
+<li>Consider that avatars are not invincible and still require air. If you're making a safe house, it should start with an area that accommodates for this.</li>
+<li>For compatibility, your safe house should have a route open from the top center xy [3x0] of the map.</li>
+<li>If you want a custom safehouse for a custom map with no modularity, no problem. Make whatever sizes you want, just ensure there are exit and goal effects placed.</li>
+<li>Some maps can alter what is spawned into the safehouse by placing objects in the safehouse area. I'm using the left corner, starting from the top, for things like space gear. </li>
+</ul></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

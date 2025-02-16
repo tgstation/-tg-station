@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/admin/verbs/lua/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Objects <aside>code/modules/admin/verbs/lua/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/admin/verbs/lua/README.md0"><img src="git.png" width="16" height="16" title="code/modules/admin/verbs/lua/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>Datums, lists, typepaths, static appearances, and some other objects are represented in Luau as userdata. Certain operations can be performed on these types of objects.</p>
+<h2 id="common-metamethods">Common metamethods</h2>
+<p>The following metamethods are defined for all objects.</p>
+<h3 id="tostring-string">__tostring(): string</h3>
+<p>Returns the string representation of the object. This uses BYOND's internal string conversion function.</p>
+<h3 id="eq-other-any-boolean">__eq(other: any): boolean</h3>
+<p>Compare the equality of two objects. While passing the same object into luau twice will return two references to the same userdata, some DM projects may override the equality operator using an <code>__operator==</code> proc definition.</p>
+<h2 id="datum-like-objects">Datum-like Objects</h2>
+<p>Datum-like objects include datums themselves, clients (if they have not been redefined to be children of <code>/datum</code>), static appearances, and the world.</p>
+<h3 id="index-index-string-any">__index(index: string): any</h3>
+<p>Access the member specified by <code>index</code>.</p>
+<p>If <code>index</code> is a valid var for the object, the index operation will return that var's value.
+If the var getting wrapper proc is set, the operation will instead call that proc with the arguments <code>(object, index)</code>.</p>
+<p>For objects other than static appearances, if <code>index</code> is a valid proc for the object, the operation will return a wrapper for that proc that can be invoked using call syntax (e.g. <code>object:proc(...arguments)</code>). If the object proc calling wrapper is set, calling the returned function will instead call the wrapper proc with the arguments <code>(object, proc, {...arguments})</code>. Note that vars will be shadowed by procs with the same name. To work around this, use the <code>dm.get_var</code> function.</p>
+<h3 id="newindex-index-string-value-any">__newindex(index: string, value: any): ()</h3>
+<p>Set the var specified by <code>index</code> to <code>value</code>, if that var exists on the object.</p>
+<p>If the var setting wrapper proc is set, the operation will instead call that proc with the arguments <code>(object, index, value)</code>.</p>
+<h2 id="lists">Lists</h2>
+<p>Lists are syntactically similar to tables, with one crucial difference.
+Unlike tables, numeric indices must be non-zero integers within the bounds of the list.</p>
+<h3 id="index-index-any-any">__index(index: any): any</h3>
+<p>Read the list at <code>index</code>. This works both for numeric indices and assoc keys.
+Vars lists cannot be directly read this way if the var getting wrapper proc is set.</p>
+<h3 id="newindex-index-any-value-any-any">__newindex(index: any, value: any): any</h3>
+<p>Write <code>value</code> to the list at <code>index</code>. This works both for writing numeric indices and assoc keys.
+Vars lists cannot be directly written this way if the var setting wrapper proc is set.</p>
+<h3 id="len-integer">__len(): integer</h3>
+<p>Returns the length of the list, similarly to the <code>length</code> builtin in DM.</p>
+<h3 id="iteration">Iteration</h3>
+<p>Lists support Luau's generalized iteration. Iteration this way returns pairs of numeric indices and list values.
+For example, the statement <code>for _, v in L do</code> is logically equivalent to the DM statement <code>for(var/v in L)</code>.</p>
+<h1 id="global-fields-and-modules">Global Fields and Modules</h1>
+<p>In addition to the full extent of Luau's standard library modules, some extra functions and modules have been added.</p>
+<h2 id="global-level-fields">Global-Level Fields</h2><h3 id="sleep">sleep(): ()</h3>
+<p>Yields the active thread, without worrying about passing data into or out of the state.</p>
+<p>Threads yielded this way are placed at the end of a queue. Call the <code>awaken</code> hook function from DM to execute the thread at the front of the queue.</p>
+<h3 id="loadstring-code-string-function">loadstring(code: string): function</h3>
+<p>Luau does not inherently include the <code>loadstring</code> function common to a number of other versions of lua. This is an effective reimplementation of <code>loadstring</code>.</p>
+<h3 id="print-any">print(...any): ()</h3>
+<p>Calls the print wrapper with the passed in arguments.
+Raises an error if no print wrapper is set, as that means there is nothing to print with.</p>
+<h3 id="state-id-integer">_state_id: integer</h3>
+<p>The handle to the underlying luau state in the dreamluau binary.</p>
+<h2 id="exec">_exec</h2>
+<p>The <code>_exec</code> module includes volatile fields related to the current execution context.</p>
+<h3 id="next-yield-index-integer">_next_yield_index: integer</h3>
+<p>When yielding a thread with <code>coroutine.yield</code>, it will be inserted into an internal table at the first open integer index.
+This field corresponds to that first open integer index.</p>
+<h3 id="limit-integer">_limit: integer?</h3>
+<p>If set, the execution limit, rounded to the nearest millisecond.</p>
+<h3 id="time-integer">_time: integer</h3>
+<p>The length of successive time luau code has been executed, including recursive calls to DM and back into luau, rounded to the nearest millisecond.</p>
+<h2 id="dm">dm</h2>
+<p>The <code>dm</code> module includes fields and functions for basic interaction with DM.</p>
+<h3 id="world-userdata">world: userdata</h3>
+<p>A static reference to the DM <code>world</code>.</p>
+<h3 id="global-vars-userdata">global_vars: userdata</h3>
+<p>A static reference that functions like the DM keyword <code>global</code>. This can be indexed to read/write global vars.</p>
+<h3 id="global-procs-table">global_procs: table</h3>
+<p>A table that can be indexed by string for functions that wrap global procs.</p>
+<p>Due to BYOND limitations, attempting to index an invalid proc returns a function logically equivalent to a no-op.</p>
+<h3 id="get-var-object-userdata-var-string-function">get_var(object: userdata, var: string): function</h3>
+<p>Reads the var <code>var</code> on <code>object</code>. This function can be used to get vars that are shadowed by procs declared with the same name.</p>
+<h3 id="new-path-string-any-userdata">new(path: string, ...any): userdata</h3>
+<p>Creates an instance of the object specified by <code>path</code>, with <code>...</code> as its arguments.
+If the &quot;new&quot; wrapper is set, that proc will be called instead, with the arguments <code>(path, {...})</code>.</p>
+<h3 id="is-valid-ref-ref-any-boolean">is_valid_ref(ref: any): boolean</h3>
+<p>Returns true if the value passed in corresponds to a valid reference-counted DM object.</p>
+<h3 id="usr-userdata">usr: userdata?</h3>
+<p>Corresponds to the DM var <code>usr</code>.</p>
+<h2 id="list">list</h2>
+<p>The <code>list</code> module contains wrappers for the builtin list procs, along with several other utility functions for working with lists.</p>
+<h3 id="add-list-userdata-any">add(list: userdata, ...any): ()</h3>
+<p>Logically equivalent to the DM statement <code>list.Add(...)</code>.</p>
+<h3 id="copy-list-userdata-start-integer-end-integer-userdata">copy(list: userdata, start?: integer, end?: integer): userdata</h3>
+<p>Logically equivalent to the DM statement <code>list.Copy(start, end)</code>.</p>
+<h3 id="cut-list-userdata-start-integer-end-integer-userdata">cut(list: userdata, start?: integer, end?: integer): userdata</h3>
+<p>Logically equivalent to the DM statement <code>list.Cut(start, end)</code>.</p>
+<h3 id="find-list-userdata-item-any-start-integer-end-integer-integer">find(list: userdata, item: any, start?: integer, end?: integer): integer</h3>
+<p>Logically equivalent to the DM statement <code>list.Find(item, start, end)</code>.</p>
+<h3 id="insert-list-userdata-index-integer-any-integer">insert(list: userdata, index: integer, ...any): integer</h3>
+<p>Logically equivalent to the DM statement <code>list.Insert(item, ...)</code>.</p>
+<h3 id="join-list-userdata-glue-string-start-integer-end-integer-string">join(list: userdata, glue: string, start?: integer, end?: integer): string</h3>
+<p>Logically equivalent to the statement <code>list.Join(glue, start, end)</code>.</p>
+<h3 id="remove-list-userdata-any-integer">remove(list: userdata, ...any): integer</h3>
+<p>Logically equivalent to the DM statement <code>list.Remove(...)</code>.</p>
+<h3 id="remove-all-list-userdata-any-integer">remove_all(list: userdata, ...any): integer</h3>
+<p>Logically equivalent to the DM statement <code>list.RemoveAll(...)</code>.</p>
+<h3 id="splice-list-userdata-start-integer-end-integer-any">splice(list: userdata, start?: integer, end?: integer, ...any): ()</h3>
+<p>Logically equivalent to the DM statement <code>list.Splice(start, end, ...)</code>.</p>
+<h3 id="swap-list-userdata-index-1-integer-index-2-integer">swap(list: userdata, index_1: integer, index_2: integer): ()</h3>
+<p>Logically equivalent to the DM statement <code>list.Swap(index_1, index_2)</code>.</p>
+<h3 id="to-table-list-userdata-deep-boolean-table">to_table(list: userdata, deep?: boolean): table</h3>
+<p>Creates a table that is a copy of <code>list</code>. If <code>deep</code> is true, <code>to_table</code> will be called on any lists inside that list.</p>
+<h3 id="from-table-table-table-userdata">from_table(table: table): userdata</h3>
+<p>Creates a list that is a copy of <code>table</code>. This is not strictly necessary, as tables are automatically converted to lists when passed back into DM, using the same internal logic as <code>from_table</code>.</p>
+<h3 id="filter-list-userdata-path-string-userdata">filter(list: userdata, path: string): userdata</h3>
+<p>Returns a copy of <code>list</code>, containing only elements that are objects descended from <code>path</code>.</p>
+<h2 id="pointer">pointer</h2>
+<p>The <code>pointer</code> module contains utility functions for interacting with pointers.
+Keep in mind that passing DM pointers into luau and manipulating them in this way can bypass wrapper procs.</p>
+<h3 id="read-pointer-userdata-any">read(pointer: userdata): any</h3>
+<p>Gets the underlying data the pointer references.</p>
+<h3 id="write-pointer-userdata-value-any">write(pointer: userdata, value: any): ()</h3>
+<p>Writes <code>value</code> to the underlying data the pointer references.</p>
+<h3 id="unwrap-possible-pointer-any-any">unwrap(possible_pointer: any): any</h3>
+<p>If <code>possible_pointer</code> is a pointer, reads it. Otherwise, it is returned as-is.</p>
+<h1 id="the-ss13-package">The SS13 package</h1>
+<p>The <code>SS13</code> package contains various helper functions that use code specific to tgstation.</p>
+<h2 id="ss13-state">SS13.state</h2>
+<p>A reference to the state datum (<code>/datum/lua_state</code>) handling this Lua state.</p>
+<h2 id="ss13-get-runner-ckey">SS13.get_runner_ckey()</h2>
+<p>The ckey of the user who ran the lua script in the current context. Can be unreliable if accessed after sleeping.</p>
+<h2 id="ss13-get-runner-client">SS13.get_runner_client()</h2>
+<p>Returns the client of the user who ran the lua script in the current context. Can be unreliable if accessed after sleeping.</p>
+<h2 id="ss13-global-proc">SS13.global_proc</h2>
+<p>A wrapper for the magic string used to tell <code>WrapAdminProcCall</code> to call a global proc.
+For instance, <code>/datum/callback</code> must be instantiated with <code>SS13.global_proc</code> as its first argument to specify that it will be invoking a global proc.
+The following example declares a callback which will execute the global proc <code>to_chat</code>:</p>
+<pre><code class="language-lua">local callback = SS13.new(&quot;/datum/callback&quot;, SS13.global_proc, &quot;to_chat&quot;, dm.world, &quot;Hello World&quot;)
+</code></pre>
+<h2 id="ss13-istype-thing-type">SS13.istype(thing, type)</h2>
+<p>Equivalent to the DM statement <code>istype(thing, text2path(type))</code>.</p>
+<h2 id="ss13-new-type">SS13.new(type, ...)</h2>
+<p>An alias for <code>dm.new</code></p>
+<h2 id="ss13-is-valid-datum">SS13.is_valid(datum)</h2>
+<p>Can be used to determine if the datum passed is not nil, not undefined and not qdel'd all in one. A helper function that allows you to check the validity from only one function.
+Example usage:</p>
+<pre><code class="language-lua">local datum = SS13.new(&quot;/datum&quot;)
+dm.global_procs.qdel(datum)
+print(SS13.is_valid(datum)) -- false
+
+local null = nil
+print(SS13.is_valid(null)) -- false
+
+local datum = SS13.new(&quot;/datum&quot;)
+print(SS13.is_valid(datum)) -- true
+</code></pre>
+<h2 id="ss13-type-string">SS13.type(string)</h2>
+<p>Converts a string into a typepath. Equivalent to doing <code>dm.global_proc(&quot;_text2path&quot;, &quot;/path/to/type&quot;)</code></p>
+<h2 id="ss13-qdel-datum">SS13.qdel(datum)</h2>
+<p>Deletes a datum. You shouldn't try to reference it after calling this function. Equivalent to doing <code>dm.global_proc(&quot;qdel&quot;, datum)</code></p>
+<h2 id="ss13-await-thing-to-call-proc-to-call">SS13.await(thing_to_call, proc_to_call, ...)</h2>
+<p>Calls <code>proc_to_call</code> on <code>thing_to_call</code>, with <code>...</code> as its arguments, and sleeps until that proc returns.
+Returns two return values - the first is the return value of the proc, and the second is the message of any runtime exception thrown by the called proc.
+The following example calls and awaits the return of <code>poll_ghost_candidates</code>:</p>
+<pre><code class="language-lua">local ghosts, runtime = SS13.await(SS13.global_proc, &quot;poll_ghost_candidates&quot;, &quot;Would you like to be considered for something?&quot;)
+</code></pre>
+<h2 id="ss13-wait-time-timer">SS13.wait(time, timer)</h2>
+<p>Waits for a number of <strong>seconds</strong> specified with the <code>time</code> argument. You can optionally specify a timer subsystem using the <code>timer</code> argument.</p>
+<p>Internally, this function creates a timer that will resume the current task after <code>time</code> seconds, then yields the current task by calling <code>coroutine.yield</code> with no arguments and ignores the return values. If the task is prematurely resumed, the timer will be safely deleted.</p>
+<h2 id="ss13-register-signal-datum-signal-func">SS13.register_signal(datum, signal, func)</h2>
+<p>Registers the Lua function <code>func</code> as a handler for <code>signal</code> on <code>datum</code>.</p>
+<p>Like with signal handlers written in DM, Lua signal handlers should not sleep (either by calling <code>sleep</code> or <code>coroutine.yield</code>).</p>
+<p>This function returns whether the signal registration was successful.</p>
+<p>The following example defines a function which will register a signal that makes <code>target</code> make a honking sound any time it moves:</p>
+<pre><code class="language-lua">function honk(target)
+	SS13.register_signal(target, &quot;movable_moved&quot;, function(source)
+		dm.global_procs.playsound(target, &quot;sound/items/bikehorn.ogg&quot;, 100, true)
+	end)
+end
+</code></pre>
+<p>NOTE: if <code>func</code> is an anonymous function declared inside the call to <code>SS13.register_signal</code>, it cannot be referenced in order to unregister that signal with <code>SS13.unregister_signal</code></p>
+<h2 id="ss13-unregister-signal-datum-signal-func">SS13.unregister_signal(datum, signal, func)</h2>
+<p>Unregister a signal previously registered using <code>SS13.register_signal</code>. <code>func</code> must be a function for which a handler for the specified signal has already been registered. If <code>func</code> is <code>nil</code>, all handlers for that signal will be unregistered.</p>
+<h2 id="ss13-set-timeout-time-func">SS13.set_timeout(time, func)</h2>
+<p>Creates a timer which will execute <code>func</code> after <code>time</code> <strong>seconds</strong>. <code>func</code> should not expect to be passed any arguments, as it will not be passed any. Unlike <code>SS13.wait</code>, <code>SS13.set_timeout</code> does not yield or sleep the current task, making it suitable for use in signal handlers for <code>SS13.register_signal</code></p>
+<p>The following example will output a message to chat after 5 seconds:</p>
+<pre><code class="language-lua">SS13.set_timeout(5, function()
+	dm.global_procs.to_chat(dm.world, &quot;Hello World!&quot;)
+end)
+</code></pre>
+<h2 id="ss13-start-loop-time-amount-func">SS13.start_loop(time, amount, func)</h2>
+<p>Creates a timer which will execute <code>func</code> after <code>time</code> <strong>seconds</strong>. <code>func</code> should not expect to be passed any arguments, as it will not be passed any. Works exactly the same as <code>SS13.set_timeout</code> except it will loop the timer <code>amount</code> times. If <code>amount</code> is set to -1, it will loop indefinitely. Returns a number value, which represents the timer's id. Can be stopped with <code>SS13.end_loop</code>
+Returns a number, the timer id, which is needed to stop indefinite timers.
+The following example will output a message to chat every 5 seconds, repeating 10 times:</p>
+<pre><code class="language-lua">SS13.start_loop(5, 10, function()
+	dm.global_procs.to_chat(dm.world, &quot;Hello World!&quot;)
+end)
+</code></pre>
+<p>The following example will output a message to chat every 5 seconds, until <code>SS13.end_loop(timerid)</code> is called:</p>
+<pre><code class="language-lua">local timerid = SS13.start_loop(5, -1, function()
+	dm.global_proc.to_chat(dm.world, &quot;Hello World!&quot;)
+end)
+</code></pre>
+<h2 id="ss13-end-loop-id">SS13.end_loop(id)</h2>
+<p>Prematurely ends a loop that hasn't ended yet, created with <code>SS13.start_loop</code>. Silently fails if there is no started loop with the specified id.
+The following example will output a message to chat every 5 seconds and delete it after it has repeated 20 times:</p>
+<pre><code class="language-lua">local repeated_amount = 0
+-- timerid won't be in the looping function's scope if declared before the function is declared.
+local timerid
+timerid = SS13.start_loop(5, -1, function()
+	dm.global_procs.to_chat(dm.world, &quot;Hello World!&quot;)
+	repeated_amount += 1
+	if repeated_amount &gt;= 20 then
+		SS13.end_loop(timerid)
+	end
+end)
+</code></pre>
+<h2 id="ss13-stop-all-loops">SS13.stop_all_loops()</h2>
+<p>Stops all current running loops that haven't ended yet.
+Useful in case you accidentally left a indefinite loop running without storing the id anywhere.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

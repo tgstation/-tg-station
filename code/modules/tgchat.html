@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/tgchat/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/modules/tgchat/README.md <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/tgchat/README.md0"><img src="git.png" width="16" height="16" title="code/modules/tgchat/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="tg-chat">/TG/ Chat</h2>
+<p>/TG/ Chat, which will be referred to as TgChat from this point onwards, is a system in which we can send messages to clients in a controlled and semi-reliable manner. The standard way of sending messages to BYOND clients simply dumps whatever you output to them directly into their chat window, however BYOND allows us to load our own code on the client to change this behaviour in a way that allows us to do some pretty neat things.</p>
+<h3 id="message-format">Message Format</h3>
+<p>TgChat handles sending messages from the server to the client through the use of JSON payloads, of which the format will change depending on the type of message and the intended client endpoint. An example of the payload for chat messages is as follows:</p>
+<pre><code class="language-json">{
+	&quot;sequence&quot;: 0,
+	&quot;content&quot;: {
+		&quot;type&quot;: &quot;. . .&quot;, // ?optional
+		&quot;text&quot;: &quot;. . .&quot;, // ?optional !atleast-one
+		&quot;html&quot;: &quot;. . .&quot;, // ?optional !atleast-one
+		&quot;avoidHighlighting&quot;: 0 // ?optional
+	},
+}
+</code></pre>
+<h3 id="reliability">Reliability</h3>
+<p>In the past there have been issues where BYOND will silently and without reason lose a message we sent to the client, to detect this and recover from it seamlessly TgChat also has a baked in reliability layer. This reliability layer is very primitive, and simply keeps track of received sequence numbers. Should the client receive an unexpected sequence number TgChat asks the server to resend any missing packets. </p>
+<h3 id="ping-system">Ping System</h3>
+<p>TgChat supports a round trip time ping measurement, which is displayed to the client so they can know how long it takes for their commands and inputs to reach the server. This is done by sending the client a ping request, <code>ping/soft</code>, which tells the client to send a ping to the server. When the server receives said ping it sends a reply, <code>ping/reply</code>, to the client with a payload containing the current DateTime which the client can reference against the initial ping request.</p>
+<h3 id="chat-tabs-local-storage-and-highlighting">Chat Tabs, Local Storage, and Highlighting</h3>
+<p>To make organizing and managing chat easier and more functional for both players and admins, TgChat has the ability to filter out messages based on their primary tag, such as individual departmental radios, to a dedicated chat tab for easier reading and comprehension. These tabs can also be configured to highlist messages based on a simple keyword search. You can set a multitude of different keywords to search for and they will be highlighting for instant alerting of the client. Said tabs, highlighting rules, and your chat history will persist thanks to use of local storage on the client. Using local storage TgChat can ensure that your preferences are saved and maintained between client restarts and switching between other /TG/ servers. Local Storage is also used to keep your chat history aswell, should you need to scroll through your chat logs.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__DEFINES/rust_g.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__DEFINES/rust_g.html#define">Define Details</a></header><main><h1>code/__DEFINES/rust_g.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm0"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th>/proc/<a href="global.html#proc/rustg_get_version">rustg_get_version</a></th><td>Gets the version of rust_g</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_setup_acreplace">rustg_setup_acreplace</a></th><td>Sets up the Aho-Corasick automaton with its default options.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_setup_acreplace_with_options">rustg_setup_acreplace_with_options</a></th><td>Sets up the Aho-Corasick automaton using supplied options.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_acreplace">rustg_acreplace</a></th><td>Run the specified replacement engine with the provided haystack text to replace, returning replaced text.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_acreplace_with_replacements">rustg_acreplace_with_replacements</a></th><td>Run the specified replacement engine with the provided haystack text to replace, returning replaced text.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_cnoise_generate">rustg_cnoise_generate</a></th><td>This proc generates a cellular automata noise grid which can be used in procedural generation methods.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_dbp_generate">rustg_dbp_generate</a></th><td>This proc generates a grid of perlin-like noise</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_dmi_icon_states">rustg_dmi_icon_states</a></th><td>input: must be a path, not an /icon; you have to do your own handling if it is one, as icon objects can't be directly passed to rustg.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_git_revparse">rustg_git_revparse</a></th><td>Returns the git hash of the given revision, ex. &quot;HEAD&quot;.</td></tr><tr><th>/proc/<a href="global.html#proc/rustg_git_commit_date">rustg_git_commit_date</a></th><td>Returns the date of the given revision using the provided format.
+Defaults to returning %F which is YYYY-MM-DD.</td></tr><tr><th>/proc/<a href="global.html#proc/rustg_git_commit_date_head">rustg_git_commit_date_head</a></th><td>Returns the formatted datetime string of HEAD using the provided format.
+Defaults to returning %F which is YYYY-MM-DD.
+This is different to rustg_git_commit_date because it only needs the logs directory.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_encode_base64">rustg_encode_base64</a></th><td>Encode a given string into base64</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_decode_base64">rustg_decode_base64</a></th><td>Decode a given base64 string</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_generate">rustg_iconforge_generate</a></th><td>Generates a spritesheet at: [file_path][spritesheet_name]_[size_id].png
+The resulting spritesheet arranges icons in a random order, with the position being denoted in the &quot;sprites&quot; return value.
+All icons have the same y coordinate, and their x coordinate is equal to <code>icon_width * position</code>.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_generate_async">rustg_iconforge_generate_async</a></th><td>Returns a job_id for use with rustg_iconforge_check()</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_check">rustg_iconforge_check</a></th><td>Returns the status of an async job_id, or its result if it is completed. See RUSTG_JOB DEFINEs.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_cleanup">rustg_iconforge_cleanup</a></th><td>Clears all cached DMIs and images, freeing up memory.
+This should be used after spritesheets are done being generated.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_cache_valid">rustg_iconforge_cache_valid</a></th><td>Takes in a set of hashes, generate inputs, and DMI filepaths, and compares them to determine cache validity.
+input_hash: xxh64 hash of &quot;sprites&quot; from the cache.
+dmi_hashes: xxh64 hashes of the DMIs in a spritesheet, given by <code>rustg_iconforge_generate</code> with <code>hash_icons</code> enabled. From the cache.
+sprites: The new input that will be passed to rustg_iconforge_generate().
+Returns a CacheResult with the following structure: list(
+&quot;result&quot;: &quot;1&quot; (if cache is valid) or &quot;0&quot; (if cache is invalid)
+&quot;fail_reason&quot;: &quot;&quot; (emtpy string if valid, otherwise a string containing the invalidation reason or an error with ERROR: prefixed.)
+)
+In the case of an unrecoverable panic from within Rust, this function ONLY returns a string containing the error.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_cache_valid_async">rustg_iconforge_cache_valid_async</a></th><td>Returns a job_id for use with rustg_iconforge_check()</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_load_gags_config">rustg_iconforge_load_gags_config</a></th><td>Provided a /datum/greyscale_config typepath, JSON string containing the greyscale config, and path to a DMI file containing the base icons,
+Loads that config into memory for later use by rustg_iconforge_gags(). The config_path is the unique identifier used later.
+JSON Config schema: https://hackmd.io/@tgstation/GAGS-Layer-Types
+Unsupported features: color_matrix layer type, 'or' blend_mode. May not have BYOND parity with animated icons or varying dirs between layers.
+Returns &quot;OK&quot; if successful, otherwise, returns a string containing the error.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_gags">rustg_iconforge_gags</a></th><td>Given a config_path (previously loaded by rustg_iconforge_load_gags_config), and a string of hex colors formatted as &quot;#ff00ff#ffaa00&quot;
+Outputs a DMI containing all of the states within the config JSON to output_dmi_path, creating any directories leading up to it if necessary.
+Returns &quot;OK&quot; if successful, otherwise, returns a string containing the error.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_load_gags_config_async">rustg_iconforge_load_gags_config_async</a></th><td>Returns a job_id for use with rustg_iconforge_check()</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_iconforge_gags_async">rustg_iconforge_gags_async</a></th><td>Returns a job_id for use with rustg_iconforge_check()</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_noise_poisson_map">rustg_noise_poisson_map</a></th><td>Generates a 2D poisson disk distribution ('blue noise'), which is relatively uniform.</td></tr><tr><th>/proc/<a href="global.html#proc/rustg_unix_timestamp">rustg_unix_timestamp</a></th><td>Returns the timestamp as a string</td></tr><tr><th>/proc/<a href="global.html#proc/rustg_sound_length">rustg_sound_length</a></th><td>Provided a static RSC file path or a raw text file path, returns the duration of the file in deciseconds as a float.</td></tr><tr><th><a href="code/__DEFINES/rust_g.html#define/rustg_sound_length_list">rustg_sound_length_list</a></th><td>Returns a nested key-value list containing &quot;successes&quot; and &quot;errors&quot;
+The format is as follows:
+list(
+RUSTG_SOUNDLEN_SUCCESES = list(&quot;sounds/test.ogg&quot; = 25.34),
+RUSTG_SOUNDLEN_ERRORS = list(&quot;sound/bad.png&quot; = &quot;SoundLen: Unable to decode file.&quot;),
+)</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/rustg_acreplace"><aside class="declaration">#define </aside>rustg_acreplace<aside>(key, text)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L93"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 93"></a></h3><p>Run the specified replacement engine with the provided haystack text to replace, returning replaced text.</p>
+<p>Arguments:</p>
+<ul>
+<li>key - The key for the automaton</li>
+<li>text - Text to run replacements on</li>
+</ul><h3 id="define/rustg_acreplace_with_replacements"><aside class="declaration">#define </aside>rustg_acreplace_with_replacements<aside>(key, text, replacements)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L103"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 103"></a></h3><p>Run the specified replacement engine with the provided haystack text to replace, returning replaced text.</p>
+<p>Arguments:</p>
+<ul>
+<li>key - The key for the automaton</li>
+<li>text - Text to run replacements on</li>
+<li>replacements - Replacements for this call. Must be the same length as the set-up patterns</li>
+</ul><h3 id="define/rustg_cnoise_generate"><aside class="declaration">#define </aside>rustg_cnoise_generate<aside>(percentage, smoothing_iterations, birth_limit, death_limit, width, height)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L118"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 118"></a></h3><p>This proc generates a cellular automata noise grid which can be used in procedural generation methods.</p>
+<p>Returns a single string that goes row by row, with values of 1 representing an alive cell, and a value of 0 representing a dead cell.</p>
+<p>Arguments:</p>
+<ul>
+<li>percentage: The chance of a turf starting closed</li>
+<li>smoothing_iterations: The amount of iterations the cellular automata simulates before returning the results</li>
+<li>birth_limit: If the number of neighboring cells is higher than this amount, a cell is born</li>
+<li>death_limit: If the number of neighboring cells is lower than this amount, a cell dies</li>
+<li>width: The width of the grid.</li>
+<li>height: The height of the grid.</li>
+</ul><h3 id="define/rustg_dbp_generate"><aside class="declaration">#define </aside>rustg_dbp_generate<aside>(seed, accuracy, stamp_size, world_size, lower_range, upper_range)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L134"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 134"></a></h3><p>This proc generates a grid of perlin-like noise</p>
+<p>Returns a single string that goes row by row, with values of 1 representing an turned on cell, and a value of 0 representing a turned off cell.</p>
+<p>Arguments:</p>
+<ul>
+<li>seed: seed for the function</li>
+<li>accuracy: how close this is to the original perlin noise, as accuracy approaches infinity, the noise becomes more and more perlin-like</li>
+<li>stamp_size: Size of a singular stamp used by the algorithm, think of this as the same stuff as frequency in perlin noise</li>
+<li>world_size: size of the returned grid.</li>
+<li>lower_range: lower bound of values selected for. (inclusive)</li>
+<li>upper_range: upper bound of values selected for. (exclusive)</li>
+</ul><h3 id="define/rustg_decode_base64"><aside class="declaration">#define </aside>rustg_decode_base64<aside>(str)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L193"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 193"></a></h3><p>Decode a given base64 string</p><h3 id="define/rustg_dmi_icon_states"><aside class="declaration">#define </aside>rustg_dmi_icon_states<aside>(fname)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L146"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 146"></a></h3><p>input: must be a path, not an /icon; you have to do your own handling if it is one, as icon objects can't be directly passed to rustg.</p>
+<p>output: json_encode'd list. json_decode to get a flat list with icon states in the order they're in inside the .dmi</p><h3 id="define/rustg_encode_base64"><aside class="declaration">#define </aside>rustg_encode_base64<aside>(str)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L191"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 191"></a></h3><p>Encode a given string into base64</p><h3 id="define/rustg_git_revparse"><aside class="declaration">#define </aside>rustg_git_revparse<aside>(rev)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L161"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 161"></a></h3><p>Returns the git hash of the given revision, ex. &quot;HEAD&quot;.</p><h3 id="define/rustg_iconforge_cache_valid"><aside class="declaration">#define </aside>rustg_iconforge_cache_valid<aside>(input_hash, dmi_hashes, sprites)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L260"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 260"></a></h3><p>Takes in a set of hashes, generate inputs, and DMI filepaths, and compares them to determine cache validity.
+input_hash: xxh64 hash of &quot;sprites&quot; from the cache.
+dmi_hashes: xxh64 hashes of the DMIs in a spritesheet, given by <code>rustg_iconforge_generate</code> with <code>hash_icons</code> enabled. From the cache.
+sprites: The new input that will be passed to rustg_iconforge_generate().
+Returns a CacheResult with the following structure: list(
+&quot;result&quot;: &quot;1&quot; (if cache is valid) or &quot;0&quot; (if cache is invalid)
+&quot;fail_reason&quot;: &quot;&quot; (emtpy string if valid, otherwise a string containing the invalidation reason or an error with ERROR: prefixed.)
+)
+In the case of an unrecoverable panic from within Rust, this function ONLY returns a string containing the error.</p><h3 id="define/rustg_iconforge_cache_valid_async"><aside class="declaration">#define </aside>rustg_iconforge_cache_valid_async<aside>(input_hash, dmi_hashes, sprites)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L262"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 262"></a></h3><p>Returns a job_id for use with rustg_iconforge_check()</p><h3 id="define/rustg_iconforge_check"><aside class="declaration">#define </aside>rustg_iconforge_check<aside>(job_id)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L247"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 247"></a></h3><p>Returns the status of an async job_id, or its result if it is completed. See RUSTG_JOB DEFINEs.</p><h3 id="define/rustg_iconforge_cleanup"><aside class="declaration">#define </aside>rustg_iconforge_cleanup <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L250"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 250"></a></h3><p>Clears all cached DMIs and images, freeing up memory.
+This should be used after spritesheets are done being generated.</p><h3 id="define/rustg_iconforge_gags"><aside class="declaration">#define </aside>rustg_iconforge_gags<aside>(config_path, colors, output_dmi_path)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L272"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 272"></a></h3><p>Given a config_path (previously loaded by rustg_iconforge_load_gags_config), and a string of hex colors formatted as &quot;#ff00ff#ffaa00&quot;
+Outputs a DMI containing all of the states within the config JSON to output_dmi_path, creating any directories leading up to it if necessary.
+Returns &quot;OK&quot; if successful, otherwise, returns a string containing the error.</p><h3 id="define/rustg_iconforge_gags_async"><aside class="declaration">#define </aside>rustg_iconforge_gags_async<aside>(config_path, colors, output_dmi_path)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L276"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 276"></a></h3><p>Returns a job_id for use with rustg_iconforge_check()</p><h3 id="define/rustg_iconforge_generate"><aside class="declaration">#define </aside>rustg_iconforge_generate<aside>(file_path, spritesheet_name, sprites, hash_icons)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L243"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 243"></a></h3><p>Generates a spritesheet at: [file_path][spritesheet_name]_[size_id].png
+The resulting spritesheet arranges icons in a random order, with the position being denoted in the &quot;sprites&quot; return value.
+All icons have the same y coordinate, and their x coordinate is equal to <code>icon_width * position</code>.</p>
+<p>hash_icons is a boolean (0 or 1), and determines if the generator will spend time creating hashes for the output field dmi_hashes.
+These hashes can be heplful for 'smart' caching (see rustg_iconforge_cache_valid), but require extra computation.</p>
+<p>Spritesheet will contain all sprites listed within &quot;sprites&quot;.
+&quot;sprites&quot; format:
+list(
+&quot;sprite_name&quot; = list( // &lt;--- this list is a [SPRITE_OBJECT]
+icon_file = 'icons/path_to/an_icon.dmi',
+icon_state = &quot;some_icon_state&quot;,
+dir = SOUTH,
+frame = 1,
+transform = list([TRANSFORM_OBJECT], ...)
+),
+...,
+)
+TRANSFORM_OBJECT format:
+list(&quot;type&quot; = RUSTG_ICONFORGE_BLEND_COLOR, &quot;color&quot; = &quot;#ff0000&quot;, &quot;blend_mode&quot; = ICON_MULTIPLY)
+list(&quot;type&quot; = RUSTG_ICONFORGE_BLEND_ICON, &quot;icon&quot; = [SPRITE_OBJECT], &quot;blend_mode&quot; = ICON_OVERLAY)
+list(&quot;type&quot; = RUSTG_ICONFORGE_SCALE, &quot;width&quot; = 32, &quot;height&quot; = 32)
+list(&quot;type&quot; = RUSTG_ICONFORGE_CROP, &quot;x1&quot; = 1, &quot;y1&quot; = 1, &quot;x2&quot; = 32, &quot;y2&quot; = 32) // (BYOND icons index from 1,1 to the upper bound, inclusive)</p>
+<p>Returns a SpritesheetResult as JSON, containing fields:
+list(
+&quot;sizes&quot; = list(&quot;32x32&quot;, &quot;64x64&quot;, ...),
+&quot;sprites&quot; = list(&quot;sprite_name&quot; = list(&quot;size_id&quot; = &quot;32x32&quot;, &quot;position&quot; = 0), ...),
+&quot;dmi_hashes&quot; = list(&quot;icons/path_to/an_icon.dmi&quot; = &quot;d6325c5b4304fb03&quot;, ...),
+&quot;sprites_hash&quot; = &quot;a2015e5ff403fb5c&quot;, // This is the xxh64 hash of the INPUT field &quot;sprites&quot;.
+&quot;error&quot; = &quot;[A string, empty if there were no errors.]&quot;
+)
+In the case of an unrecoverable panic from within Rust, this function ONLY returns a string containing the error.</p><h3 id="define/rustg_iconforge_generate_async"><aside class="declaration">#define </aside>rustg_iconforge_generate_async<aside>(file_path, spritesheet_name, sprites, hash_icons)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L245"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 245"></a></h3><p>Returns a job_id for use with rustg_iconforge_check()</p><h3 id="define/rustg_iconforge_load_gags_config"><aside class="declaration">#define </aside>rustg_iconforge_load_gags_config<aside>(config_path, config_json, config_icon_path)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L268"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 268"></a></h3><p>Provided a /datum/greyscale_config typepath, JSON string containing the greyscale config, and path to a DMI file containing the base icons,
+Loads that config into memory for later use by rustg_iconforge_gags(). The config_path is the unique identifier used later.
+JSON Config schema: https://hackmd.io/@tgstation/GAGS-Layer-Types
+Unsupported features: color_matrix layer type, 'or' blend_mode. May not have BYOND parity with animated icons or varying dirs between layers.
+Returns &quot;OK&quot; if successful, otherwise, returns a string containing the error.</p><h3 id="define/rustg_iconforge_load_gags_config_async"><aside class="declaration">#define </aside>rustg_iconforge_load_gags_config_async<aside>(config_path, config_json, config_icon_path)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L274"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 274"></a></h3><p>Returns a job_id for use with rustg_iconforge_check()</p><h3 id="define/rustg_noise_poisson_map"><aside class="declaration">#define </aside>rustg_noise_poisson_map<aside>(seed, width, length, radius)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L306"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 306"></a></h3><p>Generates a 2D poisson disk distribution ('blue noise'), which is relatively uniform.</p>
+<p>params:
+<code>seed</code>: str
+<code>width</code>: int, width of the noisemap (see world.maxx)
+<code>length</code>: int, height of the noisemap (see world.maxy)
+<code>radius</code>: int, distance between points on the noisemap</p>
+<p>returns:
+a width*length length string of 1s and 0s representing a 2D poisson sample collapsed into a 1D string</p><h3 id="define/rustg_setup_acreplace"><aside class="declaration">#define </aside>rustg_setup_acreplace<aside>(key, patterns, replacements)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L72"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 72"></a></h3><p>Sets up the Aho-Corasick automaton with its default options.</p>
+<p>The search patterns list and the replacements must be of the same length when replace is run, but an empty replacements list is allowed if replacements are supplied with the replace call
+Arguments:</p>
+<ul>
+<li>key - The key for the automaton, to be used with subsequent rustg_acreplace/rustg_acreplace_with_replacements calls</li>
+<li>patterns - A non-associative list of strings to search for</li>
+<li>replacements - Default replacements for this automaton, used with rustg_acreplace</li>
+</ul><h3 id="define/rustg_setup_acreplace_with_options"><aside class="declaration">#define </aside>rustg_setup_acreplace_with_options<aside>(key, options, patterns, replacements)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L84"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 84"></a></h3><p>Sets up the Aho-Corasick automaton using supplied options.</p>
+<p>The search patterns list and the replacements must be of the same length when replace is run, but an empty replacements list is allowed if replacements are supplied with the replace call
+Arguments:</p>
+<ul>
+<li>key - The key for the automaton, to be used with subsequent rustg_acreplace/rustg_acreplace_with_replacements calls</li>
+<li>options - An associative list like list(&quot;anchored&quot; = 0, &quot;ascii_case_insensitive&quot; = 0, &quot;match_kind&quot; = &quot;Standard&quot;). The values shown on the example are the defaults, and default values may be omitted. See the identically named methods at https://docs.rs/aho-corasick/latest/aho_corasick/struct.AhoCorasickBuilder.html to see what the options do.</li>
+<li>patterns - A non-associative list of strings to search for</li>
+<li>replacements - Default replacements for this automaton, used with rustg_acreplace</li>
+</ul><h3 id="define/rustg_sound_length_list"><aside class="declaration">#define </aside>rustg_sound_length_list<aside>(file_paths)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/rust_g.dm#L400"><img src="git.png" width="16" height="16" title="code/__DEFINES/rust_g.dm 400"></a></h3><p>Returns a nested key-value list containing &quot;successes&quot; and &quot;errors&quot;
+The format is as follows:
+list(
+RUSTG_SOUNDLEN_SUCCESES = list(&quot;sounds/test.ogg&quot; = 25.34),
+RUSTG_SOUNDLEN_ERRORS = list(&quot;sound/bad.png&quot; = &quot;SoundLen: Unable to decode file.&quot;),
+)</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

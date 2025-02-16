@@ -1,0 +1,24 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>/obj/machinery/seed_extractor - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="obj/machinery/seed_extractor.html#var">Var Details</a> - <a href="obj/machinery/seed_extractor.html#proc">Proc Details</a></header><main><h1>seed_extractor <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/seed_extractor.html">seed_extractor</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/hydroponics/seed_extractor.dm#L44"><img src="git.png" width="16" height="16" title="code/modules/hydroponics/seed_extractor.dm 44"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr><tr><th><a href="obj/machinery/seed_extractor.html#var/piles">piles</a></th><td>Associated list of seeds, they are all weak refs.  We check the len to see how many refs we have for each</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="obj/machinery/seed_extractor.html#proc/add_seed">add_seed</a></th><td></td></tr><tr><th><a href="obj/machinery/seed_extractor.html#proc/generate_seed_hash">generate_seed_hash</a></th><td>Generate seed string</td></tr></table><h2 id="var">Var Details</h2><h3 id="var/piles"><aside class="declaration">var </aside>piles <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/hydroponics/seed_extractor.dm#L53"><img src="git.png" width="16" height="16" title="code/modules/hydroponics/seed_extractor.dm 53"></a></h3><p>Associated list of seeds, they are all weak refs.  We check the len to see how many refs we have for each</p><h2 id="proc">Proc Details</h2><h3 id="proc/add_seed"><aside class="declaration">proc </aside>add_seed<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/seeds.html">seeds</a>/to_add, /<a href="atom.html">atom</a>/taking_from)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/hydroponics/seed_extractor.dm#L179"><img src="git.png" width="16" height="16" title="code/modules/hydroponics/seed_extractor.dm 179"></a></aside></h3><ul>
+<li>
+<p>Add Seeds Proc.</p>
+</li>
+<li>
+<p>Adds the seeds to the contents and to an associated list that pregenerates the data</p>
+</li>
+<li>
+<p>needed to go to the ui handler</p>
+</li>
+<li>
+<p>to_add - what seed are we adding?</p>
+</li>
+<li>
+<p>taking_from - where are we taking the seed from? A mob, a bag, etc? If null its means it's just laying on the turf so force move it in</p>
+</li>
+</ul><h3 id="proc/generate_seed_hash"><aside class="declaration">proc </aside>generate_seed_hash<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/<a href="obj/item/seeds.html">seeds</a>/O)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/hydroponics/seed_extractor.dm#L167"><img src="git.png" width="16" height="16" title="code/modules/hydroponics/seed_extractor.dm 167"></a></aside></h3><p>Generate seed string</p>
+<p>Creates a string based of the traits of a seed.  We use this string as a bucket for all
+seeds that match as well as the key the ui uses to get the seed.  We also use the key
+for the data shown in the ui.  Javascript parses this string to display</p>
+<p>Arguments:</p>
+<ul>
+<li>O - seed to generate the string from</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

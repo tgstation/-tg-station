@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/keybindings/readme.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>In-code keypress handling system <aside>code/modules/keybindings/readme.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/keybindings/readme.md0"><img src="git.png" width="16" height="16" title="code/modules/keybindings/readme.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>This whole system is heavily based off of forum_account's keyboard library.
+Thanks to forum_account for saving the day, the library can be found
+<a href="https://secure.byond.com/developer/Forum_account/Keyboard">here</a>!</p>
+<p>.dmf macros have some very serious shortcomings. For example, they do not allow reusing parts
+of one macro in another, so giving cyborgs their own shortcuts to swap active module couldn't
+inherit the movement that all mobs should have anyways. The webclient only supports one macro,
+so having more than one was problematic. Additionally each keybind has to call an actual
+verb, which meant a lot of hidden verbs that just call one other proc. Also our existing
+macro was really bad and tied unrelated behavior into <code>Northeast()</code>, <code>Southeast()</code>, <code>Northwest()</code>,
+and <code>Southwest()</code>.</p>
+<p>The basic premise of this system is to not screw with .dmf macro setup at all and handle
+pressing those keys in the code instead. We have every key call <code>client.keyDown()</code>
+or <code>client.keyUp()</code> with the pressed key as an argument. Certain keys get processed
+directly by the client because they should be doable at any time, then we call
+<code>keyDown()</code> or <code>keyUp()</code> on the client's holder and the client's mob's focus.
+By default <code>mob.focus</code> is the mob itself, but you can set it to any datum to give control of a
+client's keypresses to another object. This would be a good way to handle a menu or driving
+a mech. You can also set it to null to disregard input from a certain user.</p>
+<p>Movement is handled by having each client call <code>client.keyLoop()</code> every game tick.
+As above, this calls holder and <code>focus.keyLoop()</code>. <code>atom/movable/keyLoop()</code> handles movement
+Try to keep the calculations in this proc light. It runs every tick for every client after all!</p>
+<p>You can also tell which keys are being held down now. Each client a list of keys pressed called
+<code>keys_held</code>. Each entry is a key as a text string associated with the world.time when it was
+pressed.</p>
+<p>No client-set keybindings at this time, but it shouldn't be too hard if someone wants.</p>
+<p>Notes about certain keys:</p>
+<ul>
+<li><code>Tab</code> has client-sided behavior but acts normally</li>
+<li><code>T</code>, <code>O</code>, and <code>M</code> move focus to the input when pressed. This fires the keyUp macro right away.</li>
+<li><code>\</code> needs to be escaped in the dmf so any usage is <code>\\</code></li>
+</ul>
+<p>You cannot <code>TICK_CHECK</code> or check <code>world.tick_usage</code> inside of procs called by key down and up
+events. They happen outside of a byond tick and have no meaning there. Key looping
+works correctly since it's part of a subsystem, not direct input.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

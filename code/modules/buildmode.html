@@ -1,0 +1,204 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/buildmode/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Buildmode <aside>code/modules/buildmode/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/buildmode/README.md0"><img src="git.png" width="16" height="16" title="code/modules/buildmode/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="code-layout">Code layout</h2><h3 id="buildmode">Buildmode</h3>
+<p>Manager for buildmode modes. Contains logic to manage switching between each mode, and presenting a suitable user interface.</p>
+<h3 id="effects">Effects</h3>
+<p>Special graphics used by buildmode modes for user interface purposes.</p>
+<h3 id="buildmode-mode">Buildmode Mode</h3>
+<p>Implementer of buildmode behaviors.</p>
+<p>Existing varieties:</p>
+<ul>
+<li>
+<p>Basic</p>
+<p><strong>Description</strong>:</p>
+<p>Allows creation of simple structures consisting of floors, walls, windows, and airlocks.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Left click a turf</em>:</p>
+<p>&quot;Upgrades&quot; the turf based on the following rules below:</p>
+<ul>
+<li>Space -&gt; Tiled floor</li>
+<li>Simulated floor -&gt; Regular wall</li>
+<li>Wall -&gt; Reinforced wall</li>
+</ul>
+</li>
+<li>
+<p><em>Right click a turf</em>:</p>
+<p>&quot;Downgrades&quot; the turf based on the following rules below:</p>
+<ul>
+<li>Reinforced wall -&gt; Regular wall</li>
+<li>Wall -&gt; Tiled floor</li>
+<li>Simulated floor -&gt; Space</li>
+</ul>
+</li>
+<li>
+<p><em>Right click an object</em>:</p>
+<p>Deletes the clicked object.</p>
+</li>
+<li>
+<p><em>Alt+Left click a location</em>:</p>
+<p>Places an airlock at the clicked location.</p>
+</li>
+<li>
+<p><em>Ctrl+Left click a location</em>:</p>
+<p>Places a window at the clicked location.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Advanced</p>
+<p><strong>Description</strong>:</p>
+<p>Creates an instance of a configurable atom path where you click.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click on the mode selector</em>:</p>
+<p>Choose a path to spawn.</p>
+</li>
+<li>
+<p><em>Left click a location</em> (requires chosen path):</p>
+<p>Place an instance of the chosen path at the location.</p>
+</li>
+<li>
+<p><em>Right click an object</em>:</p>
+<p>Delete the object.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Fill</p>
+<p><strong>Description</strong>:</p>
+<p>Creates an instance of an atom path on every tile in a chosen region.</p>
+<p>With a special control input, instead deletes everything within the region.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click on the mode selector</em>:</p>
+<p>Choose a path to spawn.</p>
+</li>
+<li>
+<p><em>Left click on a region</em> (requires chosen path):</p>
+<p>Fill the region with the chosen path.</p>
+</li>
+<li>
+<p><em>Alt+Left click on a region</em>:</p>
+<p>Deletes everything within the region.</p>
+</li>
+<li>
+<p><em>Right click during region selection</em>:</p>
+<p>Cancel region selection.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Copy</p>
+<p><strong>Description</strong>:</p>
+<p>Take an existing object in the world, and place duplicates with identical attributes where you click.</p>
+<p>May not always work nicely - &quot;deep&quot; variables such as lists or datums may malfunction.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click an existing object</em>:</p>
+<p>Select the clicked object as a template.</p>
+</li>
+<li>
+<p><em>Left click a location</em> (Requires a selected object as template):</p>
+<p>Place a duplicate of the template at the clicked location.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Area Edit</p>
+<p><strong>Description</strong>:</p>
+<p>Modifies and creates areas.</p>
+<p>The active area will be highlighted in yellow.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click the mode selector</em>:</p>
+<p>Create a new area, and make it active.</p>
+</li>
+<li>
+<p><em>Right click an existing area</em>:</p>
+<p>Make the clicked area active.</p>
+</li>
+<li>
+<p><em>Left click a turf</em>:</p>
+<p>When an area is active, adds the turf to the active area.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Var Edit</p>
+<p><strong>Description</strong>:</p>
+<p>Allows for setting and resetting variables of objects with a click.</p>
+<p>If the object does not have the var, will do nothing and print a warning message.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click the mode selector</em>:</p>
+<p>Choose which variable to set, and what to set it to.</p>
+</li>
+<li>
+<p><em>Left click an atom</em>:</p>
+<p>Change the clicked atom's variables as configured.</p>
+</li>
+<li>
+<p><em>Right click an atom</em>:</p>
+<p>Reset the targeted variable to its original value in the code.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Map Generator</p>
+<p><strong>Description</strong>:</p>
+<p>Fills rectangular regions with algorithmically generated content. Right click during region selection to cancel.</p>
+<p>See the <code>procedural_mapping</code> module for the generators themselves.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right-click on the mode selector</em>:</p>
+<p>Select a map generator from all the generators present in the codebase.</p>
+</li>
+<li>
+<p><em>Left click two corners of an area</em>:</p>
+<p>Use the generator to populate the region.</p>
+</li>
+<li>
+<p><em>Right click during region selection</em>:</p>
+<p>Cancel region selection.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Throwing</p>
+<p><strong>Description</strong>:</p>
+<p>Select an object with left click, and right click to throw it towards where you clicked.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Left click on a movable atom</em>:</p>
+<p>Select the atom for throwing.</p>
+</li>
+<li>
+<p><em>Right click on a location</em>:</p>
+<p>Throw the selected atom towards that location.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Boom</p>
+<p><strong>Description</strong>:</p>
+<p>Make explosions where you click.</p>
+<p><strong>Controls</strong>:</p>
+<ul>
+<li>
+<p><em>Right click the mode selector</em>:</p>
+<p>Configure the explosion size.</p>
+</li>
+<li>
+<p><em>Left click a location</em>:</p>
+<p>Cause an explosion where you clicked.</p>
+</li>
+</ul>
+</li>
+</ul></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,264 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/mod/adding_new_mod.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/modules/mod/adding_new_mod.md <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mod/adding_new_mod.md0"><img src="git.png" width="16" height="16" title="code/modules/mod/adding_new_mod.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="introduction">Introduction</h2>
+<p>This is a step by step guide for creating a MODsuit theme, skin and module.</p>
+<h2 id="theme">Theme</h2>
+<p>This is pretty simple, we go <a href="./mod_theme.dm">here</a> and add a new definition, let's go with a Psychologist theme as an example. <br />
+Their names should be like model names or use similar adjectives, like &quot;magnate&quot; or simply &quot;engineering&quot;, so we'll go with &quot;psychological&quot;. <br />
+After that, it's good to decide what company is manufacturing the suit, and a basic description of what it offers, we'll write that down in the desc. <br />
+So, let's our suit should be a low-power usage with lowered module capacity. We'd go with something like this.</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+</code></pre>
+<p>For people that want to see additional stuff, we add an extended description with some more insight into what the suit does. We also set the default skin to usually the theme name, like so.</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+	extended_desc = &quot;DeForest Medical Corporation's prototype suit, based off the work of \
+		Nakamura Engineering. The suit has been modified to save power compared to regular suits, \
+		for operating at lower power levels, keeping people sane. As consequence, the capacity \
+		of the suit has decreased, not being able to fit many modules at all.&quot;
+	default_skin = &quot;psychological&quot;
+</code></pre>
+<p>Next we want to set the statistics, you can view them all in the theme file, so let's just grab our relevant ones, armor, charge and capacity and set them to what we establilished. <br />
+Currently crew MODsuits should be lightly armored in combat relevant stats.</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+	extended_desc = &quot;DeForest Medical Corporation's prototype suit, based off the work of \
+		Nakamura Engineering. The suit has been modified to save power compared to regular suits, \
+		for operating at lower power levels, keeping people sane. As consequence, the capacity \
+		of the suit has decreased, not being able to fit many modules at all.&quot;
+	default_skin = &quot;psychological&quot;
+	armor_type = /datum/armor/modtheme_psychological
+	complexity_max = DEFAULT_MAX_COMPLEXITY - 7
+	charge_drain = DEFAULT_CHARGE_DRAIN * 0.5
+</code></pre>
+<p>Now we have a basic theme, it lacks a skin which will be covered in the next section, and an item, which we will add right now. <br />
+Let's go into <a href="./mod_types.dm">here</a>. It's as simple as adding a new suit type with the appropriate modules you want.</p>
+<pre><code class="language-dm">/obj/item/mod/control/pre_equipped/psychological
+	theme = /datum/mod_theme/psychological
+	initial_modules = list(
+		/obj/item/mod/module/storage,
+		/obj/item/mod/module/flashlight,
+	)
+</code></pre>
+<p>This will create our psychological suit, equipped with a storage and flashlight modules by default. We might also want to make it craftable, in which case we go <a href="./mod_construction.dm">here</a> and set this.</p>
+<pre><code class="language-dm">/obj/item/mod/construction/armor/psychological
+	theme = /datum/mod_theme/psychological
+</code></pre>
+<p>After that we put it in the techweb or whatever other source we want. Now our suit is almost ready, it just needs a skin.</p>
+<h2 id="skin">Skin</h2>
+<p>So, now that we have our theme, we want to add a skin to it (or another theme of our choosing). Let's start with a basis.</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+	extended_desc = &quot;DeForest Medical Corporation's prototype suit, based off the work of \
+		Nakamura Engineering. The suit has been modified to save power compared to regular suits, \
+		for operating at lower power levels, keeping people sane. As consequence, the capacity \
+		of the suit has decreased, not being able to fit many modules at all.&quot;
+	default_skin = &quot;psychological&quot;
+	armor_type = /datum/armor/modtheme_psychological
+	complexity_max = DEFAULT_MAX_COMPLEXITY - 7
+	charge_drain = DEFAULT_CHARGE_DRAIN * 0.5
+	variants = list(
+		&quot;psychological&quot; = list(
+			/obj/item/clothing/head/mod = list(
+			),
+			/obj/item/clothing/suit/mod = list(
+			),
+			/obj/item/clothing/gloves/mod = list(
+			),
+			/obj/item/clothing/shoes/mod = list(
+			),
+		),
+	)
+</code></pre>
+<p>We now have a psychological skin, this will apply the psychological icons to every part of the suit. Next we'll be looking at the flags. Boots, gauntlets and the chestplate are usually very standard, we set their thickmaterial and pressureproofness while hiding the jumpsuit on the chestplate. On the helmet however, we'll actually look at its icon. <br />
+For example, if our helmet's icon covers the full head (like the research skin), we want to do something like this.</p>
+<pre><code class="language-dm">			/obj/item/clothing/head/mod = list(
+				UNSEALED_CLOTHING = SNUG_FIT|THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE|BLOCK_GAS_SMOKE_EFFECT,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR|HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				UNSEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+</code></pre>
+<p>Otherwise, with an open helmet that becomes closed (like the engineering skin), we'd do this.</p>
+<pre><code class="language-dm">			/obj/item/clothing/head/mod = list(
+				UNSEALED_LAYER = NECK_LAYER
+				UNSEALED_CLOTHING = SNUG_FIT,
+				SEALED_CLOTHING = THICKMATERIAL|STOPSPRESSUREDAMAGE,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR,
+				SEALED_INVISIBILITY = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				SEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+</code></pre>
+<p>There are specific cases of helmets that semi-cover the head, like the cosmohonk, apocryphal and whatnot. You can look at these for more specific suits. So let's say our suit is an open helmet design, and also add an alternate skin with a closed helmet called psychotherapeutic. It'd look something like this.</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+	extended_desc = &quot;DeForest Medical Corporation's prototype suit, based off the work of \
+		Nakamura Engineering. The suit has been modified to save power compared to regular suits, \
+		for operating at lower power levels, keeping people sane. As consequence, the capacity \
+		of the suit has decreased, not being able to fit many modules at all.&quot;
+	default_skin = &quot;psychological&quot;
+	armor_type = /datum/armor/modtheme_psychological
+	complexity_max = DEFAULT_MAX_COMPLEXITY - 7
+	charge_drain = DEFAULT_CHARGE_DRAIN * 0.5
+	variants = list(
+		&quot;psychological&quot; = list(
+			/obj/item/clothing/head/mod = list(
+				UNSEALED_LAYER = NECK_LAYER
+				UNSEALED_CLOTHING = SNUG_FIT,
+				SEALED_CLOTHING = THICKMATERIAL|STOPSPRESSUREDAMAGE,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR,
+				SEALED_INVISIBILITY = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				SEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+			/obj/item/clothing/suit/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				SEALED_INVISIBILITY = HIDEJUMPSUIT,
+			),
+			/obj/item/clothing/gloves/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+			/obj/item/clothing/shoes/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+		&quot;psychotherapeutic&quot; = list(
+			/obj/item/clothing/head/mod = list(
+				UNSEALED_CLOTHING = SNUG_FIT|THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR|HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				UNSEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+			/obj/item/clothing/suit/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				SEALED_INVISIBILITY = HIDEJUMPSUIT,
+			),
+			/obj/item/clothing/gloves/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+			/obj/item/clothing/shoes/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+		),
+	)
+</code></pre>
+<p>Thus we finished our codeside. Now we go to the icon files for the suits and simply add our new skin's icons. <br />
+Now our suit is finished. But let's say we want to give it an unique module.</p>
+<h2 id="module">Module</h2>
+<p>So, for our psychological suit, let's say we want a module that heals the brain damage of everyone in range. <br />
+As it's a medical module, we'll put it <a href="modules/modules_medical.dm">here</a>. Let's start with the object definition.</p>
+<pre><code class="language-dm">/obj/item/mod/module/neuron_healer
+	name = &quot;MOD neuron healer module&quot;
+	desc = &quot;A module made experimentally by DeForest Medical Corporation. On demand it releases waves \
+		that heal neuron damage of everyone nearby, getting their brains to a better state.&quot;
+	icon_state = &quot;neuron_healer&quot;
+</code></pre>
+<p>As we want this effect to be on demand, we probably want this to be an usable module. There are four types of modules:</p>
+<ul>
+<li>Passive: These have a passive effect.</li>
+<li>Togglable: You can turn these on and off.</li>
+<li>Usable: You can use these for a one time effect.</li>
+<li>Active: You can only have one selected at a time. It gives you a special click effect.</li>
+</ul>
+<p>As we have an usable module, we want to set a cooldown time. All modules are also incompatible with themselves, have a specific power cost and complexity varying on how powerful they are, and are equippable to certain slots, so let's update our definition, and also add a new variable for how much brain damage we'll heal.</p>
+<pre><code class="language-dm">/obj/item/mod/module/neuron_healer
+	name = &quot;MOD neuron healer module&quot;
+	desc = &quot;A module made experimentally by DeForest Medical Corporation. On demand it releases waves \
+		that heal neuron damage of everyone nearby, getting their brains to a better state.&quot;
+	icon_state = &quot;neuron_healer&quot;
+	module_type = MODULE_USABLE
+	complexity = 3
+	use_energy_cost = DEFAULT_CHARGE_DRAIN
+	incompatible_modules = list(/obj/item/mod/module/neuron_healer)
+	cooldown_time = 15 SECONDS
+	required_slot = list(ITEM_SLOT_HEAD)
+	var/brain_damage_healed = 25
+</code></pre>
+<p>Now, we want to override the on_use proc for our new effect. You can read about most procs and variables by reading <a href="modules/_module.dm">this</a></p>
+<pre><code class="language-dm">/obj/item/mod/module/neuron_healer/on_use()
+</code></pre>
+<p>After this, we want to put our special code, a basic effect of healing all mobs nearby for their brain damage and creating a beam to them.</p>
+<pre><code class="language-dm">/obj/item/mod/module/neuron_healer/on_use()
+	for(var/mob/living/carbon/carbon_mob in range(5, src))
+		if(carbon_mob == mod.wearer)
+			continue
+		carbon_mob.adjustOrganLoss(ORGAN_SLOT_BRAIN, -brain_damage_healed)
+		mod.wearer.Beam(carbon_mob, icon_state = &quot;plasmabeam&quot;, time = 1.5 SECONDS)
+	playsound(src, 'sound/effects/magic.ogg', 100, TRUE)
+	drain_power(use_energy_cost)
+</code></pre>
+<p>We now have a basic module, we can add it to the techwebs to make it printable ingame, and we can add an inbuilt, advanced version of it for our psychological suit. We'll give it more healing power, no complexity and make it unremovable.</p>
+<pre><code class="language-dm">/obj/item/mod/module/neuron_healer/advanced
+	name = &quot;MOD advanced neuron healer module&quot;
+	complexity = 0
+	brain_damage_healed = 50
+</code></pre>
+<p>Now we want to add it to the psychological theme, which is very simple, finishing with this:</p>
+<pre><code class="language-dm">/datum/mod_theme/psychological
+	name = &quot;psychological&quot;
+	desc = &quot;A DeForest Medical Corporation power-saving psychological suit, limiting its module capacity.&quot;
+	extended_desc = &quot;DeForest Medical Corporation's prototype suit, based off the work of \
+		Nakamura Engineering. The suit has been modified to save power compared to regular suits, \
+		for operating at lower power levels, keeping people sane. As consequence, the capacity \
+		of the suit has decreased, not being able to fit many modules at all.&quot;
+	default_skin = &quot;psychological&quot;
+	armor_type = /datum/armor/modtheme_psychological
+	complexity_max = DEFAULT_MAX_COMPLEXITY - 7
+	charge_drain = DEFAULT_CHARGE_DRAIN * 0.5
+	inbuilt_modules = list(/obj/item/mod/module/neuron_healer/advanced)
+	variants = list(
+		&quot;psychological&quot; = list(
+			/obj/item/clothing/head/mod = list(
+				UNSEALED_LAYER = NECK_LAYER
+				UNSEALED_CLOTHING = SNUG_FIT,
+				SEALED_CLOTHING = THICKMATERIAL|STOPSPRESSUREDAMAGE,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR,
+				SEALED_INVISIBILITY = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				SEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+			/obj/item/clothing/suit/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				SEALED_INVISIBILITY = HIDEJUMPSUIT,
+			),
+			/obj/item/clothing/gloves/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+			/obj/item/clothing/shoes/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+		&quot;psychotherapeutic&quot; = list(
+			/obj/item/clothing/head/mod = list(
+				UNSEALED_CLOTHING = SNUG_FIT|THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				UNSEALED_INVISIBILITY = HIDEFACIALHAIR|HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE|HIDEHAIR|HIDESNOUT,
+				UNSEALED_COVER = HEADCOVERSMOUTH|HEADCOVERSEYES|PEPPERPROOF,
+			),
+			/obj/item/clothing/suit/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+				SEALED_INVISIBILITY = HIDEJUMPSUIT,
+			),
+			/obj/item/clothing/gloves/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+			/obj/item/clothing/shoes/mod = list(
+				UNSEALED_CLOTHING = THICKMATERIAL,
+				SEALED_CLOTHING = STOPSPRESSUREDAMAGE,
+			),
+		),
+	)
+</code></pre>
+<h2 id="ending">Ending</h2>
+<p>This finishes this hopefully easy to follow along tutorial. You should now know how to make a basic theme, a skin for it, and a module.</p></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/weakref - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/weakref.html#proc">Proc Details</a></header><main><h1>weakref <aside>/<a href="datum.html">datum</a>/<a href="datum/weakref.html">weakref</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/weakrefs.dm#L55"><img src="git.png" width="16" height="16" title="code/datums/weakrefs.dm 55"></a></h1><p>A weakref holds a non-owning reference to a datum.
+The datum can be referenced again using <code>resolve()</code>.</p>
+<p>To figure out why this is important, you must understand how deletion in
+BYOND works.</p>
+<p>Imagine a datum as a TV in a living room. When one person enters to watch
+TV, they turn it on. Others can come into the room and watch the TV.
+When the last person leaves the room, they turn off the TV because it's
+no longer being used.</p>
+<p>A datum being deleted tells everyone who's watching the TV to stop.
+If everyone leaves properly (AKA cleaning up their references), then the
+last person will turn off the TV, and everything is well.
+However, if someone is resistant (holds a hard reference after deletion),
+then someone has to walk in, drag them away, and turn off the TV forecefully.
+This process is very slow, and it's known as hard deletion.</p>
+<p>This is where weak references come in. Weak references don't count as someone
+watching the TV. Thus, when what it's referencing is destroyed, it will
+hopefully clean up properly, and limit hard deletions.</p>
+<p>A common use case for weak references is holding onto what created itself.
+For example, if a machine wanted to know what its last user was, it might
+create a <code>var/mob/living/last_user</code>. However, this is a strong reference to
+the mob, and thus will force a hard deletion when that mob is deleted.
+It is often better in this case to instead create a weakref to the user,
+meaning this type definition becomes <code>var/datum/weakref/last_user</code>.</p>
+<p>A good rule of thumb is that you should hold strong references to things
+that you <em>own</em>. For example, a dog holding a chew toy would be the owner
+of that chew toy, and thus a <code>var/obj/item/chew_toy</code> reference is fine
+(as long as it is cleaned up properly).
+However, a chew toy does not own its dog, so a <code>var/mob/living/dog/owner</code>
+might be inferior to a weakref.
+This is also a good rule of thumb to avoid circular references, such as the
+chew toy example. A circular reference that doesn't clean itself up properly
+will always hard delete.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/weakref.html#proc/hard_resolve">hard_resolve</a></th><td>SERIOUSLY READ THE AUTODOC COMMENT FOR THIS PROC BEFORE EVEN THINKING ABOUT USING IT</td></tr><tr><th><a href="datum/weakref.html#proc/resolve">resolve</a></th><td>Retrieves the datum that this weakref is referencing.</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/hard_resolve"><aside class="declaration">proc </aside>hard_resolve<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/weakrefs.dm#L93"><img src="git.png" width="16" height="16" title="code/datums/weakrefs.dm 93"></a></aside></h3><p>SERIOUSLY READ THE AUTODOC COMMENT FOR THIS PROC BEFORE EVEN THINKING ABOUT USING IT</p>
+<p>Like resolve, but doesn't care if the datum is being qdeleted but hasn't been deleted yet.</p>
+<p>The return value of this proc leaves hanging references if the datum is being qdeleted but hasn't been deleted yet.</p>
+<p>Do not do anything that would create a lasting reference to the return value, such as giving it a tag, putting it on the map,
+adding it to an atom's contents or vis_contents, giving it a key (if it's a mob), attaching it to an atom (if it's an image),
+or assigning it to a datum or list referenced somewhere other than a temporary value.</p>
+<p>Unless you're resolving a weakref to a datum in a COMSIG_QDELETING signal handler registered on that very same datum,
+just use resolve instead.</p><h3 id="proc/resolve"><aside class="declaration">proc </aside>resolve<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/weakrefs.dm#L75"><img src="git.png" width="16" height="16" title="code/datums/weakrefs.dm 75"></a></aside></h3><p>Retrieves the datum that this weakref is referencing.</p>
+<p>This will return <code>null</code> if the datum was deleted. This MUST be respected.</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

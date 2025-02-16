@@ -1,0 +1,14 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/controllers/subsystem/garbage.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/controllers/subsystem/garbage.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/controllers/subsystem/garbage.dm0"><img src="git.png" width="16" height="16" title="code/controllers/subsystem/garbage.dm0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="debugging-gc-issues">Debugging GC issues</h2>
+<p>In order to debug <code>qdel()</code> failures, there are several tools available.
+To enable these tools, define <code>TESTING</code> in <a href="https://github.com/tgstation/-tg-station/blob/master/code/_compile_options.dm">_compile_options.dm</a>.</p>
+<p>First is a verb called &quot;Find References&quot;, which lists <strong>every</strong> refererence to an object in the world. This allows you to track down any indirect or obfuscated references that you might have missed.</p>
+<p>Complementing this is another verb, &quot;qdel() then Find References&quot;.
+This does exactly what you'd expect; it calls <code>qdel()</code> on the object and then it finds all references remaining.
+This is great, because it means that <code>Destroy()</code> will have been called before it starts to find references,
+so the only references you'll find will be the ones preventing the object from <code>qdel()</code>ing gracefully.</p>
+<p>If you have a datum or something you are not destroying directly (say via the singulo),
+the next tool is <code>QDEL_HINT_FINDREFERENCE</code>. You can return this in <code>Destroy()</code> (where you would normally <code>return ..()</code>),
+to print a list of references once it enters the GC queue.</p>
+<p>Finally is a verb, &quot;Show qdel() Log&quot;, which shows the deletion log that the garbage subsystem keeps. This is helpful if you are having race conditions or need to review the order of deletions.</p>
+<p>Note that for any of these tools to work <code>TESTING</code> must be defined.
+By using these methods of finding references, you can make your life far, far easier when dealing with <code>qdel()</code> failures.</p></td></tr><tr><th><a href="datum/qdel_item.html">/datum/qdel_item</a></th><td>Qdel Item: Holds statistics on each type that passes thru qdel</td></tr><tr><th>/proc/<a href="global.html#proc/qdel">qdel</a></th><td>Should be treated as a replacement for the 'del' keyword.</td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__HELPERS/radiation.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__HELPERS/radiation.html#define">Define Details</a></header><main><h1>code/__HELPERS/radiation.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/radiation.dm0"><img src="git.png" width="16" height="16" title="code/__HELPERS/radiation.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/__HELPERS/radiation.html#define/CAN_IRRADIATE">CAN_IRRADIATE</a></th><td>Whether or not it's possible for this atom to be irradiated</td></tr><tr><th>/proc/<a href="global.html#proc/radiation_pulse">radiation_pulse</a></th><td>Sends out a pulse of radiation, eminating from the source.
+Radiation is performed by collecting all radiatables within the max range (0 means source only, 1 means adjacent, etc),
+then makes their way towards them. A number, starting at 1, is multiplied
+by the insulation amounts of whatever is in the way (for example, walls lowering it down).
+If this number hits equal or below the threshold, then the target can no longer be irradiated.
+If the number is above the threshold, then the chance is the chance that the target will be irradiated.
+As a consumer, this means that max_range going up usually means you want to lower the threshold too,
+as well as the other way around.
+If max_range is high, but threshold is too high, then it usually won't reach the source at the max range in time.
+If max_range is low, but threshold is too low, then it basically guarantees everyone nearby, even if there's walls
+and such in the way, can be irradiated.
+You can also pass in a minimum exposure time. If this is set, then this radiation pulse
+will not irradiate the source unless they have been around <em>any</em> radioactive source for that
+period of time.
+The chance to get irradiated diminishes over range, and from objects that block radiation.
+Assuming there is nothing in the way, the chance will determine what the chance is to get irradiated from half of max_range.
+Example: If chance is equal to 30%, and max_range is equal to 8,
+then the chance for a thing to get irradiated is 30% if they are 4 turfs away from the pulse source.</td></tr><tr><th>/proc/<a href="global.html#proc/get_perceived_radiation_danger">get_perceived_radiation_danger</a></th><td>Gets the perceived &quot;danger&quot; of radiation pulse, given the threshold to the target.
+Returns a RADIATION_DANGER_* define, see <a href="code/__DEFINES/radiation.html" title="code/__DEFINES/radiation.dm">code/__DEFINES/radiation.dm</a></td></tr></table><h2 id="define">Define Details</h2><h3 id="define/CAN_IRRADIATE"><aside class="declaration">#define </aside>CAN_IRRADIATE<aside>(atom)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/radiation.dm#L2"><img src="git.png" width="16" height="16" title="code/__HELPERS/radiation.dm 2"></a></h3><p>Whether or not it's possible for this atom to be irradiated</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

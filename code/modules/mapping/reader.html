@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/mapping/reader.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/modules/mapping/reader.html#define">Define Details</a></header><main><h1>code/modules/mapping/reader.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mapping/reader.dm0"><img src="git.png" width="16" height="16" title="code/modules/mapping/reader.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/modules/mapping/reader.html#define/MAP_DMM">MAP_DMM</a></th><td>DMM SPEC:
+DMM is split into two parts. First we have strings of text linked to lists of paths and their modifications (I will call this the cache)
+We call these strings &quot;keys&quot; and the things they point to members. Keys have a static length</td></tr><tr><th><a href="code/modules/mapping/reader.html#define/MAP_TGM">MAP_TGM</a></th><td>TGM SPEC:
+TGM is a derevation of DMM, with restrictions placed on it
+to make it easier to parse and to reduce merge conflicts/ease their resolution</td></tr><tr><th>/proc/<a href="global.html#proc/load_map">load_map</a></th><td>Helper and recommened way to load a map file</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/MAP_DMM"><aside class="declaration">#define </aside>MAP_DMM <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mapping/reader.dm#L28"><img src="git.png" width="16" height="16" title="code/modules/mapping/reader.dm 28"></a></h3><p>DMM SPEC:
+DMM is split into two parts. First we have strings of text linked to lists of paths and their modifications (I will call this the cache)
+We call these strings &quot;keys&quot; and the things they point to members. Keys have a static length</p>
+<p>The second part is a list of locations matched to a string of keys. (I'll be calling this the grid)
+These are used to lookup the cache we built earlier.
+We store location lists as grid_sets. the lines represent different things depending on the spec</p>
+<p>In standard DMM (which you can treat as the base case, since it also covers weird modifications) each line
+represents an x file, and there's typically only one grid set per z level.
+The meme is you can look at a DMM formatted map and literally see what it should roughly look like
+This differs in TGM, and we can pull some performance from this</p>
+<p>Any restrictions here also apply to TGM</p>
+<p>/tg/ Restrictions:
+Paths have a specified order. First atoms in the order in which they should be loaded, then a single turf, then the area of the cell
+DMM technically supports turf stacking, but this is deprecated for all formats</p><h3 id="define/MAP_TGM"><aside class="declaration">#define </aside>MAP_TGM <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mapping/reader.dm#L63"><img src="git.png" width="16" height="16" title="code/modules/mapping/reader.dm 63"></a></h3><p>TGM SPEC:
+TGM is a derevation of DMM, with restrictions placed on it
+to make it easier to parse and to reduce merge conflicts/ease their resolution</p>
+<p>Requirements:
+Each &quot;statement&quot; in a key's details ends with a new line, and wrapped in (...)
+All paths end with either a comma or occasionally a {, then a new line
+Excepting the area, who is listed last and ends with a ) to mark the end of the key</p>
+<p>{} denotes a list of variable edits applied to the path that came before the first {
+the final } is followed by a comma, and then a new line
+Variable edits have the form \tname = value;\n
+Except the last edit, which has no final ;, and just ends in a newline
+No extra padding is permitted
+Many values are supported. See parse_constant()
+Strings must be wrapped in &quot;...&quot;, files in '...', and lists in list(...)
+Files are kinda susy, and may not actually work. buyer beware
+Lists support assoc values as expected
+These constants can be further embedded into lists</p>
+<p>There can be no padding in front of, or behind a path</p>
+<p>Therefore:
+&quot;key&quot; = (
+/path,
+/other/path{
+var = list(&quot;name&quot; = 'filepath');
+other_var = /path
+},
+/turf,
+/area)</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

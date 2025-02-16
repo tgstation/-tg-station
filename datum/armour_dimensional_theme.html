@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/armour_dimensional_theme - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/armour_dimensional_theme.html#proc">Proc Details</a></header><main><h1>armour_dimensional_theme <aside>/<a href="datum.html">datum</a>/<a href="datum/armour_dimensional_theme.html">armour_dimensional_theme</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L8"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 8"></a></h1><p>Datum describing a 'theme' which transforms a 3x3 area's turfs when applied.
+It also creates a number of themed barriers in that area.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/apply">apply</a></th><td>Transforms turfs around a source point into a new themed material.
+Also place some barriers in unoccupied areas.</td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/apply_random">apply_random</a></th><td>Applies a random dimensional theme effect centered around a provided point.
+This will transform floors and walls, as well as creating some themed barriers in that area.</td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/convert_turf">convert_turf</a></th><td>Changes a turf into a different turf</td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/get_target_area">get_target_area</a></th><td>Returns a list of turfs which it is valid to apply changes to.</td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/place_barrier">place_barrier</a></th><td>Places a barrier at a specified turf.</td></tr><tr><th><a href="datum/armour_dimensional_theme.html#proc/place_barriers">place_barriers</a></th><td>Places a random amount of themed barriers in unoccupied spaces adjacent to a source tile.</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/apply"><aside class="declaration">proc </aside>apply<aside>(/<a href="turf.html">turf</a>/source)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L40"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 40"></a></aside></h3><p>Transforms turfs around a source point into a new themed material.
+Also place some barriers in unoccupied areas.</p>
+<p>Arguments</p>
+<ul>
+<li>source - The central turf to apply outwards from.</li>
+</ul><h3 id="proc/apply_random"><aside class="declaration">proc </aside>apply_random<aside>(/<a href="turf.html">turf</a>/source, dangerous)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L23"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 23"></a></aside></h3><p>Applies a random dimensional theme effect centered around a provided point.
+This will transform floors and walls, as well as creating some themed barriers in that area.</p>
+<p>Arguments</p>
+<ul>
+<li>source - The central turf to apply outwards from.</li>
+<li>dangerous - If true this will pick a 'dangerous' theme.</li>
+</ul><h3 id="proc/convert_turf"><aside class="declaration">proc </aside>convert_turf<aside>(/<a href="turf.html">turf</a>/to_convert)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L78"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 78"></a></aside></h3><p>Changes a turf into a different turf</p>
+<p>Arguments</p>
+<ul>
+<li>to_convert - Turf to convert.</li>
+</ul><h3 id="proc/get_target_area"><aside class="declaration">proc </aside>get_target_area<aside>(/<a href="turf.html">turf</a>/source)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L54"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 54"></a></aside></h3><p>Returns a list of turfs which it is valid to apply changes to.</p>
+<p>Arguments</p>
+<ul>
+<li>source - The central turf to check outwards from.</li>
+</ul><h3 id="proc/place_barrier"><aside class="declaration">proc </aside>place_barrier<aside>(/<a href="turf.html">turf</a>/source, /list/materials)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L121"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 121"></a></aside></h3><p>Places a barrier at a specified turf.</p>
+<p>Arguments</p>
+<ul>
+<li>source - Tile to place barrier upon.</li>
+<li>materials - Custom material data to apply to the barrier.</li>
+</ul><h3 id="proc/place_barriers"><aside class="declaration">proc </aside>place_barriers<aside>(/<a href="turf.html">turf</a>/source, /list/target_area)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/clothing/suits/reactive_armour_dimensional_themes.dm#L96"><img src="git.png" width="16" height="16" title="code/modules/clothing/suits/reactive_armour_dimensional_themes.dm 96"></a></aside></h3><p>Places a random amount of themed barriers in unoccupied spaces adjacent to a source tile.</p>
+<p>Arguments</p>
+<ul>
+<li>source - Central tile to place barriers around.</li>
+<li>target_area - Tiles which have had their materials converted, needs further culling to remove dense tiles.</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

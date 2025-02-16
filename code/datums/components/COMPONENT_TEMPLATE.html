@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/datums/components/COMPONENT_TEMPLATE.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Template file for your new component <aside>code/datums/components/COMPONENT_TEMPLATE.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/COMPONENT_TEMPLATE.md0"><img src="git.png" width="16" height="16" title="code/datums/components/COMPONENT_TEMPLATE.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>See _component.dm for detailed explanations</p>
+<pre><code class="language-dm">/datum/component/mycomponent
+	//can_transfer = TRUE                   // Must have PostTransfer
+	//dupe_mode = COMPONENT_DUPE_ALLOWED    // code/__DEFINES/dcs/flags.dm
+	var/myvar
+
+/datum/component/mycomponent/Initialize(myargone, myargtwo)
+	if(myargone)
+		myvar = myargone
+	if(myargtwo)
+		send_to_playing_players(myargtwo)
+
+/datum/component/mycomponent/RegisterWithParent()
+	RegisterSignal(parent, COMSIG_NOT_REAL, PROC_REF(signalproc))                                    // RegisterSignal can take a signal name by itself,
+	RegisterSignal(parent, list(COMSIG_NOT_REAL_EITHER, COMSIG_ALMOST_REAL), PROC_REF(otherproc))    // or a list of them to assign to the same proc
+
+/datum/component/mycomponent/UnregisterFromParent()
+	UnregisterSignal(parent, COMSIG_NOT_REAL)          // UnregisterSignal has similar behavior
+	UnregisterSignal(parent, list(                     // But you can just include all registered signals in one call
+		COMSIG_NOT_REAL,
+		COMSIG_NOT_REAL_EITHER,
+		COMSIG_ALMOST_REAL,
+	))
+
+/datum/component/mycomponent/proc/signalproc(datum/source)
+	SIGNAL_HANDLER
+	send_to_playing_players(&quot;[source] signaled [src]!&quot;)
+
+/*
+/datum/component/mycomponent/InheritComponent(datum/component/mycomponent/old, i_am_original, list/arguments)
+	myvar = old.myvar
+
+	if(i_am_original)
+		send_to_playing_players(&quot;No parent should have to bury their child&quot;)
+*/
+
+/*
+/datum/component/mycomponent/PreTransfer(datum/new_parent)
+	send_to_playing_players(&quot;Goodbye [new_parent], I'm getting adopted&quot;)
+
+/datum/component/mycomponent/PostTransfer(datum/new_parent)
+	send_to_playing_players(&quot;Hello my new parent, [parent]! It's nice to meet you!&quot;)
+*/
+
+/*
+/datum/component/mycomponent/CheckDupeComponent(datum/mycomponent/new, myargone, myargtwo)
+	if(myargone == myvar)
+		return TRUE
+*/
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

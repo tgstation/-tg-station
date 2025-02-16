@@ -1,0 +1,41 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__DEFINES/dcs/signals/signals_screentips.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__DEFINES/dcs/signals/signals_screentips.html#define">Define Details</a></header><main><h1>code/__DEFINES/dcs/signals/signals_screentips.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm0"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/__DEFINES/dcs/signals/signals_screentips.html#define/COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET">COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET</a></th><td>A &quot;Type-A&quot; contextual screentip interaction.
+These are used for items that are defined by their behavior. They define their contextual text within <em>themselves</em>,
+not in their targets.
+Examples include syringes (LMB to inject, RMB to draw) and health analyzers (LMB to scan health/wounds, RMB for chems)
+Items can override <code>add_item_context()</code>, and call <code>register_item_context()</code> in order to easily connect to this.
+Called on /obj/item with a mutable screentip context list, the hovered target, and the mob hovering.
+A screentip context list is a list that has context keys (SCREENTIP_CONTEXT_*, from __DEFINES/screentips.dm)
+that map to the action as text.
+If you mutate the list in this signal, you must return CONTEXTUAL_SCREENTIP_SET.</td></tr><tr><th><a href="code/__DEFINES/dcs/signals/signals_screentips.html#define/COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM">COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM</a></th><td>A &quot;Type-B&quot; contextual screentip interaction.
+These are atoms that are defined by what happens <em>to</em> them. These should define contextual text within themselves, and
+not in their operating tools.
+Examples include construction objects (LMB with glass to put in screen for computers).
+Called on /atom with a mutable screentip context list, the item being used, and the mob hovering.
+A screentip context list is a list that has context keys (SCREENTIP_CONTEXT_*, from __DEFINES/screentips.dm)
+that map to the action as text.
+If you mutate the list in this signal, you must return CONTEXTUAL_SCREENTIP_SET.</td></tr><tr><th><a href="code/__DEFINES/dcs/signals/signals_screentips.html#define/CONTEXTUAL_SCREENTIP_SET">CONTEXTUAL_SCREENTIP_SET</a></th><td>Tells the contextual screentips system that the list context was mutated.</td></tr><tr><th><a href="code/__DEFINES/dcs/signals/signals_screentips.html#define/COMSIG_MOB_REQUESTING_SCREENTIP_NAME_FROM_USER">COMSIG_MOB_REQUESTING_SCREENTIP_NAME_FROM_USER</a></th><td>A user screentip name override.
+These are used for mobs that may override the names of atoms they hover over.
+Examples include prosopagnosia (sees human names as Unknown regardless of what they are).
+Called on /mob with a mutable screentip name list, the item being used, and the atom hovered over.
+A screentip name override list is a list used for returning a string value from the signal. Only the first value matters.
+If you mutate the list in this signal, you must return SCREENTIP_NAME_SET.</td></tr><tr><th><a href="code/__DEFINES/dcs/signals/signals_screentips.html#define/SCREENTIP_NAME_SET">SCREENTIP_NAME_SET</a></th><td>Tells the screentips system that the list names was mutated.</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM"><aside class="declaration">#define </aside>COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm#L20"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm 20"></a></h3><p>A &quot;Type-B&quot; contextual screentip interaction.
+These are atoms that are defined by what happens <em>to</em> them. These should define contextual text within themselves, and
+not in their operating tools.
+Examples include construction objects (LMB with glass to put in screen for computers).
+Called on /atom with a mutable screentip context list, the item being used, and the mob hovering.
+A screentip context list is a list that has context keys (SCREENTIP_CONTEXT_*, from __DEFINES/screentips.dm)
+that map to the action as text.
+If you mutate the list in this signal, you must return CONTEXTUAL_SCREENTIP_SET.</p><h3 id="define/COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET"><aside class="declaration">#define </aside>COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm#L10"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm 10"></a></h3><p>A &quot;Type-A&quot; contextual screentip interaction.
+These are used for items that are defined by their behavior. They define their contextual text within <em>themselves</em>,
+not in their targets.
+Examples include syringes (LMB to inject, RMB to draw) and health analyzers (LMB to scan health/wounds, RMB for chems)
+Items can override <code>add_item_context()</code>, and call <code>register_item_context()</code> in order to easily connect to this.
+Called on /obj/item with a mutable screentip context list, the hovered target, and the mob hovering.
+A screentip context list is a list that has context keys (SCREENTIP_CONTEXT_*, from __DEFINES/screentips.dm)
+that map to the action as text.
+If you mutate the list in this signal, you must return CONTEXTUAL_SCREENTIP_SET.</p><h3 id="define/COMSIG_MOB_REQUESTING_SCREENTIP_NAME_FROM_USER"><aside class="declaration">#define </aside>COMSIG_MOB_REQUESTING_SCREENTIP_NAME_FROM_USER <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm#L32"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm 32"></a></h3><p>A user screentip name override.
+These are used for mobs that may override the names of atoms they hover over.
+Examples include prosopagnosia (sees human names as Unknown regardless of what they are).
+Called on /mob with a mutable screentip name list, the item being used, and the atom hovered over.
+A screentip name override list is a list used for returning a string value from the signal. Only the first value matters.
+If you mutate the list in this signal, you must return SCREENTIP_NAME_SET.</p><h3 id="define/CONTEXTUAL_SCREENTIP_SET"><aside class="declaration">#define </aside>CONTEXTUAL_SCREENTIP_SET <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm#L23"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm 23"></a></h3><p>Tells the contextual screentips system that the list context was mutated.</p><h3 id="define/SCREENTIP_NAME_SET"><aside class="declaration">#define </aside>SCREENTIP_NAME_SET <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/dcs/signals/signals_screentips.dm#L35"><img src="git.png" width="16" height="16" title="code/__DEFINES/dcs/signals/signals_screentips.dm 35"></a></h3><p>Tells the screentips system that the list names was mutated.</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

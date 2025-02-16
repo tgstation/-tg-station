@@ -1,0 +1,25 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__DEFINES/sight.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__DEFINES/sight.html#define">Define Details</a></header><main><h1>code/__DEFINES/sight.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/sight.dm0"><img src="git.png" width="16" height="16" title="code/__DEFINES/sight.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/__DEFINES/sight.html#define/SEE_AVOID_TURF_BLACKNESS">SEE_AVOID_TURF_BLACKNESS</a></th><td>can't see anything
+can see all mobs, no matter what
+can see all objs, no matter what
+can see self, no matter what
+can see infra-red objects (different sort of luminosity, essentially a copy of it, one we do not use)
+if an object is located on an unlit area, but some of its pixels are
+in a lit area (via pixel_x,y or smooth movement), can see those pixels
+can see through opaque objects
+render dark tiles as blackness (Note, this basically means we draw dark tiles to plane 0)
+we can then hijack that plane with a plane master, and start drawing it anywhere we want
+NOTE: this does not function with the SIDE_MAP map format. So we can't. :(
+Bitfield of sight flags that show THINGS but no lighting
+Since lighting is an underlay on turfs, this is everything but that</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/SEE_AVOID_TURF_BLACKNESS"><aside class="declaration">#define </aside>SEE_AVOID_TURF_BLACKNESS <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__DEFINES/sight.dm#L61"><img src="git.png" width="16" height="16" title="code/__DEFINES/sight.dm 61"></a></h3><p>can't see anything
+can see all mobs, no matter what
+can see all objs, no matter what
+can see self, no matter what
+can see infra-red objects (different sort of luminosity, essentially a copy of it, one we do not use)
+if an object is located on an unlit area, but some of its pixels are
+in a lit area (via pixel_x,y or smooth movement), can see those pixels
+can see through opaque objects
+render dark tiles as blackness (Note, this basically means we draw dark tiles to plane 0)
+we can then hijack that plane with a plane master, and start drawing it anywhere we want
+NOTE: this does not function with the SIDE_MAP map format. So we can't. :(
+Bitfield of sight flags that show THINGS but no lighting
+Since lighting is an underlay on turfs, this is everything but that</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

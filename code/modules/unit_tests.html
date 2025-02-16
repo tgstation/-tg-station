@@ -1,0 +1,59 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/unit_tests/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Unit Tests <aside>code/modules/unit_tests/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/unit_tests/README.md0"><img src="git.png" width="16" height="16" title="code/modules/unit_tests/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2 id="what-is-unit-testing">What is unit testing?</h2>
+<p>Unit tests are automated code to verify that parts of the game work exactly as they should. For example, <a href="https://github.com/tgstation/tgstation/blob/e416283f162b86345a8623125ab866839b1ac40d/code/modules/unit_tests/surgeries.dm#L1-L13">a test to make sure that the amputation surgery actually amputates the limb</a>. These are ran every time a PR is made, and thus are very helpful for preventing bugs from cropping up in your code that would've otherwise gone unnoticed. For example, would you have thought to check <a href="https://github.com/tgstation/tgstation/pull/53641#issuecomment-691384934">that beach boys would still work the same after editing pizza</a>? If you value your time, probably not.</p>
+<p>On their most basic level, when <code>UNIT_TESTS</code> is defined, all subtypes of <code>/datum/unit_test</code> will have their <code>Run</code> proc executed. From here, if <code>Fail</code> is called at any point, then the tests will report as failed.</p>
+<h2 id="how-do-i-write-one">How do I write one?</h2>
+<ol>
+<li>Find a relevant file.</li>
+</ol>
+<p>All unit test related code is in <code>code/modules/unit_tests</code>. If you are adding a new test for a surgery, for example, then you'd open <code>surgeries.dm</code>. If a relevant file does not exist, simply create one in this folder, then <code>#include</code> it in <code>_unit_tests.dm</code>.</p>
+<ol start="2">
+<li>Create the unit test.</li>
+</ol>
+<p>To make a new unit test, you simply need to define a <code>/datum/unit_test</code>.</p>
+<p>For example, let's suppose that we are creating a test to make sure a proc <code>square</code> correctly raises inputs to the power of two. We'd start with first:</p>
+<pre><code>/datum/unit_test/square/Run()
+</code></pre>
+<p>This defines our new unit test, <code>/datum/unit_test/square</code>. Inside this function, we're then going to run through whatever we want to check. Tests provide a few assertion functions to make this easy. For now, we're going to use <code>TEST_ASSERT_EQUAL</code>.</p>
+<pre><code>/datum/unit_test/square/Run()
+    TEST_ASSERT_EQUAL(square(3), 9, &quot;square(3) did not return 9&quot;)
+    TEST_ASSERT_EQUAL(square(4), 16, &quot;square(4) did not return 16&quot;)
+</code></pre>
+<p>As you can hopefully tell, we're simply checking if the output of <code>square</code> matches the output we are expecting. If the test fails, it'll report the error message given as well as whatever the actual output was.</p>
+<ol start="3">
+<li>Run the unit test</li>
+</ol>
+<p>Open <code>code/_compile_options.dm</code> and uncomment the following line.</p>
+<pre><code>//#define UNIT_TESTS			//If this is uncommented, we do a single run though of the game setup and tear down process with unit tests in between
+</code></pre>
+<p>There are 3 ways to run unit tests</p>
+<ul>
+<li>
+<p>Run tgstation.dmb in Dream Daemon. Don't bother trying to connect, you won't need to. You'll be able to see the outputs of all the tests. You'll get to see which tests failed and for what reason. If they all pass, you're set!</p>
+</li>
+<li>
+<p>Launch game from VS Code. Launch the game as normal &amp; you will see the output of your unit tests in your fancy chat window. This is preferred as you can use the debugger to step through each line of your unit test &amp; can use the games inbuilt debugging tools to further aid in testing</p>
+</li>
+<li>
+<p>Use VS Code Tgstation Test Explorer Extension. This allows you to run tests without launching the game &amp; can also run focused tests(either a single or a selected group)</p>
+</li>
+</ul>
+<h2 id="how-to-think-about-tests">How to think about tests</h2>
+<p>Unit tests exist to prevent bugs that would happen in a real game. Thus, they should attempt to emulate the game world wherever possible.  For example, the <a href="https://github.com/tgstation/tgstation/blob/e416283f162b86345a8623125ab866839b1ac40d/code/modules/unit_tests/quick_swap_sanity.dm">quick swap sanity test</a> emulates a <em>real</em> scenario of the bug it fixed occurring by creating a character and giving it real items. The unrecommended alternative would be to create special test-only items. This isn't a hard rule, the <a href="https://github.com/tgstation/tgstation/blob/e416283f162b86345a8623125ab866839b1ac40d/code/modules/unit_tests/reagent_mod_expose.dm">reagent method exposure tests</a> create a test-only reagent for example, but do keep it in mind.</p>
+<p>Unit tests should also be just that--testing <em>units</em> of code. For example, instead of having one massive test for reagents, there are instead several smaller tests for testing exposure, metabolization, etc.</p>
+<h2 id="the-unit-testing-api">The unit testing API</h2>
+<p>You can find more information about all of these from their respective doc comments, but for a brief overview:</p>
+<p><code>/datum/unit_test</code> - The base for all tests to be ran. Subtypes must override <code>Run()</code>. <code>New()</code> and <code>Destroy()</code> can be used for setup and teardown. To fail, use <code>TEST_FAIL(reason)</code>.</p>
+<p><code>/datum/unit_test/proc/allocate(type, ...)</code> - Allocates an instance of the provided type with the given arguments. Is automatically destroyed when the test is over. Commonly seen in the form of <code>var/mob/living/carbon/human/human = allocate(/mob/living/carbon/human/consistent)</code>.</p>
+<p><code>TEST_FAIL(reason)</code> - Marks a failure at this location, but does not stop the test.</p>
+<p><code>TEST_ASSERT(assertion, reason)</code> - Stops the unit test and fails if the assertion is not met. For example: <code>TEST_ASSERT(powered(), &quot;Machine is not powered&quot;)</code>.</p>
+<p><code>TEST_ASSERT_NOTNULL(a, message)</code> - Same as <code>TEST_ASSERT</code>, but checks if <code>!isnull(a)</code>. For example: <code>TEST_ASSERT_NOTNULL(myatom, &quot;My atom was never set!&quot;)</code>.</p>
+<p><code>TEST_ASSERT_NULL(a, message)</code> - Same as <code>TEST_ASSERT</code>, but checks if <code>isnull(a)</code>. If not, gives a helpful message showing what <code>a</code> was. For example: <code>TEST_ASSERT_NULL(delme, &quot;Delme was never cleaned up!&quot;)</code>.</p>
+<p><code>TEST_ASSERT_EQUAL(a, b, message)</code> - Same as <code>TEST_ASSERT</code>, but checks if <code>a == b</code>. If not, gives a helpful message showing what both <code>a</code> and <code>b</code> were. For example: <code>TEST_ASSERT_EQUAL(2 + 2, 4, &quot;The universe is falling apart before our eyes!&quot;)</code>.</p>
+<p><code>TEST_ASSERT_NOTEQUAL(a, b, message)</code> - Same as <code>TEST_ASSERT_EQUAL</code>, but reversed.</p>
+<p><code>TEST_FOCUS(test_path)</code> - <em>Only</em> run the test provided within the parameters. Useful for reducing noise. For example, if we only want to run our example square test, we can add <code>TEST_FOCUS(/datum/unit_test/square)</code>. Should <em>never</em> be pushed in a pull request--you will be laughed at.</p>
+<h2 id="final-notes">Final Notes</h2>
+<ul>
+<li>Writing tests before you attempt to fix the bug can actually speed up development a lot! It means you don't have to go in game and folllow the same exact steps manually every time. This process is known as &quot;TDD&quot; (test driven development). Write the test first, make sure it fails, <em>then</em> start work on the fix/feature, and you'll know you're done when your tests pass. If you do try this, do make sure to confirm in a non-testing environment just to double check.</li>
+<li>Make sure that your tests don't accidentally call RNG functions like <code>prob</code>. Since RNG is seeded during tests, you may not realize you have until someone else makes a PR and the tests fail!</li>
+<li>Do your best not to change the behavior of non-testing code during tests. While it may sometimes be necessary in the case of situations such as the above, it is still a slippery slope that can lead to the code you're testing being too different from the production environment to be useful.</li>
+</ul></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

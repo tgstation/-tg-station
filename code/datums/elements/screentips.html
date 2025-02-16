@@ -1,0 +1,91 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/datums/elements/screentips/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Contextual screentips (and when to not use this folder) <aside>code/datums/elements/screentips/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/screentips/README.md0"><img src="git.png" width="16" height="16" title="code/datums/elements/screentips/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>Contextual screentips provide information in the form of text at the top of your screen to inform you of the possibilities of an item. The &quot;contextual&quot; here refers to this being handled entirely through code, what it displays and when is completely up to you.</p>
+<h2 id="the-elements-and-this-folder">The elements (and this folder)</h2>
+<p>This folder provides several useful shortcuts to be able to handle 95% of situations.</p>
+<h3 id=""><code>/datum/element/contextual_screentip_bare_hands</code></h3>
+<p>This element is used to display screentips <strong>when the user hovers over the object with nothing in their active hand.</strong></p>
+<p>It takes parameters in the form of both non-combat mode and, optionally, combat mode.</p>
+<p>Example:</p>
+<pre><code class="language-dm">/obj/machinery/firealarm/Initialize(mapload)
+	. = ..()
+
+	AddElement( \
+		/datum/element/contextual_screentip_bare_hands, \
+		lmb_text = &quot;Turn on&quot;, \
+		rmb_text = &quot;Turn off&quot;, \
+	)
+</code></pre>
+<p>This will display &quot;LMB: Turn on | RMB: Turn off&quot; when the user hovers over a fire alarm with an empty active hand.</p>
+<h3 id=""><code>/datum/element/contextual_screentip_tools</code></h3>
+<p>This element takes a map of tool behaviors to <a href="#context-lists">context lists</a>. These will be displayed <strong>when the user hovers over the object with an item that has the tool behavior.</strong></p>
+<p>Example:</p>
+<pre><code class="language-dm">/obj/structure/table/Initialize(mapload)
+	var/static/list/tool_behaviors = list(
+		TOOL_SCREWDRIVER = list(
+			SCREENTIP_CONTEXT_RMB = &quot;Disassemble&quot;,
+		),
+
+		TOOL_WRENCH = list(
+			SCREENTIP_CONTEXT_RMB = &quot;Deconstruct&quot;,
+		),
+	)
+
+	AddElement(/datum/element/contextual_screentip_tools, tool_behaviors)
+</code></pre>
+<p>This will display &quot;RMB: Deconstruct&quot; when the user hovers over a table with a wrench.</p>
+<h3 id=""><code>/datum/element/contextual_screentip_item_typechecks</code></h3>
+<p>This element takes a map of item typepaths to <a href="#context-lists">context lists</a>. These will be displayed <strong>when the user hovers over the object with the selected item.</strong></p>
+<p>Example:</p>
+<pre><code class="language-dm">/obj/item/restraints/handcuffs/cable/Initialize(mapload)
+	. = ..()
+
+	var/static/list/hovering_item_typechecks = list(
+		/obj/item/stack/rods = list(
+			SCREENTIP_CONTEXT_LMB = &quot;Craft wired rod&quot;,
+		),
+
+		/obj/item/stack/sheet/iron = list(
+			SCREENTIP_CONTEXT_LMB = &quot;Craft bola&quot;,
+		),
+	)
+
+	AddElement(/datum/element/contextual_screentip_item_typechecks, hovering_item_typechecks)
+</code></pre>
+<p>This will display &quot;LMB: Craft bola&quot; when the user hovers over cable restraints with metal in their hand.</p>
+<h2 id="the-basic-system-and-when-to-not-use-this-folder">The basic system (and when to not use this folder)</h2>
+<p>The basic system acknowledges the following two interactions:</p>
+<h3 id="self-defining-items-type-a">Self-defining items (Type A)</h3>
+<p>These are items that are defined by their behavior. These should define their contextual text within themselves, and not in their targets.</p>
+<ul>
+<li>Stun batons (LMB to stun, RMB to harm)</li>
+<li>Syringes (LMB to inject, RMB to draw)</li>
+<li>Health analyzers (LMB to scan for health/wounds [another piece of context], RMB to scans for chemicals)</li>
+</ul>
+<h3 id="receiving-action-defining-objects-type-b">Receiving action defining objects (Type B)</h3>
+<p>These are objects (not necessarily items) that are defined by what happens <em>to</em> them. These should define their contextual text within themselves, and not in their operating tools.</p>
+<ul>
+<li>Tables (RMB with wrench to deconstruct)</li>
+<li>Construction objects (LMB with glass to put in screen for computers)</li>
+<li>Carbon copies (RMB to take a copy)</li>
+</ul>
+<hr />
+<p>Both of these are supported, and can be hooked to through several means.</p>
+<p>Note that you <strong>must return <code>CONTEXTUAL_SCREENTIP_SET</code> if you change the contextual screentip at all</strong>, otherwise you may not see it.</p>
+<h3 id=""><code>COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET</code></h3>
+<p>This signal is registered on <strong>items</strong>, and receives <strong>the hovering object</strong>, provided in the form of <code>obj/item/source, list/context, atom/target, mob/living/user</code>.</p>
+<h3 id="and"><code>/atom/proc/register_item_context()</code>, and <code>/atom/proc/add_item_context()</code></h3>
+<p><code>/atom/proc/add_item_context()</code> is a proc intended to be overridden to easily create Type-B interactions (ones where atoms are hovered over by items). It receives the exact same arguments as <code>COMSIG_ITEM_REQUESTING_CONTEXT_FOR_TARGET</code>: <code>obj/item/source, list/context, atom/target, mob/living/user</code>.</p>
+<p>In order for your <code>add_item_context()</code> method to be run, you <strong>must</strong> call <code>register_item_context()</code>.</p>
+<h3 id=""><code>COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM</code></h3>
+<p>This signal is registered on <strong>atoms</strong>, and receives <strong>what the user is hovering with</strong>, provided in the form of <code>atom/source, list/context, obj/item/held_item, mob/living/user</code>.</p>
+<h3 id="and"><code>/atom/proc/register_context()</code>, and <code>/atom/proc/add_context()</code></h3>
+<p><code>/atom/proc/add_context()</code> is a proc intended to be overridden to easily create Type-B interactions (ones where atoms are hovered over by items). It receives the exact same arguments as <code>COMSIG_ATOM_REQUESTING_CONTEXT_FROM_ITEM</code>: <code>atom/source, list/context, obj/item/held_item, mob/living/user</code>.</p>
+<p>In order for your <code>add_context()</code> method to be run, you <strong>must</strong> call <code>register_context()</code>.</p>
+<hr />
+<p>When using any of these methods, you will receive a mutable context list.</p>
+<h3 id="context-lists">Context lists</h3>
+<p>Context lists are lists with keys mapping from <code>SCREENTIP_CONTEXT_*</code> to a string. You can find these keys in <code>code/__DEFINES/screentips.dm</code>.</p>
+<p>The signals and <code>add_context()</code> variants mutate the list directly, while shortcut elements will just have you pass them in directly.</p>
+<p>For example:</p>
+<pre><code class="language-dm">context[SCREENTIP_CONTEXT_LMB] = &quot;Open&quot;
+context[SCREENTIP_CONTEXT_RMB] = &quot;Destroy&quot;
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

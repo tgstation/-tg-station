@@ -1,0 +1,110 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>/datum/component/food_storage - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="datum/component/food_storage.html#var">Var Details</a> - <a href="datum/component/food_storage.html#proc">Proc Details</a></header><main><h1>food_storage <aside>/<a href="datum.html">datum</a>/<a href="datum/component.html">component</a>/<a href="datum/component/food_storage.html">food_storage</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L5"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 5"></a></h1><p>--Food storage component--
+This component lets you slide one item into large foods, such as bread, cheese wheels, or cakes.
+Consuming food storages with an item inside can cause unique interactions, such as eating glass shards.</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr><tr><th><a href="datum/component/food_storage.html#var/bad_chance_of_discovery">bad_chance_of_discovery</a></th><td>What are the odds we bite into the stored item?</td></tr><tr><th><a href="datum/component/food_storage.html#var/good_chance_of_discovery">good_chance_of_discovery</a></th><td>What are the odds we see the stored item before we bite it?</td></tr><tr><th><a href="datum/component/food_storage.html#var/initial_volume">initial_volume</a></th><td>The amount of volume the food has on creation - Used for probabilities</td></tr><tr><th><a href="datum/component/food_storage.html#var/minimum_weight_class">minimum_weight_class</a></th><td>Minimum size items that can be inserted</td></tr><tr><th><a href="datum/component/food_storage.html#var/stored_item">stored_item</a></th><td>Reference to what we have in our food.</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="datum/component/food_storage.html#proc/begin_remove_item">begin_remove_item</a></th><td></td></tr><tr><th><a href="datum/component/food_storage.html#proc/consume_food_storage">consume_food_storage</a></th><td></td></tr><tr><th><a href="datum/component/food_storage.html#proc/insert_item">insert_item</a></th><td></td></tr><tr><th><a href="datum/component/food_storage.html#proc/on_requesting_context_from_item">on_requesting_context_from_item</a></th><td>Adds context sensitivy directly to the processable file for screentips
+Arguments:</td></tr><tr><th><a href="datum/component/food_storage.html#proc/remove_item">remove_item</a></th><td>Removes the stored item, putting it in user's hands or on the ground, then updates the reference.</td></tr><tr><th><a href="datum/component/food_storage.html#proc/storage_consumed">storage_consumed</a></th><td>When fully consumed, just drop the item out on the ground.</td></tr><tr><th><a href="datum/component/food_storage.html#proc/try_inserting_item">try_inserting_item</a></th><td></td></tr><tr><th><a href="datum/component/food_storage.html#proc/try_removing_item">try_removing_item</a></th><td></td></tr><tr><th><a href="datum/component/food_storage.html#proc/update_stored_item">update_stored_item</a></th><td></td></tr></table><h2 id="var">Var Details</h2><h3 id="var/bad_chance_of_discovery"><aside class="declaration">var </aside>bad_chance_of_discovery <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L13"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 13"></a></h3><p>What are the odds we bite into the stored item?</p><h3 id="var/good_chance_of_discovery"><aside class="declaration">var </aside>good_chance_of_discovery <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L15"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 15"></a></h3><p>What are the odds we see the stored item before we bite it?</p><h3 id="var/initial_volume"><aside class="declaration">var </aside>initial_volume <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L9"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 9"></a></h3><p>The amount of volume the food has on creation - Used for probabilities</p><h3 id="var/minimum_weight_class"><aside class="declaration">var </aside>minimum_weight_class <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L11"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 11"></a></h3><p>Minimum size items that can be inserted</p><h3 id="var/stored_item"><aside class="declaration">var </aside>stored_item <aside>– /final/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L7"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 7"></a></h3><p>Reference to what we have in our food.</p><h2 id="proc">Proc Details</h2><h3 id="proc/begin_remove_item"><aside class="declaration">proc </aside>begin_remove_item<aside>(/<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L131"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 131"></a></aside></h3><ul>
+<li>
+<p>Removes the item from the food, after a do_after.</p>
+</li>
+<li>
+<p>Arguments</p>
+</li>
+<li>
+<p>user - person removing the item.</p>
+</li>
+</ul><h3 id="proc/consume_food_storage"><aside class="declaration">proc </aside>consume_food_storage<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/target, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, bitecount, bitesize)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L164"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 164"></a></aside></h3><ul>
+<li>
+<p>Checks for stored items when the food is eaten.</p>
+</li>
+<li>
+<p>If the food is eaten while an item is stored in it, calculates the odds that the item will be found.</p>
+</li>
+<li>
+<p>Then, if the item is found before being bitten, the item is removed.</p>
+</li>
+<li>
+<p>If the item is found by biting into it, calls on_accidental_consumption on the stored item.</p>
+</li>
+<li>
+<p>Afterwards, removes the item from the food if it was discovered.</p>
+</li>
+<li>
+<p>Arguments</p>
+</li>
+<li>
+<p>target - person doing the eating (can be the same as user)</p>
+</li>
+<li>
+<p>user - person causing the eating to happen</p>
+</li>
+<li>
+<p>bitecount - how many times the current food has been bitten</p>
+</li>
+<li>
+<p>bitesize - how large bties are for this food</p>
+</li>
+</ul><h3 id="proc/insert_item"><aside class="declaration">proc </aside>insert_item<aside>(/<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/inserted_item, /<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L110"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 110"></a></aside></h3><ul>
+<li>
+<p>Inserts the item into the food, after a do_after.</p>
+</li>
+<li>
+<p>Arguments</p>
+</li>
+<li>
+<p>inserted_item - The item being inserted.</p>
+</li>
+<li>
+<p>user - the person inserting the item.</p>
+</li>
+</ul><h3 id="proc/on_requesting_context_from_item"><aside class="declaration">proc </aside>on_requesting_context_from_item<aside>(/<a href="datum.html">datum</a>/source, /list/context, /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/held_item, /<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L233"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 233"></a></aside></h3><p>Adds context sensitivy directly to the processable file for screentips
+Arguments:</p>
+<ul>
+<li>source - refers to item that will display its screentip</li>
+<li>context - refers to, in this case, an item that can be inserted into another item</li>
+<li>held_item - refers to item in user's hand, typically the one that will be inserted into the food item</li>
+<li>user - refers to user who will see the screentip when the proper context and tool are there</li>
+</ul><h3 id="proc/remove_item"><aside class="declaration">proc </aside>remove_item<aside>(/<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L142"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 142"></a></aside></h3><p>Removes the stored item, putting it in user's hands or on the ground, then updates the reference.</p><h3 id="proc/storage_consumed"><aside class="declaration">proc </aside>storage_consumed<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/target, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L190"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 190"></a></aside></h3><p>When fully consumed, just drop the item out on the ground.</p><h3 id="proc/try_inserting_item"><aside class="declaration">proc </aside>try_inserting_item<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/user, /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/inserted_item, /list/modifiers)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L56"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 56"></a></aside></h3><ul>
+<li>
+<p>Begins the process of inserted an item.</p>
+</li>
+<li>
+<p>Clicking on the food storage with an item will begin a do_after, which if successful inserts the item.</p>
+</li>
+<li>
+<p>Arguments</p>
+</li>
+<li>
+<p>inserted_item - the item being placed into the food</p>
+</li>
+<li>
+<p>user - the person inserting the item</p>
+</li>
+</ul><h3 id="proc/try_removing_item"><aside class="declaration">proc </aside>try_removing_item<aside>(/<a href="datum.html">datum</a>/source, /<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L90"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 90"></a></aside></h3><ul>
+<li>
+<p>Begins the process of attempting to remove the stored item.</p>
+</li>
+<li>
+<p>Clicking on food storage on grab intent will begin a do_after, which if successful removes the stored_item.</p>
+</li>
+<li>
+<p>Arguments</p>
+</li>
+<li>
+<p>user - the person removing the item.</p>
+</li>
+</ul><h3 id="proc/update_stored_item"><aside class="declaration">proc </aside>update_stored_item<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/components/food_storage.dm#L205"><img src="git.png" width="16" height="16" title="code/datums/components/food_storage.dm 205"></a></aside></h3><ul>
+<li>
+<p>Updates the reference of the stored item.</p>
+</li>
+<li>
+<p>Checks the food's contents for if an alternate item was placed into the food.</p>
+</li>
+<li>
+<p>If there is an alternate item, updates the reference to the new item.</p>
+</li>
+<li>
+<p>If there isn't, updates the reference to null.</p>
+</li>
+<li>
+<p>Returns FALSE if the ref is nulled, or TRUE is another item replaced it.</p>
+</li>
+</ul></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/movespeed/_movespeed_modifier.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/modules/movespeed/_movespeed_modifier.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/movespeed/_movespeed_modifier.dm0"><img src="git.png" width="16" height="16" title="code/modules/movespeed/_movespeed_modifier.dm0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>Movespeed modification datums.</p>
+<pre><code>How move speed for mobs works
+</code></pre>
+<p>Move speed is now calculated by using modifier datums which are added to mobs. Some of them (nonvariable ones) are globally cached, the variable ones are instanced and changed based on need.</p>
+<p>This gives us the ability to have multiple sources of movespeed, reliabily keep them applied and remove them when they should be</p>
+<p>THey can have unique sources and a bunch of extra fancy flags that control behaviour</p>
+<p>Previously trying to update move speed was a shot in the dark that usually meant mobs got stuck going faster or slower</p>
+<p>Movespeed modification list is a simple key = datum system. Key will be the datum's ID if it is overridden to not be null, or type if it is not.</p>
+<p>DO NOT override datum IDs unless you are going to have multiple types that must overwrite each other. It's more efficient to use types, ID functionality is only kept for cases where dynamic creation of modifiers need to be done.</p>
+<p>When update movespeed is called, the list of items is iterated, according to flags priority and a bunch of conditions
+this spits out a final calculated value which is used as a modifer to last_move + modifier for calculating when a mob
+can next move</p>
+<p>Key procs</p>
+<ul>
+<li><a href="mob.html#proc/add_movespeed_modifier">add_movespeed_modifier</a></li>
+<li><a href="mob.html#proc/remove_movespeed_modifier">remove_movespeed_modifier</a></li>
+<li><a href="mob.html#proc/has_movespeed_modifier">has_movespeed_modifier</a></li>
+<li><a href="mob.html#proc/update_movespeed">update_movespeed</a></li>
+</ul></td></tr><tr><th>/proc/<a href="global.html#proc/get_cached_movespeed_modifier">get_cached_movespeed_modifier</a></th><td>Grabs a STATIC MODIFIER datum from cache. YOU MUST NEVER EDIT THESE DATUMS, OR IT WILL AFFECT ANYTHING ELSE USING IT TOO!</td></tr><tr><td colspan="2"><p>Used for variable slowdowns like hunger/health loss/etc, works somewhat like the old list-based modification adds. Returns the modifier datum if successful
+How this SHOULD work is:
+1. Ensures type_id_datum one way or another refers to a /variable datum. This makes sure it can't be cached. This includes if it's already in the modification list.
+2. Instantiate a new datum if type_id_datum isn't already instantiated + in the list, using the type. Obviously, wouldn't work for ID only.
+3. Add the datum if necessary using the regular add proc
+4. If any of the rest of the args are not null (see: multiplicative slowdown), modify the datum
+5. Update if necessary</p>
+</td></tr><tr><th>/proc/<a href="global.html#proc/movespeed_data_null_check">movespeed_data_null_check</a></th><td>Checks if a move speed modifier is valid and not missing any data</td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

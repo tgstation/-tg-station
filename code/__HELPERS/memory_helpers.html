@@ -1,0 +1,34 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/__HELPERS/memory_helpers.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="code/__HELPERS/memory_helpers.html#define">Define Details</a></header><main><h1>code/__HELPERS/memory_helpers.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/memory_helpers.dm0"><img src="git.png" width="16" height="16" title="code/__HELPERS/memory_helpers.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th><a href="code/__HELPERS/memory_helpers.html#define/add_memory_in_range">add_memory_in_range</a></th><td>Adds a memory to all carbon mobs in a certain range of a certain atom.</td></tr><tr><th>/proc/<a href="global.html#proc/_add_memory_in_range">_add_memory_in_range</a></th><td>Unless you need to use this for an explicit reason, use the add_memory_in_range macro wrapper.</td></tr><tr><th><a href="code/__HELPERS/memory_helpers.html#define/add_mob_memory">add_mob_memory</a></th><td>Adds a memory to the target mob.</td></tr><tr><th><a href="code/__HELPERS/memory_helpers.html#define/add_memory">add_memory</a></th><td>Adds a memory to the target mind.</td></tr></table><h2 id="define">Define Details</h2><h3 id="define/add_memory"><aside class="declaration">#define </aside>add_memory<aside>(arguments ...)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/memory_helpers.dm#L56"><img src="git.png" width="16" height="16" title="code/__HELPERS/memory_helpers.dm 56"></a></h3><p>Adds a memory to the target mind.</p>
+<p>The first argument should be a typepath of a /datum/memory.</p>
+<p>If the mob already has a memory of that type, it will be deleted.</p>
+<p>Beyond that, can be supplied with named arguments pertaining to your memory type.
+Common arguments include:</p>
+<ul>
+<li>protagonist: The main subject of the memory</li>
+<li>deuteragonist: The side subject of the memory. Doesn't necessarily have to be a mob!</li>
+<li>antagonist: The main villain of the memory. Also doesn't necessarily have to be a mob!</li>
+</ul>
+<p>Returns the datum memory created, or null otherwise.</p><h3 id="define/add_memory_in_range"><aside class="declaration">#define </aside>add_memory_in_range<aside>(source, range, arguments ...)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/memory_helpers.dm#L16"><img src="git.png" width="16" height="16" title="code/__HELPERS/memory_helpers.dm 16"></a></h3><p>Adds a memory to all carbon mobs in a certain range of a certain atom.</p>
+<p>The third argument should be a typepath of a /datum/memory.</p>
+<p>Two things of note when using this:</p>
+<ul>
+<li>If the source atom is a mob, it will be added to that mob if possible.</li>
+<li>The protagonist of the memory is set to the memorizer by default. If sourced from a mob, you need to set the protagonist manually.</li>
+</ul>
+<p>Beyond that, can be supplied with named arguments pertaining to your memory type.
+Common arguments include:</p>
+<ul>
+<li>protagonist: The main subject of the memory</li>
+<li>deuteragonist: The side subject of the memory. Doesn't necessarily have to be a mob!</li>
+<li>antagonist: The main villain of the memory. Also doesn't necessarily have to be a mob!</li>
+</ul><h3 id="define/add_mob_memory"><aside class="declaration">#define </aside>add_mob_memory<aside>(arguments ...)</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/memory_helpers.dm#L38"><img src="git.png" width="16" height="16" title="code/__HELPERS/memory_helpers.dm 38"></a></h3><p>Adds a memory to the target mob.</p>
+<p>The first argument should be a typepath of a /datum/memory.</p>
+<p>If the mob already has a memory of that type, it will be deleted.</p>
+<p>Beyond that, can be supplied with named arguments pertaining to your memory type.
+Common arguments include:</p>
+<ul>
+<li>protagonist: The main subject of the memory</li>
+<li>deuteragonist: The side subject of the memory. Doesn't necessarily have to be a mob!</li>
+<li>antagonist: The main villain of the memory. Also doesn't necessarily have to be a mob!</li>
+</ul>
+<p>Returns the datum memory created, or null otherwise.</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/mapping/README.txt - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/modules/mapping/README.txt <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/mapping/README.txt0"><img src="git.png" width="16" height="16" title="code/modules/mapping/README.txt0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><pre><code>The code in this module originally evolved from dmm_suite and has since been
+specialized for SS13 and otherwise tweaked to fit /tg/station's needs.
+
+dmm_suite version 1.0
+	Released January 30th, 2011.
+
+NOTE: Map saving functionality removed
+
+defines the object /dmm_suite
+	- Provides the proc load_map()
+		- Loads the specified map file onto the specified z-level.
+	- provides the proc write_map()
+		- Returns a text string of the map in dmm format
+			ready for output to a file.
+	- provides the proc save_map()
+		- Returns a .dmm file if map is saved
+		- Returns FALSE if map fails to save
+
+The dmm_suite provides saving and loading of map files in BYOND's native DMM map
+format. It approximates the map saving and loading processes of the Dream Maker
+and Dream Seeker programs so as to allow editing, saving, and loading of maps at
+runtime.
+
+------------------------
+
+To save a map at runtime, create an instance of /dmm_suite, and then call
+write_map(), which accepts three arguments:
+	- A turf representing one corner of a three dimensional grid (Required).
+	- Another turf representing the other corner of the same grid (Required).
+	- Any, or a combination, of several bit flags (Optional, see documentation).
+
+The order in which the turfs are supplied does not matter, the /dmm_writer will
+determine the grid containing both, in much the same way as DM's block() function.
+write_map() will then return a string representing the saved map in dmm format;
+this string can then be saved to a file, or used for any other purose.
+
+------------------------
+
+To load a map at runtime, create an instance of /dmm_suite, and then call load_map(),
+which accepts two arguments:
+	- A .dmm file to load (Required).
+	- A number representing the z-level on which to start loading the map (Optional).
+
+The /dmm_suite will load the map file starting on the specified z-level. If no
+z-level	was specified, world.maxz will be increased so as to fit the map. Note
+that if you wish to load a map onto a z-level that already has objects on it,
+you will have to handle the removal of those objects. Otherwise the new map will
+simply load the new objects on top of the old ones.
+
+Also note that all type paths specified in the .dmm file must exist in the world's
+code, and that the /dmm_reader trusts that files to be loaded are in fact valid
+.dmm files. Errors in the .dmm format will cause runtime errors.
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

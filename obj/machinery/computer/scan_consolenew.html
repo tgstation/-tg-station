@@ -1,0 +1,212 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>/obj/machinery/computer/scan_consolenew - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="obj/machinery/computer/scan_consolenew.html#var">Var Details</a> - <a href="obj/machinery/computer/scan_consolenew.html#proc">Proc Details</a></header><main><h1>scan_consolenew <aside>/<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/<a href="obj/machinery/computer.html">computer</a>/<a href="obj/machinery/computer/scan_consolenew.html">scan_consolenew</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L65"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 65"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Vars</h2></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/can_use_scanner">can_use_scanner</a></th><td>Used for setting tgui data - Whether the connected DNA Scanner is usable</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/connected_scanner">connected_scanner</a></th><td>Currently connected DNA Scanner</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/crispr_charges">crispr_charges</a></th><td>Counter for CRISPR charges</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/delayed_action">delayed_action</a></th><td>Current delayed action, used for delayed enzyme transfer on scanner door close</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/diskette">diskette</a></th><td>Currently stored genetic data diskette</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/enzyme_copy_timer">enzyme_copy_timer</a></th><td>Cooldown for the genetic makeup transfer actions.</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/genetic_damage_pulse_index">genetic_damage_pulse_index</a></th><td>Index of the enzyme being modified during delayed enzyme pulse operations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/genetic_damage_pulse_timer">genetic_damage_pulse_timer</a></th><td>World time when the enzyme pulse should complete</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/genetic_damage_pulse_type">genetic_damage_pulse_type</a></th><td>Which dna string to edit with the pulse</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/genetic_makeup_buffer">genetic_makeup_buffer</a></th><td>Maximum number of enzymes we can store</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/injector_ready">injector_ready</a></th><td>World time when injectors are ready to be printed</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/injector_selection">injector_selection</a></th><td>Assoc list of all advanced injectors. Keys are injector names. Values are lists of mutations.</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_crispr_ready">is_crispr_ready</a></th><td>Used for setting tgui data - Is CRISPR ready?</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_injector_ready">is_injector_ready</a></th><td>Used for setting tgui data - Whether injectors are ready to be printed</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_joker_ready">is_joker_ready</a></th><td>Used for setting tgui data - Whether JOKER algorithm is ready</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_pulsing">is_pulsing</a></th><td>Used for setting tgui data - Wheher an enzyme pulse operation is ongoing</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_scramble_ready">is_scramble_ready</a></th><td>Used for setting tgui data - Whether Scramble DNA is ready</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/is_viable_occupant">is_viable_occupant</a></th><td>Used for setting tgui data - Whether the current DNA Scanner occupant is viable for genetic modification</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/joker_ready">joker_ready</a></th><td>World time when JOKER algorithm can be used in DNA Consoles</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/max_injector_instability">max_injector_instability</a></th><td>Maximum total instability of all combined mutations allowed on an advanced injector</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/max_injector_mutations">max_injector_mutations</a></th><td>Maximum number of mutation that an advanced injector can store</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/max_injector_selections">max_injector_selections</a></th><td>Maximum number of advanced injectors that DNA Consoles store</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/pulse_duration">pulse_duration</a></th><td>Duration for enzyme genetic damage pulses</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/pulse_strength">pulse_strength</a></th><td>Strength for enzyme genetic damage pulses</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/scanner_occupant">scanner_occupant</a></th><td>Current DNA Scanner occupant</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/scramble_ready">scramble_ready</a></th><td>World time when Scramble can be used in DNA Consoles</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/stored_chromosomes">stored_chromosomes</a></th><td>List of all chromosomes stored in the DNA Console</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/stored_mutations">stored_mutations</a></th><td>List of all mutations stored on the DNA Console</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/stored_research">stored_research</a></th><td>Link to the techweb's stored research. Used to retrieve stored mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_advinjector_mutations">tgui_advinjector_mutations</a></th><td>Used for setting tgui data - List of occupant mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_console_chromosomes">tgui_console_chromosomes</a></th><td>Used for setting tgui data - List of DNA Console chromosomes</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_console_mutations">tgui_console_mutations</a></th><td>Used for setting tgui data - List of DNA Console stored mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_diskette_mutations">tgui_diskette_mutations</a></th><td>Used for setting tgui data - List of diskette stored mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_genetic_makeup">tgui_genetic_makeup</a></th><td>Used for setting tgui data - List of occupant mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_occupant_mutations">tgui_occupant_mutations</a></th><td>Used for setting tgui data - List of occupant mutations</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/tgui_view_state">tgui_view_state</a></th><td>State of tgui view, i.e. which tab is currently active, or which genome we're currently looking at.</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/time_to_injector">time_to_injector</a></th><td>Used for setting tgui data - Time until injectors are ready</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/time_to_joker">time_to_joker</a></th><td>Used for setting tgui data - Time until joker is ready</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/time_to_pulse">time_to_pulse</a></th><td>Used for setting tgui data - Time until the enzyme pulse is complete</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#var/time_to_scramble">time_to_scramble</a></th><td>Used for setting tgui data - Time until scramble is ready</td></tr><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/apply_genetic_makeup">apply_genetic_makeup</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/build_chrom_list">build_chrom_list</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/build_genetic_makeup_list">build_genetic_makeup_list</a></th><td>Builds the genetic makeup list which will be sent to tgui interface.</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/build_mutation_list">build_mutation_list</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/can_modify_occupant">can_modify_occupant</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/check_discovery">check_discovery</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/connect_to_scanner">connect_to_scanner</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/eject_disk">eject_disk</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/genetic_damage_pulse">genetic_damage_pulse</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/get_mut_by_ref">get_mut_by_ref</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/on_scanner_close">on_scanner_close</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/on_scanner_open">on_scanner_open</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/randomize_GENETIC_DAMAGE_accuracy">randomize_GENETIC_DAMAGE_accuracy</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/scanner_operational">scanner_operational</a></th><td>Checks if there is a connected DNA Scanner that is operational</td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/scramble">scramble</a></th><td></td></tr><tr><th><a href="obj/machinery/computer/scan_consolenew.html#proc/set_default_state">set_default_state</a></th><td>Sets the default state for the tgui interface.</td></tr></table><h2 id="var">Var Details</h2><h3 id="var/can_use_scanner"><aside class="declaration">var </aside>can_use_scanner <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L119"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 119"></a></h3><p>Used for setting tgui data - Whether the connected DNA Scanner is usable</p><h3 id="var/connected_scanner"><aside class="declaration">var </aside>connected_scanner <aside>– /<a href="obj.html">obj</a>/<a href="obj/machinery.html">machinery</a>/dna_scannernew</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L142"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 142"></a></h3><p>Currently connected DNA Scanner</p><h3 id="var/crispr_charges"><aside class="declaration">var </aside>crispr_charges <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L164"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 164"></a></h3><p>Counter for CRISPR charges</p><h3 id="var/delayed_action"><aside class="declaration">var </aside>delayed_action <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L107"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 107"></a></h3><p>Current delayed action, used for delayed enzyme transfer on scanner door close</p><h3 id="var/diskette"><aside class="declaration">var </aside>diskette <aside>– /<a href="obj.html">obj</a>/<a href="obj/item.html">item</a>/disk/data</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L104"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 104"></a></h3><p>Currently stored genetic data diskette</p><h3 id="var/enzyme_copy_timer"><aside class="declaration">var </aside>enzyme_copy_timer <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L116"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 116"></a></h3><p>Cooldown for the genetic makeup transfer actions.</p><h3 id="var/genetic_damage_pulse_index"><aside class="declaration">var </aside>genetic_damage_pulse_index <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L110"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 110"></a></h3><p>Index of the enzyme being modified during delayed enzyme pulse operations</p><h3 id="var/genetic_damage_pulse_timer"><aside class="declaration">var </aside>genetic_damage_pulse_timer <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L112"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 112"></a></h3><p>World time when the enzyme pulse should complete</p><h3 id="var/genetic_damage_pulse_type"><aside class="declaration">var </aside>genetic_damage_pulse_type <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L114"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 114"></a></h3><p>Which dna string to edit with the pulse</p><h3 id="var/genetic_makeup_buffer"><aside class="declaration">var </aside>genetic_makeup_buffer <aside>– /list/list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L82"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 82"></a></h3><p>Maximum number of enzymes we can store</p><h3 id="var/injector_ready"><aside class="declaration">var </aside>injector_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L97"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 97"></a></h3><p>World time when injectors are ready to be printed</p><h3 id="var/injector_selection"><aside class="declaration">var </aside>injector_selection <aside>– /list/list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L88"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 88"></a></h3><p>Assoc list of all advanced injectors. Keys are injector names. Values are lists of mutations.</p><h3 id="var/is_crispr_ready"><aside class="declaration">var </aside>is_crispr_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L129"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 129"></a></h3><p>Used for setting tgui data - Is CRISPR ready?</p><h3 id="var/is_injector_ready"><aside class="declaration">var </aside>is_injector_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L127"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 127"></a></h3><p>Used for setting tgui data - Whether injectors are ready to be printed</p><h3 id="var/is_joker_ready"><aside class="declaration">var </aside>is_joker_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L125"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 125"></a></h3><p>Used for setting tgui data - Whether JOKER algorithm is ready</p><h3 id="var/is_pulsing"><aside class="declaration">var </aside>is_pulsing <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L131"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 131"></a></h3><p>Used for setting tgui data - Wheher an enzyme pulse operation is ongoing</p><h3 id="var/is_scramble_ready"><aside class="declaration">var </aside>is_scramble_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L123"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 123"></a></h3><p>Used for setting tgui data - Whether Scramble DNA is ready</p><h3 id="var/is_viable_occupant"><aside class="declaration">var </aside>is_viable_occupant <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L121"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 121"></a></h3><p>Used for setting tgui data - Whether the current DNA Scanner occupant is viable for genetic modification</p><h3 id="var/joker_ready"><aside class="declaration">var </aside>joker_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L99"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 99"></a></h3><p>World time when JOKER algorithm can be used in DNA Consoles</p><h3 id="var/max_injector_instability"><aside class="declaration">var </aside>max_injector_instability <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L94"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 94"></a></h3><p>Maximum total instability of all combined mutations allowed on an advanced injector</p><h3 id="var/max_injector_mutations"><aside class="declaration">var </aside>max_injector_mutations <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L92"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 92"></a></h3><p>Maximum number of mutation that an advanced injector can store</p><h3 id="var/max_injector_selections"><aside class="declaration">var </aside>max_injector_selections <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L90"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 90"></a></h3><p>Maximum number of advanced injectors that DNA Consoles store</p><h3 id="var/pulse_duration"><aside class="declaration">var </aside>pulse_duration <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L78"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 78"></a></h3><p>Duration for enzyme genetic damage pulses</p><h3 id="var/pulse_strength"><aside class="declaration">var </aside>pulse_strength <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L80"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 80"></a></h3><p>Strength for enzyme genetic damage pulses</p><h3 id="var/scanner_occupant"><aside class="declaration">var </aside>scanner_occupant <aside>– /<a href="mob.html">mob</a>/<a href="mob/living.html">living</a>/<a href="mob/living/carbon.html">carbon</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L144"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 144"></a></h3><p>Current DNA Scanner occupant</p><h3 id="var/scramble_ready"><aside class="declaration">var </aside>scramble_ready <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L101"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 101"></a></h3><p>World time when Scramble can be used in DNA Consoles</p><h3 id="var/stored_chromosomes"><aside class="declaration">var </aside>stored_chromosomes <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L86"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 86"></a></h3><p>List of all chromosomes stored in the DNA Console</p><h3 id="var/stored_mutations"><aside class="declaration">var </aside>stored_mutations <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L84"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 84"></a></h3><p>List of all mutations stored on the DNA Console</p><h3 id="var/stored_research"><aside class="declaration">var </aside>stored_research <aside>– /<a href="datum.html">datum</a>/<a href="datum/techweb.html">techweb</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L76"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 76"></a></h3><p>Link to the techweb's stored research. Used to retrieve stored mutations</p><h3 id="var/tgui_advinjector_mutations"><aside class="declaration">var </aside>tgui_advinjector_mutations <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L157"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 157"></a></h3><p>Used for setting tgui data - List of occupant mutations</p><h3 id="var/tgui_console_chromosomes"><aside class="declaration">var </aside>tgui_console_chromosomes <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L153"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 153"></a></h3><p>Used for setting tgui data - List of DNA Console chromosomes</p><h3 id="var/tgui_console_mutations"><aside class="declaration">var </aside>tgui_console_mutations <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L149"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 149"></a></h3><p>Used for setting tgui data - List of DNA Console stored mutations</p><h3 id="var/tgui_diskette_mutations"><aside class="declaration">var </aside>tgui_diskette_mutations <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L151"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 151"></a></h3><p>Used for setting tgui data - List of diskette stored mutations</p><h3 id="var/tgui_genetic_makeup"><aside class="declaration">var </aside>tgui_genetic_makeup <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L155"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 155"></a></h3><p>Used for setting tgui data - List of occupant mutations</p><h3 id="var/tgui_occupant_mutations"><aside class="declaration">var </aside>tgui_occupant_mutations <aside>– /list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L147"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 147"></a></h3><p>Used for setting tgui data - List of occupant mutations</p><h3 id="var/tgui_view_state"><aside class="declaration">var </aside>tgui_view_state <aside>– /list/list</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L161"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 161"></a></h3><p>State of tgui view, i.e. which tab is currently active, or which genome we're currently looking at.</p><h3 id="var/time_to_injector"><aside class="declaration">var </aside>time_to_injector <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L137"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 137"></a></h3><p>Used for setting tgui data - Time until injectors are ready</p><h3 id="var/time_to_joker"><aside class="declaration">var </aside>time_to_joker <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L135"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 135"></a></h3><p>Used for setting tgui data - Time until joker is ready</p><h3 id="var/time_to_pulse"><aside class="declaration">var </aside>time_to_pulse <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L139"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 139"></a></h3><p>Used for setting tgui data - Time until the enzyme pulse is complete</p><h3 id="var/time_to_scramble"><aside class="declaration">var </aside>time_to_scramble <aside>– </aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L133"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 133"></a></h3><p>Used for setting tgui data - Time until scramble is ready</p><h2 id="proc">Proc Details</h2><h3 id="proc/apply_genetic_makeup"><aside class="declaration">proc </aside>apply_genetic_makeup<aside>(type, buffer_slot)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1706"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1706"></a></aside></h3><ul>
+<li>
+<p>Applies the enzyme buffer to the current scanner occupant</p>
+</li>
+<li>
+<p>Applies the type of a specific genetic makeup buffer to the current scanner</p>
+<ul>
+<li>occupant</li>
+</ul>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+<li>
+<ul>
+<li>type - &quot;ui&quot;/&quot;ue&quot;/&quot;mixed&quot; - Which part of the enzyme buffer to apply</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>buffer_slot - Index of the enzyme buffer to apply</li>
+</ul>
+</li>
+</ul><h3 id="proc/build_chrom_list"><aside class="declaration">proc </aside>build_chrom_list<aside>(mutation)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2125"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2125"></a></aside></h3><ul>
+<li>
+<p>Takes any given chromosome and calculates chromosome compatibility</p>
+<ul>
+<li>
+<p>Will iterate over the stored chromosomes in the DNA Console and will check</p>
+</li>
+<li>
+<p>whether it can be applied to the supplied mutation. Then returns a list of</p>
+</li>
+<li>
+<p>names of chromosomes that were compatible.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>mutation - The mutation to check chromosome compatibility with</li>
+</ul>
+</li>
+</ul><h3 id="proc/build_genetic_makeup_list"><aside class="declaration">proc </aside>build_genetic_makeup_list<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1884"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1884"></a></aside></h3><p>Builds the genetic makeup list which will be sent to tgui interface.</p><h3 id="proc/build_mutation_list"><aside class="declaration">proc </aside>build_mutation_list<aside>(can_modify_occ)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1901"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1901"></a></aside></h3><ul>
+<li>
+<p>Builds the genetic makeup list which will be sent to tgui interface.</p>
+<ul>
+<li>Will iterate over the connected scanner occupant, DNA Console, inserted</li>
+<li>diskette and chromosomes and any advanced injectors, building the main data</li>
+<li>structures which get passed to the tgui interface.</li>
+</ul>
+</li>
+</ul><h3 id="proc/can_modify_occupant"><aside class="declaration">proc </aside>can_modify_occupant<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1790"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1790"></a></aside></h3><ul>
+<li>
+<p>Checks if there is a valid DNA Scanner occupant for genetic modification</p>
+<ul>
+<li>Checks if there is a valid subject in the DNA Scanner that can be genetically</li>
+<li>modified. Will set the scanner occupant var as part of this check.</li>
+<li>Requires that the scanner can be operated and will return early if it can't</li>
+</ul>
+</li>
+</ul><h3 id="proc/check_discovery"><aside class="declaration">proc </aside>check_discovery<aside>(alias)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2143"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2143"></a></aside></h3><ul>
+<li>
+<p>Checks whether a mutation alias has been discovered</p>
+<ul>
+<li>
+<p>Checks whether a given mutation's genetic sequence has been completed and</p>
+</li>
+<li>
+<p>discovers it if appropriate</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>alias - Alias of the mutation to check (ie &quot;Mutation 51&quot; or &quot;Mutation 12&quot;)</li>
+</ul>
+</li>
+</ul><h3 id="proc/connect_to_scanner"><aside class="declaration">proc </aside>connect_to_scanner<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1820"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1820"></a></aside></h3><ul>
+<li>
+<p>Checks for adjacent DNA scanners and connects when it finds a viable one</p>
+<ul>
+<li>Seearches cardinal directions in order. Stops when it finds a viable DNA Scanner.</li>
+<li>Will connect to a broken scanner if no functional scanner is available.</li>
+<li>Links itself to the DNA Scanner to receive door open and close events.</li>
+</ul>
+</li>
+</ul><h3 id="proc/eject_disk"><aside class="declaration">proc </aside>eject_disk<aside>(/<a href="mob.html">mob</a>/user)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2307"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2307"></a></aside></h3><ul>
+<li>
+<p>Ejects the DNA Disk from the console.</p>
+<ul>
+<li>
+<p>Will insert into the user's hand if possible, otherwise will drop it at the</p>
+</li>
+<li>
+<p>console's location.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>user - The mob that is attempting to eject the diskette.</li>
+</ul>
+</li>
+</ul><h3 id="proc/genetic_damage_pulse"><aside class="declaration">proc </aside>genetic_damage_pulse<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2250"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2250"></a></aside></h3><ul>
+<li>
+<p>Performs the enzyme genetic damage pulse.</p>
+<ul>
+<li>Donor code from previous DNA Console iteration. Called from process() when</li>
+<li>there is a genetic damage pulse in progress. Ends processing.</li>
+</ul>
+</li>
+</ul><h3 id="proc/get_mut_by_ref"><aside class="declaration">proc </aside>get_mut_by_ref<aside>(ref, target_flags)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2182"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2182"></a></aside></h3><ul>
+<li>
+<p>Find a mutation from various storage locations via ATOM ref</p>
+<ul>
+<li>
+<p>Takes an ATOM Ref and searches the appropriate mutation buffers and storage</p>
+</li>
+<li>
+<p>vars to try and find the associated mutation.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>ref - ATOM ref of the mutation to locate</li>
+<li>
+<ul>
+<li>target_flags - Flags for storage mediums to search, see #defines</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h3 id="proc/on_scanner_close"><aside class="declaration">proc </aside>on_scanner_close<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1848"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1848"></a></aside></h3><ul>
+<li>
+<p>Called by connected DNA Scanners when their doors close.</p>
+<ul>
+<li>Sets the new scanner occupant and completes delayed enzyme transfer if one</li>
+<li>is queued.</li>
+</ul>
+</li>
+</ul><h3 id="proc/on_scanner_open"><aside class="declaration">proc </aside>on_scanner_open<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1873"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1873"></a></aside></h3><ul>
+<li>
+<p>Called by connected DNA Scanners when their doors open.</p>
+<ul>
+<li>Clears enzyme pulse operations, stops processing and nulls the current</li>
+<li>scanner occupant var.</li>
+</ul>
+</li>
+</ul><h3 id="proc/randomize_GENETIC_DAMAGE_accuracy"><aside class="declaration">proc </aside>randomize_GENETIC_DAMAGE_accuracy<aside>(position, pulse_duration, number_of_blocks)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2220"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2220"></a></aside></h3><ul>
+<li>
+<p>Creates a randomised accuracy value for the enzyme pulse functionality.</p>
+<ul>
+<li>
+<p>Donor code from previous DNA Console iteration.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>position - Index of the intended enzyme element to pulse</li>
+<li>
+<ul>
+<li>pulse_duration - Duration of intended genetic damage pulse</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>number_of_blocks - Number of individual data blocks in the pulsed enzyme</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h3 id="proc/scanner_operational"><aside class="declaration">proc </aside>scanner_operational<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L1780"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 1780"></a></aside></h3><p>Checks if there is a connected DNA Scanner that is operational</p><h3 id="proc/scramble"><aside class="declaration">proc </aside>scramble<aside>(input, rs)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2233"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2233"></a></aside></h3><ul>
+<li>
+<p>Scrambles an enzyme element value for the enzyme pulse functionality.</p>
+<ul>
+<li>
+<p>Donor code from previous DNA Console iteration.</p>
+</li>
+<li>
+<p>Arguments:</p>
+</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>input - Enzyme identity element to scramble, expected hex value</li>
+<li>
+<ul>
+<li>rs - Strength of genetic damage pulse, increases the range of possible outcomes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><h3 id="proc/set_default_state"><aside class="declaration">proc </aside>set_default_state<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/machinery/computer/dna_console.dm#L2292"><img src="git.png" width="16" height="16" title="code/game/machinery/computer/dna_console.dm 2292"></a></aside></h3><p>Sets the default state for the tgui interface.</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

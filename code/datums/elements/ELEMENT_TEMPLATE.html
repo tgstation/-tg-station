@@ -1,0 +1,20 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/datums/elements/ELEMENT_TEMPLATE.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Template file for your new element <aside>code/datums/elements/ELEMENT_TEMPLATE.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/datums/elements/ELEMENT_TEMPLATE.md0"><img src="git.png" width="16" height="16" title="code/datums/elements/ELEMENT_TEMPLATE.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><p>See _element.dm for detailed explanations</p>
+<pre><code class="language-dm">/datum/element/myelement
+	element_flags = ELEMENT_BESPOKE | ELEMENT_COMPLEX_DETACH | ELEMENT_DETACH_ON_HOST_DESTROY | ELEMENT_NOTAREALFLAG // code/__DEFINES/dcs/flags.dm
+	//argument_hash_start_idx = 2  // Use with ELEMENT_BESPOKE
+	var/list/myvar = list()
+
+/datum/element/myelement/Attach(datum/target)
+	if(!ismovable(target))
+		return COMPONENT_INCOMPATIBLE
+	RegisterSignal(target, COMSIG_MOVABLE_MOVED, myproc)
+	to_chat(target, &quot;Hey, you're in your element.&quot;)
+
+/datum/element/myelement/Detach(datum/source)
+	UnregisterSignal(source, COMSIG_MOVABLE_MOVED)
+	to_chat(source, &quot;You feel way out of your element.&quot;)
+
+/datum/element/myelement/proc/myproc(datum/source)
+	SIGNAL_HANDLER
+	playsound(source, 'sound/effects/gong.ogg', 50, TRUE)
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

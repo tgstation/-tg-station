@@ -1,0 +1,112 @@
+body {
+    margin: auto;
+    background: #f4f4f4;
+    color: #333333;
+    font-size: 16px;
+    line-height: 1.3;
+    max-width: 73%;
+    overflow-y: scroll;
+    font-family: Arial, Helvetica, sans-serif;
+}
+pre, code {
+    background: white;
+    tab-size: 4;
+    -moz-tab-size: 4;
+}
+pre {
+    padding: 8px;
+    white-space: pre-wrap;
+}
+code {
+    font-family: Consolas, "DejaVu Sans Mono", "Courier New", Courier, monospace;
+}
+a {
+    color: #333333;
+}
+article {
+    margin: 2.5% auto;
+}
+header, footer {
+    margin: 2.5% -6px;
+    border: 1px solid #444444;
+    border-radius: 5px;
+    padding: 5px;
+}
+h1 aside, h2 aside, h3 aside, h4 aside, h5 aside {
+    display: inline;
+    font-weight: normal;
+    font-size: smaller;
+}
+aside.declaration, aside.parent {
+    display: inline-block;
+    position: relative;
+    text-align: right;
+    width: 100px;
+    margin-right: -100px;
+    right: 105px;
+}
+aside.declaration {
+    font-style: italic;
+}
+table.summary tr:first-child > td > :first-child {
+    margin-top: 0;
+}
+table.summary tr:last-child > td > :last-child {
+    margin-bottom: 0;
+}
+table.summary th, table.summary td {
+    text-align: left;
+    vertical-align: top;
+    padding-left: 0;
+    padding-right: 1em;
+}
+table.summary th {
+    padding-left: 1em;
+    padding-bottom: 4px;
+    text-indent: -1em;
+}
+.no-substance {
+    color: #888888;
+}
+:target {
+    background-color: white;
+    border-radius: 5px;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-left: -3px;
+    margin-right: 3px;
+}
+img[src="git.png"] {
+    opacity: 0.8;
+}
+.expander {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    text-align: right;
+    width: 50px;
+    margin-right: -50px;
+    right: 53px;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #151520;
+        color: #e0e0e0;
+    }
+    a {
+        color: #e0e0e0;
+    }
+    header, footer {
+        border-color: #d0d0d0;
+    }
+    .no-substance {
+        color: #bbbbbb;
+    }
+    pre, code, :target {
+        background-color: #252530;
+    }
+    img[src="git.png"] {
+        filter: invert(1);
+    }
+}

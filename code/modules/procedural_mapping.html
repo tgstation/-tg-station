@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/procedural_mapping/README.md - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>Procedural Mapping <aside>code/modules/procedural_mapping/README.md</aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/procedural_mapping/README.md0"><img src="git.png" width="16" height="16" title="code/modules/procedural_mapping/README.md0"></a></h1><table class="summary" cellspacing="0"><tr><td colspan="2"><h3 id="with-regards-to-remierichards"><em>With Regards To RemieRichards</em></h3>
+<hr />
+<h2 id="coder-informative-readme">Coder Informative Readme</h2><h3 id="mapgenerator">mapGenerator:</h3>
+<p>Desc: a <em>mapGenerator</em> is a master datum that collects and syncs all <em>mapGeneratorModules</em> in its modules list.</p>
+<h3 id="defineregion-var-turf-start-turf-end-replace-0">defineRegion(var/turf/Start, turf/End, replace = 0)</h3>
+<p>Example: <code>defineRegion(locate(1,1,1),locate(5,5,5),0)</code></p>
+<p>Desc: Sets the bounds of the <em>mapGenerator's</em> &quot;map&quot;.</p>
+<h3 id="definecircularregion-var-turf-start-turf-end-replace-0">defineCircularRegion(var/turf/Start, turf/End, replace = 0)</h3>
+<p>Example: <code>defineCircularRegion(locate(1,1,1),locate(5,5,5),0)</code></p>
+<p>Desc: Sets the <em>mapGenerator's</em> &quot;map&quot; as a circle, with center in the middle of Start and End's X,Y,Z coordinates.</p>
+<h3 id="undefineregion">undefineRegion()</h3>
+<p>Example: <code>undefineRegion()</code></p>
+<p>Desc: Empties the map generator list.</p>
+<h3 id="checkregion-var-turf-start-turf-end">checkRegion(var/turf/Start, turf/End)</h3>
+<p>Example: <code>checkRegion(locate(1,1,1), locate(5,5,5))</code></p>
+<p>Desc: Checks if a rectangle between Start's coords and End's coords is valid.</p>
+<p>Existing Calls: <code>mapGenerator/defineRegion(), mapGenerator/defineCircularRegion()</code></p>
+<h3 id="generate">generate()</h3>
+<p>Example: <code>generate()</code></p>
+<p>Desc: Orders all <em>mapGeneratorModules</em> in the modules list to <code>generate()</code>.</p>
+<h3 id="generateoneturf-var-turf-t">generateOneTurf(var/turf/T)</h3>
+<p>Example: <code>generateOneTurf(locate(1,1,1))</code></p>
+<p>Desc: Orders all <em>mapGeneratorModules</em> in the modules list to <code>place(T)</code> on this turf.</p>
+<h3 id="initialisemodules">initialiseModules()</h3>
+<p>Example: <code>initialiseModules()</code></p>
+<p>Desc: Replaces all typepaths in the modules list with actual <code>/datum/map_generator/Module</code> types.</p>
+<p>Existing Calls: <code>mapGenerator/New()</code></p>
+<h3 id="syncmodules">syncModules()</h3>
+<p>Example: <code>syncModules()</code></p>
+<p>Desc: Sets the Mother variable on all <em>mapGeneratorModules</em> in the modules list to this <em>mapGenerator</em>.</p>
+<p>Existing Calls: <code>initialiseModules(),generate(),generateOneTurf()</code></p>
+<hr />
+<h3 id="mapgeneratormodule">mapGeneratorModule</h3>
+<p>Desc: a mapGeneratorModule has spawnableAtoms and spawnableTurfs lists which it will generate on turfs in its mother's map based on cluster variables.</p>
+<h3 id="sync-var-datum-map-generator-mum">sync(var/datum/map_generator/mum)</h3>
+<p>Example: <code>sync(a_mapGenerator_as_a_variable)</code></p>
+<p>Desc: Sets the Mother variable to the mum argument.</p>
+<p>Existing Calls: <code>mapGenerator/syncModules()</code></p>
+<h3 id="generate">generate()</h3>
+<p>Example: <code>generate()</code></p>
+<p>Desc: Calls place(T) on all turfs in its mother's map</p>
+<p>Existing Calls: <code>mapGenerator/generate()</code></p>
+<h3 id="place-var-turf-t">place(var/turf/T)</h3>
+<p>Example: <code>place(locate(1,1,1)) </code>
+Desc: Run this <em>mapGeneratorModule's</em> effects on this turf (Spawning atoms, Changing turfs).</p>
+<p>Existing Calls: <code>mapGenerator/generate()</code>, <code>mapGenerator/generateOneTurf()</code></p>
+<h3 id="checkplaceatom-var-turf-t">checkPlaceAtom(var/turf/T)</h3>
+<p>Example: <code>checkPlace(locate(1,1,1))</code></p>
+<p>Desc: Checks if the turf is valid for placing atoms.</p>
+<p>Existing Calls: <code>place()</code></p>
+<hr />
+<h2 id="mapper-friendly-readme">Mapper Friendly Readme</h2>
+<p>Simple Workflow:</p>
+<ol>
+<li>Define a/some mapGeneratorModule(s) to your liking, choosing atoms and turfs to spawn</li>
+</ol>
+<ul>
+<li>I chose to split Turfs and Atoms off into separate modules, but this is NOT required.</li>
+<li>A mapGeneratorModule may have turfs AND atoms, so long as each is in its appropriate list</li>
+</ul>
+<ol start="2">
+<li>Define a mapGenerator type who's modules list contains the typepath(s) of all the module(s) you wish to use</li>
+</ol>
+<ul>
+<li>The order of the typepaths in the modules list is the order they will happen in, this is important for clusterCheckFlags.</li>
+</ul>
+<ol start="3">
+<li>Take notes of the Bottom Left and Top Right turfs of your rectangular &quot;map&quot;'s coordinates</li>
+</ol>
+<ul>
+<li>X, Y, AND Z. Yes, you can create 3D &quot;maps&quot; by having differing Z coordinates</li>
+</ul>
+<ol start="4">
+<li>
+<p>Create the mapGenerator type you created</p>
+</li>
+<li>
+<p>Call <code>yourMapGeneratorType.defineRegion(locate(X,Y,Z), locate(X,Y,Z))</code></p>
+</li>
+</ol>
+<ul>
+<li>The above X/Y/Zs are the coordinates of the start and end turfs, the locate() simply finds the turf for the code</li>
+</ul>
+<ol start="6">
+<li>Call <code>yourMapGeneratorType.generate()</code>, this will cause all the modules in the generator to build within the map bounds</li>
+</ol>
+<p>Option Suggestions:</p>
+<ul>
+<li>Have separate modules for Turfs and Atoms, this is not enforced, but it is how I have structured my nature example.</li>
+<li>If your map doesn't look quite to your liking, simply jiggle with the variables on your modules and the type probabilities.</li>
+<li>You can mix and map premade areas with the procedural generation, for example mapping an entire flat land but having code generate just the grass tufts.</li>
+</ul>
+<p>Using the Modules list</p>
+<p>Simply think of it like each module is a layer in a graphics editing program!</p>
+<p>To help you do this templates such as /mapGeneratorModule/bottomLayer have been provided with appropriate default settings.</p>
+<p>These are located near the bottom of <code>mapGeneratorModule.dm</code>. You would order your list left to right, top to bottom. For example: <code>modules = list(bottomLayer,nextLayer,nextNextLayer)</code>, etc.</p>
+<p>Variable Breakdown (For Mappers):</p>
+<h3 id="mapgenerator">mapGenerator</h3>
+<ul>
+<li>map - INTERNAL, do not touch</li>
+<li>modules - A list of typepaths of mapGeneratorModules</li>
+</ul>
+<h3 id="mapgeneratormodule">mapGeneratorModule</h3>
+<ul>
+<li>
+<p>mother - INTERNAL, do not touch</p>
+</li>
+<li>
+<p>spawnableAtoms - A list of typepaths and their probability to spawn, eg: <code>spawnableAtoms = list(/obj/structure/flora/tree/pine = 30)</code></p>
+</li>
+<li>
+<p>spawnableTurfs - A list of typepaths and their probability to spawn, eg: <code>spawnableTurfs = list(/turf/unsimulated/floor/grass = 100)</code></p>
+</li>
+<li>
+<p>clusterMax - The max range to check for something being &quot;too close&quot; for this atom/turf to spawn, the true value is random between clusterMin and clusterMax</p>
+</li>
+<li>
+<p>clusterMin - The min range to check for something being &quot;too close&quot; for this atom/turf to spawn, the true value is random between clusterMin and clusterMax</p>
+</li>
+<li>
+<p>clusterCheckFlags - A Bitfield that controls how the cluster checks work, All based on clusterMin and clusterMax guides</p>
+</li>
+<li>
+<p>allowAtomsOnSpace - A Boolean for if we allow atoms to spawn on space tiles</p>
+</li>
+</ul>
+<h3 id="clustercheckflags-flags">clusterCheckFlags flags:</h3>
+<pre><code>CLUSTER_CHECK_NONE				0   //No checks are done, cluster as much as possible
+CLUSTER_CHECK_DIFFERENT_TURFS			2  //Don't let turfs of DIFFERENT types cluster
+CLUSTER_CHECK_DIFFERENT_ATOMS			4  //Don't let atoms of DIFFERENT types cluster
+CLUSTER_CHECK_SAME_TURFS			8  //Don't let turfs of the SAME type cluster
+CLUSTER_CHECK_SAME_ATOMS			16 //Don't let atoms of the SAME type cluster
+
+CLUSTER_CHECK_SAMES				24 //Don't let any of the same type cluster
+CLUSTER_CHECK_DIFFERENTS			6  //Don't let any different types cluster
+CLUSTER_CHECK_ALL_TURFS				10 //Don't let ANY turfs cluster same and different types
+CLUSTER_CHECK_ALL_ATOMS				20 //Don't let ANY atoms cluster same and different types
+
+CLUSTER_CHECK_ALL				30 //Don't let anything cluster, like, at all
+</code></pre></td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

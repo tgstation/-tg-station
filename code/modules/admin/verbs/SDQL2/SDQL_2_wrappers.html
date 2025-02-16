@@ -1,0 +1,11 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><base href="../../../../../"><link rel="stylesheet" href="dmdoc.css"><title>code/modules/admin/verbs/SDQL2/SDQL_2_wrappers.dm - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a></header><main><h1>code/modules/admin/verbs/SDQL2/SDQL_2_wrappers.dm <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/admin/verbs/SDQL2/SDQL_2_wrappers.dm0"><img src="git.png" width="16" height="16" title="code/modules/admin/verbs/SDQL2/SDQL_2_wrappers.dm0"></a></h1><table class="summary" cellspacing="0"><tr><th>/proc/<a href="global.html#proc/_pick_list">_pick_list</a></th><td>Allow me to explain
+for some reason, if pick() is passed arglist(args) directly and args contains only one list
+it considers it to be a list of lists
+this means something like _pick(list) would fail
+need to do this instead</td></tr><tr><th>/proc/<a href="global.html#proc/_animate_filter">_animate_filter</a></th><td>Auxtools REALLY doesn't know how to handle filters as values;
+when passed as arguments to auxtools-called procs, they aren't simply treated as nulls -
+they don't even count towards the length of args.
+For example, calling some_proc([a filter], foo, bar) from auxtools
+is equivalent to calling some_proc(foo, bar). Thus, we can't use _animate directly on filters.
+Use this to perform animation steps on a filter. Consecutive steps on the same filter can be
+achieved by calling _animate with no target.</td></tr></table></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>

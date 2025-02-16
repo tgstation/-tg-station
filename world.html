@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><link rel="stylesheet" href="dmdoc.css"><title>/world - /tg/ Station 13</title></head><body><header><a href="index.html">/tg/ Station 13</a> - <a href="index.html#modules">Modules</a> - <a href="index.html#types">Types</a> — <a href="world.html#proc">Proc Details</a></header><main><h1>World <aside>/<a href="world.html">world</a></aside> <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/world.dm#L11"><img src="git.png" width="16" height="16" title="code/world.dm 11"></a></h1><p>Two possibilities exist: either we are alone in the Universe or we are not. Both are equally terrifying. ~ Arthur C. Clarke</p>
+<p>The byond world object stores some basic byond level config, and has a few hub specific procs for managing hub visibility</p><table class="summary" cellspacing="0"><tr><td colspan="2"><h2>Procs</h2></td></tr><tr><th><a href="world.html#proc/ConfigLoaded">ConfigLoaded</a></th><td>Runs after config is loaded but before Master is initialized</td></tr><tr><th><a href="world.html#proc/Genesis">Genesis</a></th><td>WORLD INITIALIZATION
+THIS IS THE INIT ORDER:</td></tr><tr><th><a href="world.html#proc/InitTgs">InitTgs</a></th><td>Initializes TGS and loads the returned revising info into GLOB.revdata</td></tr><tr><th><a href="world.html#proc/New">New</a></th><td>World creation</td></tr><tr><th><a href="world.html#proc/RunUnattendedFunctions">RunUnattendedFunctions</a></th><td>Runs after the call to Master.Initialize, but before the delay kicks in. Used to turn the world execution into some single function then exit</td></tr><tr><th><a href="world.html#proc/_">_</a></th><td>THE GENESIS CALL</td></tr><tr><th><a href="world.html#proc/get_world_state_for_logging">get_world_state_for_logging</a></th><td>Returns a list of data about the world state, don't clutter</td></tr><tr><th><a href="world.html#proc/increase_max_x">increase_max_x</a></th><td>Handles increasing the world's maxx var and initializing the new turfs and assigning them to the global area.
+If map_load_z_cutoff is passed in, it will only load turfs up to that z level, inclusive.
+This is because maploading will handle the turfs it loads itself.</td></tr><tr><th><a href="world.html#proc/jatum_deserialize">jatum_deserialize</a></th><td>Attempt to create a value from a JATUM JSON.</td></tr><tr><th><a href="world.html#proc/jatum_serialize">jatum_serialize</a></th><td>Attempt to serialize a given value to the JATUM format.</td></tr><tr><th><a href="world.html#proc/push_usr">push_usr</a></th><td>Makes a call in the context of a different usr. Use sparingly</td></tr><tr><th><a href="world.html#proc/send_cross_comms">send_cross_comms</a></th><td>Sends a message to a given cross comms server by name (by name for security).</td></tr></table><h2 id="proc">Proc Details</h2><h3 id="proc/ConfigLoaded"><aside class="declaration">proc </aside>ConfigLoaded<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L170"><img src="git.png" width="16" height="16" title="code/game/world.dm 170"></a></aside></h3><p>Runs after config is loaded but before Master is initialized</p><h3 id="proc/Genesis"><aside class="declaration">proc </aside>Genesis<aside>(tracy_initialized)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L73"><img src="git.png" width="16" height="16" title="code/game/world.dm 73"></a></aside></h3><p>WORLD INITIALIZATION
+THIS IS THE INIT ORDER:</p>
+<p>BYOND =&gt;</p>
+<ul>
+<li>(secret init native) =&gt;
+<ul>
+<li>world.Genesis() =&gt;
+<ul>
+<li>world.init_byond_tracy()</li>
+<li>(Start native profiling)</li>
+<li>world.init_debugger()</li>
+<li>Master =&gt;
+<ul>
+<li>config *unloaded</li>
+<li>(all subsystems) PreInit()</li>
+<li>GLOB =&gt;
+<ul>
+<li>make_datum_reference_lists()</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>(/static variable inits, reverse declaration order)</li>
+</ul>
+</li>
+<li>(all pre-mapped atoms) /atom/New()</li>
+<li>world.New() =&gt;
+<ul>
+<li>config.Load()</li>
+<li>world.InitTgs() =&gt;
+<ul>
+<li>TgsNew() *may sleep</li>
+<li>GLOB.rev_data.load_tgs_info()</li>
+</ul>
+</li>
+<li>world.ConfigLoaded() =&gt;
+<ul>
+<li>SSdbcore.InitializeRound()</li>
+<li>world.SetupLogs()</li>
+<li>load_admins()</li>
+<li>...</li>
+</ul>
+</li>
+<li>Master.Initialize() =&gt;
+<ul>
+<li>(all subsystems) Initialize()</li>
+<li>Master.StartProcessing() =&gt;
+<ul>
+<li>Master.Loop() =&gt;
+<ul>
+<li>Failsafe</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>world.RunUnattendedFunctions()</li>
+</ul>
+</li>
+</ul>
+<p>Now listen up because I want to make something clear:
+If something is not in this list it should almost definitely be handled by a subsystem Initialize()ing
+If whatever it is that needs doing doesn't fit in a subsystem you probably aren't trying hard enough tbhfam</p>
+<p>GOT IT MEMORIZED?</p>
+<ul>
+<li>Dominion/Cyberboss</li>
+</ul>
+<p>Where to put init shit quick guide:
+If you need it to happen before the mc is created: world/Genesis.
+If you need it to happen last: world/New(),
+Otherwise, in a subsystem preinit or init. Subsystems can set an init priority.</p>
+<p>THIS !!!SINGLE!!! PROC IS WHERE ANY FORM OF INIITIALIZATION THAT CAN'T BE PERFORMED IN SUBSYSTEMS OR WORLD/NEW IS DONE
+NOWHERE THE FUCK ELSE
+I DON'T CARE HOW MANY LAYERS OF DEBUG/PROFILE/TRACE WE HAVE, YOU JUST HAVE TO DEAL WITH THIS PROC EXISTING
+I'M NOT EVEN GOING TO TELL YOU WHERE IT'S CALLED FROM BECAUSE I'M DECLARING THAT FORBIDDEN KNOWLEDGE
+SO HELP ME GOD IF I FIND ABSTRACTION LAYERS OVER THIS!</p><h3 id="proc/InitTgs"><aside class="declaration">proc </aside>InitTgs<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L165"><img src="git.png" width="16" height="16" title="code/game/world.dm 165"></a></aside></h3><p>Initializes TGS and loads the returned revising info into GLOB.revdata</p><h3 id="proc/New"><aside class="declaration">proc </aside>New<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L142"><img src="git.png" width="16" height="16" title="code/game/world.dm 142"></a></aside></h3><p>World creation</p>
+<p>Here is where a round itself is actually begun and setup.</p>
+<ul>
+<li>db connection setup</li>
+<li>config loaded from files</li>
+<li>loads admins</li>
+<li>Sets up the dynamic menu system</li>
+<li>and most importantly, calls initialize on the master subsystem, starting the game loop that causes the rest of the game to begin processing and setting up</li>
+</ul>
+<p>Nothing happens until something moves. ~Albert Einstein</p>
+<p>For clarity, this proc gets triggered later in the initialization pipeline, it is not the first thing to happen, as it might seem.</p>
+<p>Initialization Pipeline:
+Global vars are new()'ed, (including config, glob, and the master controller will also new and preinit all subsystems when it gets new()ed)
+Compiled in maps are loaded (mainly centcom). all areas/turfs/objs/mobs(ATOMs) in these maps will be new()ed
+world/New() (You are here)
+Once world/New() returns, client's can connect.
+1 second sleep
+Master Controller initialization.
+Subsystem initialization.
+Non-compiled-in maps are maploaded, all atoms are new()ed
+All atoms in both compiled and uncompiled maps are initialized()</p><h3 id="proc/RunUnattendedFunctions"><aside class="declaration">proc </aside>RunUnattendedFunctions<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L191"><img src="git.png" width="16" height="16" title="code/game/world.dm 191"></a></aside></h3><p>Runs after the call to Master.Initialize, but before the delay kicks in. Used to turn the world execution into some single function then exit</p><h3 id="proc/_"><aside class="declaration">proc </aside>_<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/ze_genesis_call/genesis_call.dm#L51"><img src="git.png" width="16" height="16" title="code/ze_genesis_call/genesis_call.dm 51"></a></aside></h3><p>THE GENESIS CALL</p>
+<p>THE VERY FIRST LINE OF DM CODE TO EXECUTE
+Ong this must be done after !!!EVERYTHING!!! else
+NO IFS ANDS OR BUTS
+it's a hack, not an example of any sort, and DEFINITELY should NOT be emulated
+IT JUST HAS TO BE LAST!!!!!!
+If you want to do something in the initialization pipeline
+FIRST RTFM IN /code/game/world.dm
+AND THEN NEVER RETURN TO THIS PLACE</p>
+<p>If you're still here, here's an explanation:
+BYOND loves to tell you about its loving spouse /global
+But it's actually having a sexy an affair with /static
+Specifically statics in procs
+Priority is given to these lines of code in REVERSE order of declaration in the .dme
+Which is why this file has a funky name
+So this is what we use to call world.Genesis()
+It's a nameless, no-op function, because it does absolutely nothing
+It exists to hold a static var which is initialized to null
+It's on /world to hide it from reflection
+Painful right? Good, now you share my suffering
+Please lock the door on your way out</p><h3 id="proc/get_world_state_for_logging"><aside class="declaration">proc </aside>get_world_state_for_logging<aside>()  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L214"><img src="git.png" width="16" height="16" title="code/game/world.dm 214"></a></aside></h3><p>Returns a list of data about the world state, don't clutter</p><h3 id="proc/increase_max_x"><aside class="declaration">proc </aside>increase_max_x<aside>(new_maxx, map_load_z_cutoff)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/game/world.dm#L451"><img src="git.png" width="16" height="16" title="code/game/world.dm 451"></a></aside></h3><p>Handles increasing the world's maxx var and initializing the new turfs and assigning them to the global area.
+If map_load_z_cutoff is passed in, it will only load turfs up to that z level, inclusive.
+This is because maploading will handle the turfs it loads itself.</p><h3 id="proc/jatum_deserialize"><aside class="declaration">proc </aside>jatum_deserialize<aside>(json)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/jatum.dm#L140"><img src="git.png" width="16" height="16" title="code/__HELPERS/jatum.dm 140"></a></aside></h3><p>Attempt to create a value from a JATUM JSON.</p>
+<ul>
+<li>json - The JSON to deserialize.</li>
+</ul><h3 id="proc/jatum_serialize"><aside class="declaration">proc </aside>jatum_serialize<aside>(value)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/jatum.dm#L17"><img src="git.png" width="16" height="16" title="code/__HELPERS/jatum.dm 17"></a></aside></h3><p>Attempt to serialize a given value to the JATUM format.</p>
+<ul>
+<li>value - The var to serialize.</li>
+</ul><h3 id="proc/push_usr"><aside class="declaration">proc </aside>push_usr<aside>(/<a href="mob.html">mob</a>/user_mob, /<a href="datum.html">datum</a>/<a href="datum/callback.html">callback</a>/invoked_callback, ...)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/__HELPERS/mobs.dm#L816"><img src="git.png" width="16" height="16" title="code/__HELPERS/mobs.dm 816"></a></aside></h3><p>Makes a call in the context of a different usr. Use sparingly</p><h3 id="proc/send_cross_comms"><aside class="declaration">proc </aside>send_cross_comms<aside>(server_name, /list/message, auth)  <a href="https://github.com/tgstation/tgstation/blob/5ccbbf44448e4869df592cc5e05427e5a6abaca1/code/modules/admin/verbs/adminhelp.dm#L938"><img src="git.png" width="16" height="16" title="code/modules/admin/verbs/adminhelp.dm 938"></a></aside></h3><p>Sends a message to a given cross comms server by name (by name for security).</p></main><footer>tgstation.dme <a href="https://github.com/tgstation/tgstation/tree/5ccbbf44448e4869df592cc5e05427e5a6abaca1">5ccbbf4</a> (master) — <a href="https://github.com/SpaceManiac/SpacemanDMM/blob/master/crates/dmdoc/README.md">dmdoc 1.9.0</a></footer></body></html>
