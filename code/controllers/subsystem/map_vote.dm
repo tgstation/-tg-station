@@ -154,7 +154,7 @@ SUBSYSTEM_DEF(map_vote)
 	next_map_config = change_to
 	return TRUE
 
-/datum/controller/subsystem/map_vote/proc/revert_next_map()
+/datum/controller/subsystem/map_vote/proc/revert_next_map(client/user)
 	if(!next_map_config)
 		return
 	if(previous_cache)
@@ -163,6 +163,11 @@ SUBSYSTEM_DEF(map_vote)
 
 	already_voted = FALSE
 	admin_override = FALSE
+	next_map_config = null
+
+	if(!isnull(user))
+		message_admins("[key_name_admin(user)] has reverted the next map selection. Voting re-enabled.")
+		log_admin("[key_name_admin(user)] reverted the next map selection.")
 	send_map_vote_notice("Next map reverted. Voting re-enabled.")
 
 #undef MAP_VOTE_CACHE_LOCATION
