@@ -122,9 +122,9 @@
  *Arguments:
  *A is the atom being tapped
  *user is the person making the attack action
- *params is anything the pre_attack() proc had in the same-named variable.
+ *modifiers is anything the pre_attack() proc had in the same-named variable.
 */
-/datum/computer_file/program/proc/tap(atom/tapped_atom, mob/living/user, params)
+/datum/computer_file/program/proc/tap(atom/tapped_atom, mob/living/user, list/modifiers)
 	return FALSE
 
 ///Makes sure a program can run on this hardware (for apps limited to tablets/computers/laptops)

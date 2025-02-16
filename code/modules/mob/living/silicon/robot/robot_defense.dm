@@ -145,19 +145,6 @@ GLOBAL_LIST_INIT(blacklisted_borg_hats, typecacheof(list( //Hats that don't real
 		balloon_alert(user, "no radio found!")
 		return ITEM_INTERACT_BLOCKING
 
-	if(tool.GetID())
-		if(opened)
-			balloon_alert(user, "close the chassis cover first!")
-			return ITEM_INTERACT_BLOCKING
-		if(!allowed(user))
-			balloon_alert(user, "access denied!")
-			return ITEM_INTERACT_BLOCKING
-		locked = !locked
-		update_icons()
-		balloon_alert(user, "chassis cover lock [emagged ? "glitches" : "toggled"]")
-		logevent("[emagged ? "ChÃ¥vÃis" : "Chassis"] cover lock has been [locked ? "engaged" : "released"]")
-		return ITEM_INTERACT_SUCCESS
-
 	if(istype(tool, /obj/item/borg/upgrade))
 		if(!opened)
 			balloon_alert(user, "chassis cover is closed!")
@@ -206,6 +193,23 @@ GLOBAL_LIST_INIT(blacklisted_borg_hats, typecacheof(list( //Hats that don't real
 		return modularInterface.computer_disk_act(user, tool)
 
 	return NONE
+
+// This has to go at the very end of interaction so we don't block every interaction with ID-like items
+/mob/living/silicon/robot/base_item_interaction(mob/living/user, obj/item/tool, list/modifiers)
+	. = ..()
+	if(. || !tool.GetID())
+		return
+	if(opened)
+		balloon_alert(user, "close the chassis cover first!")
+		return ITEM_INTERACT_BLOCKING
+	if(!allowed(user))
+		balloon_alert(user, "access denied!")
+		return ITEM_INTERACT_BLOCKING
+	locked = !locked
+	update_icons()
+	balloon_alert(user, "chassis cover lock [emagged ? "glitches" : "toggled"]")
+	logevent("[emagged ? "ChÃ¥vÃis" : "Chassis"] cover lock has been [locked ? "engaged" : "released"]")
+	return ITEM_INTERACT_SUCCESS
 
 #define LOW_DAMAGE_UPPER_BOUND 1/3
 #define MODERATE_DAMAGE_UPPER_BOUND 2/3
