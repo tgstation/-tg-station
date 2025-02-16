@@ -269,3 +269,6 @@
 
 	///Which ambient sound this client is currently being provided.
 	var/current_ambient_sound
+
+	///Are we currently looking at the cpu debug readout?
+	var/displaying_cpu_debug = FALSE

@@ -2,9 +2,11 @@
 #define MAPTICK_MC_MIN_RESERVE 70
 #define MAPTICK_LAST_INTERNAL_TICK_USAGE (world.map_cpu)
 
-/// Tick limit while running normally
 #define TICK_BYOND_RESERVE 2
-#define TICK_LIMIT_RUNNING (max(100 - TICK_BYOND_RESERVE - MAPTICK_LAST_INTERNAL_TICK_USAGE, MAPTICK_MC_MIN_RESERVE))
+#define TICK_VERB_RESERVE 4
+#define TICK_EXPECTED_SAFE_MAX (100 - TICK_BYOND_RESERVE - TICK_VERB_RESERVE - MAPTICK_LAST_INTERNAL_TICK_USAGE)
+/// Tick limit while running normally
+#define TICK_LIMIT_RUNNING (max(TICK_EXPECTED_SAFE_MAX, MAPTICK_MC_MIN_RESERVE))
 /// Tick limit used to resume things in stoplag
 #define TICK_LIMIT_TO_RUN 70
 /// Tick limit for MC while running
