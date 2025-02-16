@@ -111,7 +111,7 @@ SUBSYSTEM_DEF(tts)
 			stack_trace("TTS tried to play a sound to a deleted mob.")
 			continue
 		/// volume modifier for TTS as set by the player in preferences.
-		var/volume_modifier = listening_mob.client?.prefs.read_preference(/datum/preference/numeric/sound_tts_volume)/100
+		var/volume_modifier = listening_mob.client?.prefs.read_preference(/datum/preference/numeric/volume/sound_tts_volume)/100
 		var/tts_pref = listening_mob.client?.prefs.read_preference(/datum/preference/choiced/sound_tts)
 		if(volume_modifier == 0 || (tts_pref == TTS_SOUND_OFF))
 			continue
