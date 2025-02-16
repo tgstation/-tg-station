@@ -60,6 +60,7 @@ GLOBAL_LIST_INIT(spanname_to_formatting, list(
 	"Bold Notice" = "boldnotice",
 	"Bold Warning" = "boldwarning",
 	"Big Bold" = "big bold",
+	"Captain-Cast" = "captaincast",
 	"Centcom Radio" = "centcomradio",
 	"Changeling" = "changeling",
 	"Clown" = "clown",

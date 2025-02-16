@@ -31054,6 +31054,14 @@
 /obj/machinery/power/apc/auto_name/directional/south,
 /turf/open/floor/iron,
 /area/station/commons/toilet/auxiliary)
+"kXi" = (
+/obj/machinery/greenscreen_camera{
+	dir = 1;
+	pixel_x = 4;
+	pixel_y = 16
+	},
+/turf/open/floor/carpet,
+/area/station/command/heads_quarters/captain/private)
 "kXp" = (
 /obj/machinery/camera/autoname{
 	dir = 5
@@ -47410,7 +47418,7 @@
 /turf/open/floor/iron/white,
 /area/station/medical/virology)
 "qPF" = (
-/obj/machinery/computer/security/wooden_tv,
+/obj/structure/sign/poster/greenscreen/directional/north,
 /turf/open/floor/carpet,
 /area/station/command/heads_quarters/captain/private)
 "qPJ" = (
@@ -61994,6 +62002,7 @@
 "vNG" = (
 /obj/structure/table/wood,
 /obj/machinery/newscaster/directional/west,
+/obj/machinery/computer/security/wooden_tv,
 /turf/open/floor/carpet,
 /area/station/command/heads_quarters/captain/private)
 "vNM" = (
@@ -99494,7 +99503,7 @@ kON
 vjn
 syo
 qPF
-hlD
+kXi
 iox
 tyY
 eCB

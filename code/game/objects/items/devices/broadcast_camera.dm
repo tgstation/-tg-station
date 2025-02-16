@@ -116,7 +116,7 @@
 	active_microphone = !active_microphone
 
 	/// Text popup for letting the user know that the microphone has changed state
-	balloon_alert(user, "turned [active_microphone ? "on" : "off"] the microphone.")
+	balloon_alert(user, "microphone [active_microphone ? "" : "de"]activated")
 
 	///If the radio exists as an object, set its state accordingly
 	if(active)

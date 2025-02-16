@@ -10608,7 +10608,9 @@
 /area/station/security/execution/transfer)
 "cBE" = (
 /obj/machinery/status_display/ai/directional/north,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
+	dir = 8
+	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "cBL" = (
@@ -11063,7 +11065,7 @@
 /obj/structure/table/wood,
 /obj/item/folder/blue,
 /obj/item/pen,
-/obj/item/radio/intercom/directional/north,
+/obj/machinery/newscaster/directional/north,
 /turf/open/floor/iron/grimy,
 /area/station/tcommsat/computer)
 "cHb" = (
@@ -17412,6 +17414,9 @@
 "epd" = (
 /obj/machinery/light/directional/east,
 /obj/structure/extinguisher_cabinet/directional/east,
+/obj/structure/table/wood,
+/obj/item/storage/photo_album,
+/obj/item/camera,
 /turf/open/floor/wood,
 /area/station/command/heads_quarters/captain)
 "epe" = (
@@ -18376,8 +18381,10 @@
 /turf/closed/wall,
 /area/station/security/checkpoint/customs/aft)
 "eBw" = (
-/obj/machinery/vending/cigarette,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/structure/sign/poster/greenscreen/directional/west,
+/obj/effect/turf_decal/tile/neutral/half/contrasted{
+	dir = 4
+	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "eBE" = (
@@ -20156,9 +20163,9 @@
 	dir = 4
 	},
 /obj/item/paper/monitorkey,
-/obj/machinery/newscaster/directional/west,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /obj/machinery/light/dim/directional/west,
+/obj/item/radio/intercom/directional/west,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
 "eXf" = (
@@ -30304,8 +30311,8 @@
 "hxP" = (
 /obj/structure/bed/dogbed/renault,
 /obj/machinery/newscaster/directional/south,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
 /mob/living/basic/pet/fox/renault,
+/obj/effect/turf_decal/tile/neutral/anticorner/contrasted,
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "hxS" = (
@@ -35160,9 +35167,9 @@
 /turf/open/floor/iron,
 /area/station/security/checkpoint/medical/medsci)
 "iKC" = (
-/obj/structure/table/wood,
-/obj/machinery/recharger,
-/turf/open/floor/wood,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/vending/boozeomat,
+/turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "iKD" = (
 /obj/structure/cable,
@@ -38431,10 +38438,9 @@
 /turf/open/floor/iron,
 /area/station/medical/psychology)
 "jzT" = (
-/obj/structure/table/wood,
-/obj/item/storage/photo_album,
-/obj/item/camera,
-/turf/open/floor/wood,
+/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/vending/cigarette,
+/turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "jzW" = (
 /obj/machinery/atmospherics/pipe/smart/manifold4w/supply/hidden/layer4,
@@ -45624,6 +45630,7 @@
 /obj/structure/table/wood,
 /obj/item/paper_bin,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/status_display/ai/directional/west,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
 "lql" = (
@@ -49033,6 +49040,14 @@
 /obj/effect/spawner/random/structure/tank_holder,
 /turf/open/floor/plating,
 /area/station/maintenance/fore)
+"mjn" = (
+/obj/machinery/greenscreen_camera{
+	dir = 8;
+	pixel_x = -8;
+	pixel_y = 6
+	},
+/turf/open/floor/wood,
+/area/station/command/heads_quarters/captain)
 "mjo" = (
 /obj/machinery/recharge_station,
 /obj/effect/decal/cleanable/dirt,
@@ -50490,7 +50505,7 @@
 /obj/item/radio{
 	pixel_y = 5
 	},
-/obj/item/radio/intercom/directional/north,
+/obj/machinery/airalarm/directional/north,
 /turf/open/floor/iron/grimy,
 /area/station/tcommsat/computer)
 "mCZ" = (
@@ -65509,7 +65524,7 @@
 /area/station/science/lobby)
 "qsY" = (
 /obj/machinery/status_display/evac/directional/north,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/tile/neutral/anticorner/contrasted,
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "qtm" = (
@@ -68203,6 +68218,7 @@
 /area/station/hallway/primary/starboard)
 "rdR" = (
 /obj/machinery/firealarm/directional/north,
+/obj/item/kirbyplants/random,
 /turf/open/floor/wood,
 /area/station/command/heads_quarters/captain)
 "rdS" = (
@@ -69052,9 +69068,9 @@
 /obj/machinery/computer/telecomms/server{
 	dir = 8
 	},
-/obj/machinery/newscaster/directional/east,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /obj/machinery/light/dim/directional/east,
+/obj/item/radio/intercom/directional/east,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
 "rmz" = (
@@ -75780,7 +75796,6 @@
 /area/station/science/research)
 "sVj" = (
 /obj/machinery/announcement_system,
-/obj/machinery/status_display/ai/directional/west,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
@@ -79572,6 +79587,7 @@
 /obj/structure/plaque/static_plaque/golden/captain{
 	pixel_x = 32
 	},
+/obj/item/kirbyplants/random,
 /turf/open/floor/wood,
 /area/station/command/heads_quarters/captain)
 "tTn" = (
@@ -81585,9 +81601,9 @@
 /area/station/command/heads_quarters/hop)
 "usZ" = (
 /obj/item/flashlight/lamp,
-/obj/machinery/airalarm/directional/east,
 /obj/structure/table/wood,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/status_display/evac/directional/east,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
 "utj" = (
@@ -86532,8 +86548,11 @@
 /turf/open/floor/iron/edge,
 /area/station/hallway/primary/central/aft)
 "vDo" = (
-/obj/machinery/vending/boozeomat,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/machinery/status_display/evac/directional/west,
+/obj/item/kirbyplants/random,
+/obj/effect/turf_decal/tile/neutral/anticorner/contrasted{
+	dir = 4
+	},
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "vDw" = (
@@ -88715,7 +88734,6 @@
 /obj/machinery/computer/telecomms/monitor{
 	dir = 8
 	},
-/obj/machinery/status_display/evac/directional/east,
 /obj/effect/turf_decal/tile/neutral/fourcorners,
 /turf/open/floor/iron/dark,
 /area/station/tcommsat/computer)
@@ -89502,6 +89520,8 @@
 /area/station/medical/cryo)
 "wqT" = (
 /obj/machinery/airalarm/directional/east,
+/obj/structure/table/wood,
+/obj/machinery/recharger,
 /turf/open/floor/wood,
 /area/station/command/heads_quarters/captain)
 "wqU" = (
@@ -95521,7 +95541,7 @@
 /area/station/security/office)
 "xRO" = (
 /obj/structure/fireplace,
-/obj/effect/turf_decal/tile/neutral/fourcorners,
+/obj/effect/turf_decal/tile/neutral/half/contrasted,
 /turf/open/floor/iron/dark,
 /area/station/command/heads_quarters/captain)
 "xSf" = (
@@ -137937,7 +137957,7 @@ neK
 gOU
 gsP
 hja
-aby
+mjn
 aby
 qig
 nxG
