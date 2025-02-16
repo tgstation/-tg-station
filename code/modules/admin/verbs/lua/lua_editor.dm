@@ -42,7 +42,7 @@
 		LAZYREMOVEASSOC(SSlua.editors, text_ref(current_state), src)
 
 /datum/lua_editor/ui_state(mob/user)
-	return GLOB.debug_state
+	return ADMIN_STATE(R_DEBUG)
 
 /datum/lua_editor/ui_data(mob/user)
 	var/list/data = list()

@@ -22,7 +22,7 @@ ADMIN_VERB(secrets, R_NONE, "Secrets", "Abuse harder than you ever have before w
 	is_funmin = check_rights(R_FUN)
 
 /datum/secrets_menu/ui_state(mob/user)
-	return GLOB.admin_state
+	return ADMIN_STATE(R_NONE)
 
 /datum/secrets_menu/ui_close()
 	qdel(src)

@@ -20,7 +20,7 @@
 	return ..()
 
 /datum/nobody_wants_to_learn_matrix_math/ui_state(mob/user)
-	return GLOB.admin_state
+	return ADMIN_STATE(R_VAREDIT)
 
 /datum/nobody_wants_to_learn_matrix_math/ui_close(mob/user)
 	qdel(src)

@@ -46,7 +46,7 @@ ADMIN_VERB(log_viewer_new, R_ADMIN|R_DEBUG, "View Round Logs", "View the rounds 
 		ui.open()
 
 /datum/log_holder/ui_state(mob/user)
-	return GLOB.admin_state
+	return ADMIN_STATE(R_ADMIN | R_DEBUG)
 
 /datum/log_holder/ui_static_data(mob/user)
 	var/list/data = list(

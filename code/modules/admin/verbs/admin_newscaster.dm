@@ -29,7 +29,7 @@ ADMIN_VERB(access_news_network, R_ADMIN, "Access Newscaster Network", "Allows yo
 	var/comment_text
 
 /datum/newspanel/ui_state(mob/user)
-	return GLOB.admin_state
+	return ADMIN_STATE(R_ADMIN)
 
 /datum/newspanel/ui_interact(mob/user, datum/tgui/ui)
 	ui = SStgui.try_update_ui(user, src, ui)
