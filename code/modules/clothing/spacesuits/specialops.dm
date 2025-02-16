@@ -15,6 +15,7 @@
 	resistance_flags = FIRE_PROOF | ACID_PROOF
 	fishing_modifier = 0
 	hair_mask = HAIR_MASK_HIDE_ABOVE_45_DEG_MEDIUM
+	visor_dirt = null
 
 /datum/armor/space_beret
 	melee = 80

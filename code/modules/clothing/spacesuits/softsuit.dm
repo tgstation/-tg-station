@@ -16,14 +16,14 @@
 	name = "Engineering Void Helmet"
 	desc = "A CentCom engineering dark red space suit helmet. While old and dusty, it still gets the job done."
 	icon_state = "void"
-	slowdown = 2
+	visor_dirt = "void_dirt"
 
 /obj/item/clothing/suit/space/nasavoid/old
 	name = "Engineering Voidsuit"
 	icon_state = "void"
 	inhand_icon_state = "void_suit"
 	desc = "A CentCom engineering dark red space suit. Age has degraded the suit making it difficult to move around in."
-	slowdown = 2
+	slowdown = 4
 	allowed = list(/obj/item/flashlight, /obj/item/tank/internals, /obj/item/multitool)
 
 	//EVA suit
@@ -41,6 +41,7 @@
 	desc = "A lightweight space helmet with the basic ability to protect the wearer from the vacuum of space during emergencies."
 	flash_protect = FLASH_PROTECTION_NONE
 	armor_type = /datum/armor/space_eva
+	visor_dirt = "space_dirt"
 
 /datum/armor/space_eva
 	bio = 100
@@ -73,7 +74,6 @@
 	inhand_icon_state = "syndicate-helm-orange" //resprite?
 	armor_type = /datum/armor/space_fragile
 	strip_delay = 65
-	slowdown = 1
 
 /obj/item/clothing/suit/space/fragile
 	name = "emergency space suit"
@@ -81,7 +81,7 @@
 	var/torn = FALSE
 	icon_state = "syndicate-orange"
 	inhand_icon_state = "syndicate-orange"
-	slowdown = 1
+	slowdown = 2
 	armor_type = /datum/armor/space_fragile
 	strip_delay = 65
 

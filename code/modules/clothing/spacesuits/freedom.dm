@@ -10,6 +10,7 @@
 	max_heat_protection_temperature = FIRE_IMMUNITY_MAX_TEMP_PROTECT
 	resistance_flags = ACID_PROOF | FIRE_PROOF
 	fishing_modifier = 0
+	visor_dirt = null
 
 /datum/armor/space_freedom
 	melee = 20

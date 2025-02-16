@@ -3,11 +3,11 @@
 	desc = "A modified helmet to allow space pirates to intimidate their customers whilst staying safe from the void. Comes with some additional protection."
 	icon_state = "spacepirate"
 	inhand_icon_state = "space_pirate_helmet"
-	slowdown = 0
 	armor_type = /datum/armor/space_pirate
 	strip_delay = 40
 	equip_delay_other = 20
 	fishing_modifier = -2
+	visor_dirt = null
 
 /datum/armor/space_pirate
 	melee = 30

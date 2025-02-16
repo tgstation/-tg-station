@@ -165,6 +165,10 @@
 #define COMSIG_CARBON_LIMPING "mob_limp_check"
 	#define COMPONENT_CANCEL_LIMP (1<<0)
 
+/// from /obj/item/toy/crayon/spraycan/use_on(target, user, modifiers): (atom/target, mob/user)
+#define COMSIG_CARBON_SPRAYPAINTED "comsig_carbon_spraypainted"
+	#define COMPONENT_CANCEL_SPRAYPAINT (1<<0)
+
 ///Called from on_acquiring(mob/living/carbon/human/acquirer)
 #define COMSIG_MUTATION_GAINED "mutation_gained"
 ///Called from on_losing(mob/living/carbon/human/owner)

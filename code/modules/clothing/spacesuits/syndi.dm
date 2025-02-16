@@ -186,6 +186,7 @@ GLOBAL_LIST_INIT(syndicate_space_suits_to_helmets,list(
 	w_class = WEIGHT_CLASS_SMALL
 	icon_state = "syndicate-contract-helm"
 	inhand_icon_state = "contractor_helmet"
+	visor_dirt = null
 
 /obj/item/clothing/suit/space/syndicate/contract
 	name = "contractor space suit"

@@ -31,9 +31,13 @@
 	drop_sound = 'sound/items/handling/helmet/helmet_drop1.ogg'
 	///How much this helmet affects fishing difficulty
 	var/fishing_modifier = 3
+	///Icon state applied when we get spraypainted/peppersprayed. If null, does not add the dirt component
+	var/visor_dirt = "helm_dirt"
 
 /obj/item/clothing/head/helmet/space/Initialize(mapload)
 	. = ..()
+	if(visor_dirt)
+		AddComponent(/datum/component/clothing_dirt, visor_dirt)
 	if(fishing_modifier)
 		AddComponent(/datum/component/adjust_fishing_difficulty, fishing_modifier)
 	add_stabilizer()
