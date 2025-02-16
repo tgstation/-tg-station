@@ -6,7 +6,6 @@
 		/obj/item/stack/sheet/animalhide/mothroach = 2,
 		/obj/item/clothing/shoes/clown_shoes = 1,
 	)
-	parts = list(/obj/item/clothing/shoes/clown_shoes = 1)
 	blacklist = list(
 		/obj/item/clothing/shoes/clown_shoes/combat,
 		/obj/item/clothing/shoes/clown_shoes/banana_shoes,
@@ -73,7 +72,6 @@
 		/obj/item/camera = 1,
 		/datum/reagent/water/holywater = 10,
 	)
-	parts = list(/obj/item/camera = 1)
 	category = CAT_ENTERTAINMENT
 
 
@@ -176,7 +174,7 @@
 	category = CAT_ENTERTAINMENT
 	tool_behaviors = list(TOOL_WRENCH)
 	reqs = list(/obj/item/flamethrower = 1)
-	structures = list(/obj/structure/toilet = CRAFTING_STRUCTURE_USE) // we will handle the consumption manually in on_craft_completion for this one
+	structures = list(/obj/structure/toilet = CRAFTING_STRUCTURE_CONSUME)
 	result = /obj/structure/toiletbong
 	time = 5 SECONDS
 	steps = list(
@@ -188,21 +186,6 @@
 	if(!flamethrower.ptank)
 		return FALSE
 	return ..()
-
-/datum/crafting_recipe/toiletbong/on_craft_completion(mob/user, atom/result)
-	var/obj/structure/toiletbong/toiletbong = result
-
-	// because we want to set the toilet's location and dir, we need to do the consumption manually
-	var/obj/structure/toilet/toilet = locate(/obj/structure/toilet) in range(1)
-	if(toilet)
-		for (var/obj/item/cistern_item in toilet.contents)
-			cistern_item.forceMove(user.drop_location())
-			to_chat(user, span_warning("[cistern_item] falls out of the toilet!"))
-		toiletbong.dir = toilet.dir
-		toiletbong.loc = toilet.loc
-		qdel(toilet)
-
-	to_chat(user, span_notice("[user] attaches the flamethrower to the repurposed toilet."))
 
 /datum/crafting_recipe/punching_bag
 	name = "Punching Bag"

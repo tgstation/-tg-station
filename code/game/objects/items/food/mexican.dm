@@ -257,7 +257,7 @@
 
 /obj/item/food/hard_taco_shell/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/hard_taco_shell/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
+	AddComponent(/datum/component/ingredients_holder, /obj/item/food/hard_taco_shell/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
 
 // empty taco shell for custom tacos
 /obj/item/food/hard_taco_shell/empty

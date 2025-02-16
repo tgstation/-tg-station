@@ -109,8 +109,8 @@
 	if(!safety && emagged_state)
 		. += emagged_state
 
-/obj/item/defibrillator/CheckParts(list/parts_list)
-	..()
+/obj/item/defibrillator/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	. = ..()
 	cell = locate(/obj/item/stock_parts/power_store) in contents
 	update_power()
 

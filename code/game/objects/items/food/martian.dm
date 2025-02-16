@@ -292,7 +292,7 @@
 
 /obj/item/food/salad/egg_fried_rice/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
 
 /obj/item/food/salad/bibimbap
 	name = "bibimbap"
@@ -312,7 +312,7 @@
 
 /obj/item/food/salad/bibimbap/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
 
 // Noodles
 /obj/item/food/salad/bulgogi_noodles
@@ -377,7 +377,7 @@
 
 /obj/item/food/salad/simple_fried_noodles/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
 
 // Curry
 /obj/item/food/salad/setagaya_curry //let me explain...
@@ -566,7 +566,7 @@
 //hey, the name literally means "grilled how you like it", it'd be crazy to not make it customisable
 /obj/item/food/okonomiyaki/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
 
 /obj/item/food/brat_kimchi
 	name = "brat-kimchi"

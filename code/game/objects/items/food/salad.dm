@@ -192,7 +192,7 @@
 	. = ..()
 	RegisterSignal(src, COMSIG_ATOM_REAGENT_EXAMINE, PROC_REF(reagent_special_examine))
 	AddElement(/datum/element/foodlike_drink)
-	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/salad/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
+	AddComponent(/datum/component/ingredients_holder, /obj/item/food/salad/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
 	AddComponent( \
 		/datum/component/takes_reagent_appearance, \
 		on_icon_changed = CALLBACK(src, PROC_REF(on_cup_change)), \

@@ -76,7 +76,7 @@ Behavior that's still missing from this component that original food items had t
 /datum/component/edible/RegisterWithParent()
 	RegisterSignal(parent, COMSIG_ATOM_EXAMINE, PROC_REF(examine))
 	RegisterSignal(parent, COMSIG_ATOM_ATTACK_ANIMAL, PROC_REF(UseByAnimal))
-	RegisterSignal(parent, COMSIG_ATOM_CHECKPARTS, PROC_REF(OnCraft))
+	RegisterSignal(parent, COMSIG_ATOM_ON_CRAFT, PROC_REF(OnCraft))
 	RegisterSignal(parent, COMSIG_OOZE_EAT_ATOM, PROC_REF(on_ooze_eat))
 	RegisterSignal(parent, COMSIG_FOOD_INGREDIENT_ADDED, PROC_REF(edible_ingredient_added))
 	RegisterSignal(parent, COMSIG_ATOM_CREATEDBY_PROCESSING, PROC_REF(OnProcessed))
@@ -105,7 +105,7 @@ Behavior that's still missing from this component that original food items had t
 	UnregisterSignal(parent, list(
 		COMSIG_ATOM_ATTACK_ANIMAL,
 		COMSIG_ATOM_ATTACK_HAND,
-		COMSIG_ATOM_CHECKPARTS,
+		COMSIG_ATOM_ON_CRAFT,
 		COMSIG_ATOM_CREATEDBY_PROCESSING,
 		COMSIG_ATOM_ENTERED,
 		COMSIG_FOOD_INGREDIENT_ADDED,
@@ -319,11 +319,11 @@ Behavior that's still missing from this component that original food items had t
 		this_food.desc = "[original_atom.desc]"
 
 ///Called when food is crafted through a crafting recipe datum.
-/datum/component/edible/proc/OnCraft(datum/source, list/parts_list, datum/crafting_recipe/food/recipe)
+/datum/component/edible/proc/OnCraft(datum/source, list/components, datum/crafting_recipe/food/recipe)
 	SIGNAL_HANDLER
 
 	var/atom/this_food = parent
-	for(var/obj/item/food/crafted_part in parts_list)
+	for(var/obj/item/food/crafted_part in components)
 		if(!crafted_part.reagents)
 			continue
 		this_food.reagents.maximum_volume += crafted_part.reagents.maximum_volume

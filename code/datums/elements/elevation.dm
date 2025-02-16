@@ -1,5 +1,5 @@
 /**
- * Manages the elevation of the turf the source is on (can be the turf itself)
+ * Manages the elevation of the turf the source is on
  * The atom with the highest pixel_shift gets to set the elevation of the turf to that value.
  */
 /datum/element/elevation
@@ -10,22 +10,15 @@
 
 /datum/element/elevation/Attach(datum/target, pixel_shift)
 	. = ..()
-	if(!isatom(target) || isarea(target))
+	if(!ismovable(target))
 		return ELEMENT_INCOMPATIBLE
 
 	src.pixel_shift = pixel_shift
 
-	if(ismovable(target))
-		RegisterSignal(target, COMSIG_MOVABLE_MOVED, PROC_REF(on_moved))
+	RegisterSignal(target, COMSIG_MOVABLE_MOVED, PROC_REF(on_moved))
 
 	var/atom/atom_target = target
-	if(isturf(atom_target.loc))
-		var/turf/turf = atom_target.loc
-		if(!HAS_TRAIT(turf, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift)))
-			RegisterSignal(turf, COMSIG_TURF_RESET_ELEVATION, PROC_REF(check_elevation))
-			RegisterSignal(turf, COMSIG_TURF_CHANGE, PROC_REF(pre_change_turf))
-			reset_elevation(turf)
-		ADD_TRAIT(turf, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(target))
+	register_turf(atom_target, atom_target.loc)
 
 /datum/element/elevation/Detach(atom/movable/source)
 	unregister_turf(source, source.loc)
@@ -50,12 +43,16 @@
 /datum/element/elevation/proc/on_moved(atom/movable/source, atom/oldloc)
 	SIGNAL_HANDLER
 	unregister_turf(source, oldloc)
-	if(isturf(source.loc))
-		if(!HAS_TRAIT(source.loc, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift)))
-			RegisterSignal(source.loc, COMSIG_TURF_RESET_ELEVATION, PROC_REF(check_elevation))
-			RegisterSignal(source.loc, COMSIG_TURF_CHANGE, PROC_REF(pre_change_turf))
-			reset_elevation(source.loc)
-		ADD_TRAIT(source.loc, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
+	register_turf(source, source.loc)
+
+/datum/element/elevation/proc/register_turf(atom/movable/source, atom/location)
+	if(!isturf(location))
+		return
+	if(!HAS_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift)))
+		RegisterSignal(location, COMSIG_TURF_RESET_ELEVATION, PROC_REF(check_elevation))
+		RegisterSignal(location, COMSIG_TURF_CHANGE, PROC_REF(pre_change_turf))
+		reset_elevation(location)
+	ADD_TRAIT(location, TRAIT_TURF_HAS_ELEVATED_OBJ(pixel_shift), ref(source))
 
 /datum/element/elevation/proc/unregister_turf(atom/movable/source, atom/location)
 	if(!isturf(location))

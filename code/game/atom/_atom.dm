@@ -338,33 +338,30 @@
 /**
  * Ensure a list of atoms/reagents exists inside this atom
  *
- * Goes throught he list of passed in parts, if they're reagents, adds them to our reagent holder
- * creating the reagent holder if it exists.
- *
- * If the part is a moveable atom and the  previous location of the item was a mob/living,
- * it calls the inventory handler transferItemToLoc for that mob/living and transfers the part
- * to this atom
- *
- * Otherwise it simply forceMoves the atom into this atom
+ * Cycles through the list of movables used up in the recipe and calls used_in_craft() for each of them
+ * then it either moves them inside the object or deletes
+ * them depending on whether they're in the list of parts for the recipe or not
  */
-/atom/proc/CheckParts(list/parts_list, datum/crafting_recipe/current_recipe)
-	SEND_SIGNAL(src, COMSIG_ATOM_CHECKPARTS, parts_list, current_recipe)
-	if(!parts_list)
-		return
-	for(var/part in parts_list)
-		if(istype(part, /datum/reagent))
-			if(!reagents)
-				reagents = new()
-			reagents.reagent_list.Add(part)
-		else if(ismovable(part))
-			var/atom/movable/object = part
-			if(isliving(object.loc))
-				var/mob/living/living = object.loc
-				living.transferItemToLoc(object, src)
-			else
-				object.forceMove(src)
-			SEND_SIGNAL(object, COMSIG_ATOM_USED_IN_CRAFT, src)
-	parts_list.Cut()
+/atom/proc/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	SHOULD_CALL_PARENT(TRUE)
+	SEND_SIGNAL(src, COMSIG_ATOM_ON_CRAFT, components, current_recipe)
+	var/list/remaining_parts = current_recipe?.parts?.Copy()
+	for(var/obj/item/item in components) // any machinery or structure in the list is guaranteed to be used up.
+		item.used_in_craft(src, current_recipe)
+		var/matched_type = find_type_match_in_list(item, remaining_parts)
+		if(!matched_type)
+			continue
+
+		if(isliving(item.loc))
+			var/mob/living/living = item.loc
+			living.transferItemToLoc(item, src)
+		else
+			item.forceMove(src)
+
+		if(matched_type)
+			remaining_parts[matched_type] -= 1
+			if(remaining_parts[matched_type] <= 0)
+				remaining_parts -= matched_type
 
 ///Take air from the passed in gas mixture datum
 /atom/proc/assume_air(datum/gas_mixture/giver)

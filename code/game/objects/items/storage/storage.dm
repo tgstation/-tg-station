@@ -106,3 +106,9 @@
 /// Don't do anything stupid, please
 /obj/item/storage/proc/get_types_to_preload()
 	return
+
+/obj/item/storage/used_in_craft(atom/result, datum/crafting_recipe/current_recipe)
+	. = ..()
+	// If we consumed in crafting, we should dump contents out before qdeling them.
+	if(!is_type_in_list(src, current_recipe.parts))
+		emptyStorage()

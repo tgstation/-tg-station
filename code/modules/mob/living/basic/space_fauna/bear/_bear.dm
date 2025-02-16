@@ -158,7 +158,7 @@
 		user.reagents.add_reagent(/datum/reagent/consumable/nutriment, 1)
 		user.reagents.add_reagent(/datum/reagent/consumable/nutriment/vitamin, 0.1)
 
-/mob/living/basic/bear/butter/CheckParts(list/parts) //Borrowed code from Cak, allows the brain used to actually control the bear.
+/mob/living/basic/bear/butter/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter) //Borrowed code from Cak, allows the brain used to actually control the bear.
 	. = ..()
 	var/obj/item/organ/brain/candidate = locate(/obj/item/organ/brain) in contents
 	if(!candidate || !candidate.brainmob || !candidate.brainmob.mind)

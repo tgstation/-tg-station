@@ -24,7 +24,9 @@
 /obj/structure/headpike/Initialize(mapload)
 	. = ..()
 	if(mapload)
-		CheckParts()
+		spear = new speartype(src)
+		victim = new(src)
+		victim.real_name = generate_random_name()
 	pixel_x = rand(-8, 8)
 
 /obj/structure/headpike/Destroy()
@@ -32,16 +34,11 @@
 	QDEL_NULL(spear)
 	return ..()
 
-/obj/structure/headpike/CheckParts(list/parts_list)
-	victim = locate() in parts_list
-	if(!victim) //likely a mapspawned one
-		victim = new(src)
-		victim.real_name = generate_random_name()
-	spear = locate(speartype) in parts_list
-	if(!spear)
-		spear = new speartype(src)
+/obj/structure/headpike/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	. = ..()
+	victim = locate() in contents
+	spear = locate(speartype) in contents
 	update_appearance()
-	return ..()
 
 /obj/structure/headpike/update_name()
 	name = "[victim.real_name] on a [spear.name]"

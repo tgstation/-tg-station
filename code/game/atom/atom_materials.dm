@@ -64,6 +64,7 @@
 			MATERIAL_LIST_MULTIPLIER = get_material_multiplier(material, materials, index),
 		)
 		index++
+	sortTim(material_effects, GLOBAL_PROC_REF(cmp_mat_composition), associative = TRUE)
 	return material_effects
 
 /**
@@ -84,17 +85,13 @@
 	var/total_alpha = 0
 	var/list/colors = list()
 	var/mat_length = length(materials)
-	var/datum/material/main_material //the material with the highest amount (after calculations)
-	var/main_mat_amount
-	var/main_mat_mult
+	var/datum/material/main_material = materials[1]//the material with the highest amount (after calculations)
+	var/main_mat_amount = materials[main_material][MATERIAL_LIST_OPTIMAL_AMOUNT]
+	var/main_mat_mult = materials[main_material][MATERIAL_LIST_MULTIPLIER]
 	for(var/datum/material/custom_material as anything in materials)
 		var/list/deets = materials[custom_material]
 		var/mat_amount = deets[MATERIAL_LIST_OPTIMAL_AMOUNT]
 		var/multiplier = deets[MATERIAL_LIST_MULTIPLIER]
-		if(mat_amount > main_mat_amount)
-			main_material = custom_material
-			main_mat_amount = mat_amount
-			main_mat_mult = multiplier
 
 		apply_single_mat_effect(custom_material, mat_amount, multiplier)
 		custom_material.on_applied(src, mat_amount, multiplier)

@@ -1,16 +1,6 @@
 /datum/crafting_recipe/food
 	mass_craftable = TRUE
-	crafting_flags = parent_type::crafting_flags | CRAFT_TRANSFERS_REAGENTS | CRAFT_CLEARS_REAGENTS
-
-/datum/crafting_recipe/food/on_craft_completion(mob/user, atom/result)
-	SHOULD_CALL_PARENT(TRUE)
-	. = ..()
-	if(istype(result) && istype(user) && !isnull(user.mind))
-		ADD_TRAIT(result, TRAIT_FOOD_CHEF_MADE, REF(user.mind))
-
-/datum/crafting_recipe/food/New()
-	. = ..()
-	parts |= reqs
+	crafting_flags = parent_type::crafting_flags | CRAFT_TRANSFERS_REAGENTS | CRAFT_CLEARS_REAGENTS | CRAFT_ENFORCE_MATERIALS_PARITY
 
 /datum/crafting_recipe/food/crafting_ui_data()
 	var/list/data = list()

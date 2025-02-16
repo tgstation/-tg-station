@@ -67,11 +67,11 @@
 #define CALTROP_NOSTUN (1 << 3)
 #define CALTROP_NOCRAWL (1 << 4)
 
-//Ingredient type in datum/component/customizable_reagent_holder
+//Ingredient type in datum/component/ingredients_holder
 #define CUSTOM_INGREDIENT_TYPE_EDIBLE 1
 #define CUSTOM_INGREDIENT_TYPE_DRYABLE 2
 
-//Icon overlay type in datum/component/customizable_reagent_holder
+//Icon overlay type in datum/component/ingredients_holder
 #define CUSTOM_INGREDIENT_ICON_NOCHANGE 0
 #define CUSTOM_INGREDIENT_ICON_FILL 1
 #define CUSTOM_INGREDIENT_ICON_SCATTER 2

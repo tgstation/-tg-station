@@ -835,8 +835,8 @@
 		return TRUE
 	return ..()
 
-/obj/machinery/CheckParts(list/parts_list)
-	..()
+/obj/machinery/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	. = ..()
 	RefreshParts()
 
 /obj/machinery/proc/RefreshParts()

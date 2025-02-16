@@ -19,6 +19,7 @@
 		/datum/reagent/water = 5,
 		/obj/item/food/spiderling = 1
 	)
+	requirements_mats_blacklist = list(/obj/item/stack/rods)
 	result = /obj/item/food/spiderlollipop
 	category = CAT_MISCFOOD
 
@@ -93,7 +94,6 @@
 		/obj/item/food/grown/holymelon = 1,
 		/obj/item/reagent_containers/cup/glass/bottle/vodka = 1
 	)
-	parts = list(/obj/item/reagent_containers/cup/glass/bottle/vodka = 1)
 	result = /obj/item/food/melonkeg
 	category = CAT_MISCFOOD
 
@@ -193,6 +193,7 @@
 		/datum/reagent/water = 5,
 		/datum/reagent/ants = 10
 	)
+	requirements_mats_blacklist = list(/obj/item/stack/rods)
 	result = /obj/item/food/ant_candy
 	category = CAT_MISCFOOD
 

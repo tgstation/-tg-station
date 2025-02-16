@@ -10,9 +10,6 @@
 		/obj/item/food/bun = 1,
 		/obj/item/food/patty/human = 1
 	)
-	parts = list(
-		/obj/item/food/patty = 1
-	)
 	result = /obj/item/food/burger/human
 	category = CAT_BURGER
 
@@ -297,7 +294,7 @@
 			/obj/item/stack/sheet/mineral/plasma = 2,
 			/obj/item/food/bun = 1
 	)
-
+	requirements_mats_blacklist = list(/obj/item/stack/sheet/mineral/plasma)
 	result = /obj/item/food/burger/empoweredburger
 	category = CAT_BURGER
 

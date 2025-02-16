@@ -38,6 +38,8 @@
 		make_edible(source, mat_amount, multiplier)
 
 /datum/material/meat/proc/make_edible(atom/source, mat_amount, multiplier)
+	if(source.material_flags & MATERIAL_NO_EDIBILITY)
+		return
 	var/nutriment_count = 3 * (mat_amount / SHEET_MATERIAL_AMOUNT)
 	var/oil_count = 2 * (mat_amount / SHEET_MATERIAL_AMOUNT)
 	source.AddComponent(/datum/component/edible, \
@@ -71,7 +73,8 @@
 
 /datum/material/meat/on_main_removed(atom/source, mat_amount, multiplier)
 	. = ..()
-	qdel(source.GetComponent(/datum/component/edible))
+	if(!(source.material_flags & MATERIAL_NO_EDIBILITY))
+		qdel(source.GetComponent(/datum/component/edible))
 	REMOVE_TRAIT(source, TRAIT_ROD_REMOVE_FISHING_DUD, REF(src))
 
 /datum/material/meat/mob_meat

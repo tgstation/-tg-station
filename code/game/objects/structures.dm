@@ -79,3 +79,9 @@
 	flying_mob.apply_damage(damage = rand(5, 15), damagetype = BRUTE, wound_bonus = 15, bare_wound_bonus = 25, sharpness = SHARP_EDGED, attack_direction = get_dir(src, oldloc))
 	new /obj/effect/decal/cleanable/glass(get_step(flying_mob, flying_mob.dir))
 	deconstruct(disassembled = FALSE)
+
+/obj/structure/used_in_craft(atom/result, datum/crafting_recipe/current_recipe)
+	. = ..()
+	// If we consumed in crafting, we should dump contents out before qdeling them.
+	if(!is_type_in_list(src, current_recipe.parts))
+		dump_contents()

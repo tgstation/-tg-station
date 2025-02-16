@@ -297,14 +297,6 @@
 	foodtypes = FRUIT | ALCOHOL
 	crafting_complexity = FOOD_COMPLEXITY_2
 
-/obj/item/food/melonkeg/CheckParts(list/parts_list)
-	. = ..()
-	var/obj/item/reagent_containers/cup/glass/bottle/bottle = locate() in contents
-	if(!bottle)
-		return
-	if(bottle.message_in_a_bottle)
-		bottle.message_in_a_bottle.forceMove(drop_location())
-
 /obj/item/food/honeybar
 	name = "honey nut bar"
 	desc = "Oats and nuts compressed together into a bar, held together with a honey glaze."
@@ -528,7 +520,7 @@
 
 /obj/item/food/seaweedsheet/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/sushi/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
+	AddComponent(/datum/component/ingredients_holder, /obj/item/food/sushi/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 6)
 
 /obj/item/food/seaweedsheet/saltcane
 	name = "dried saltcane sheathe"
@@ -573,7 +565,7 @@
 
 /obj/item/food/onigiri/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/onigiri/empty, CUSTOM_INGREDIENT_ICON_NOCHANGE, max_ingredients = 4)
+	AddComponent(/datum/component/ingredients_holder, /obj/item/food/onigiri/empty, CUSTOM_INGREDIENT_ICON_NOCHANGE, max_ingredients = 4)
 
 // empty onigiri for custom onigiri
 /obj/item/food/onigiri/empty

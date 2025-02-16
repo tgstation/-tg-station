@@ -104,8 +104,11 @@
 	var/list/prediff = get_overfloor_objects()
 	var/result = craftsman.construct_item(src, recipe)
 	if(istext(result))
-		say("Crafting failed,[result]")
+		say("Crafting failed[result]")
 		return
+	if(isstack(result)) //it doesn't have hands to pick up stacks so let's try to merge them instead
+		var/obj/item/stack/stack = result
+		stack.merge_with_stacks_on_same_loc()
 	var/list/diff = get_overfloor_objects() - prediff
 	for(var/atom/movable/diff_result as anything in diff)
 		if(iseffect(diff_result) || ismob(diff_result)) // PLEASE dont stuff cats (or other mobs) into the cat grinder 9000
@@ -114,7 +117,6 @@
 			diff_result.pixel_x += rand(-4, 4)
 			diff_result.pixel_y += rand(-4, 4)
 		withheld += WEAKREF(diff_result)
-		recipe.on_craft_completion(src, diff_result)
 	send_withheld()
 
 /obj/machinery/power/manufacturing/crafter/cooker

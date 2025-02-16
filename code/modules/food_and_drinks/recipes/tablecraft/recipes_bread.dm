@@ -148,6 +148,7 @@
 		/obj/item/food/croissant = 1,
 		/obj/item/stack/rods = 1,
 	)
+	requirements_mats_blacklist = list(/obj/item/stack/rods)
 	result = /obj/item/food/croissant/throwing
 	category = CAT_BREAD
 	crafting_flags = CRAFT_CHECK_DENSITY | CRAFT_MUST_BE_LEARNED

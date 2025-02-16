@@ -39,15 +39,14 @@
 /obj/vehicle/ridden/wheelchair/motorized/make_ridable()
 	AddElement(/datum/element/ridable, /datum/component/riding/vehicle/wheelchair/motorized)
 
-/obj/vehicle/ridden/wheelchair/motorized/CheckParts(list/parts_list)
+/obj/vehicle/ridden/wheelchair/motorized/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	// This wheelchair was crafted, so clean out default parts
 	qdel(power_cell)
 	component_parts = list()
 
-	for(var/obj/item/stock_parts/part in parts_list)
+	for(var/obj/item/stock_parts/part in contents)
 		if(istype(part, /obj/item/stock_parts/power_store/cell)) // power cell, physically moves into the wheelchair
 			power_cell = part
-			part.forceMove(src)
 			continue
 
 		// find matching datum/stock_part for this part and add to component list
@@ -55,10 +54,9 @@
 		if(isnull(newstockpart))
 			CRASH("No corresponding datum/stock_part for [part.type]")
 		component_parts += newstockpart
-		// delete this part
-		part.moveToNullspace()
-		qdel(part)
 	refresh_parts()
+
+	return ..()
 
 /obj/vehicle/ridden/wheelchair/motorized/proc/refresh_parts()
 	speed = 1 // Should never be under 1

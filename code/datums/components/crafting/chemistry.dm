@@ -18,7 +18,6 @@
 		/obj/item/reagent_containers/cup/rag = 1,
 		/obj/item/reagent_containers/cup/glass/bottle = 1,
 	)
-	parts = list(/obj/item/reagent_containers/cup/glass/bottle = 1)
 	time = 4 SECONDS
 	category = CAT_CHEMISTRY
 
@@ -30,7 +29,6 @@
 		/obj/item/grenade/c4 = 1,
 		/obj/item/grenade/chem_grenade = 2
 	)
-	parts = list(/obj/item/stock_parts/matter_bin = 1, /obj/item/grenade/chem_grenade = 2)
 	time = 3 SECONDS
 	category = CAT_CHEMISTRY
 
@@ -42,7 +40,6 @@
 		/obj/item/gibtonite = 1,
 		/obj/item/grenade/chem_grenade = 2,
 	)
-	parts = list(/obj/item/stock_parts/matter_bin = 1, /obj/item/grenade/chem_grenade = 2)
 	time = 5 SECONDS
 	category = CAT_CHEMISTRY
 
@@ -148,17 +145,6 @@
 	)
 	machinery = list(/obj/machinery/space_heater = CRAFTING_MACHINERY_CONSUME)
 	category = CAT_CHEMISTRY
-
-/datum/crafting_recipe/improvised_chem_heater/on_craft_completion(mob/user, atom/result)
-	if(!istype(user))
-		return
-	var/obj/item/stock_parts/power_store/cell/cell = locate(/obj/item/stock_parts/power_store/cell) in range(1)
-	if(!cell)
-		return
-	var/obj/machinery/space_heater/improvised_chem_heater/heater = result
-	var/turf/turf = get_turf(cell)
-	heater.forceMove(turf)
-	heater.attackby(cell, user) //puts it into the heater
 
 /datum/crafting_recipe/improvised_coolant
 	name = "Improvised cooling spray"

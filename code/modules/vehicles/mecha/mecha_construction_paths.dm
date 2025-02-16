@@ -31,7 +31,9 @@
 	// Remove default mech power cell, as we replace it with a new one.
 	var/obj/vehicle/sealed/mecha/mech = new result(drop_location(), /* built_manually = */ TRUE)
 	var/obj/item/mecha_parts/chassis/parent_chassis = parent
-	mech.CheckParts(parent_chassis.contents)
+	for(var/atom/movable/content in parent_chassis.contents)
+		content.forceMove(mech)
+	mech.locate_parts()
 	SSblackbox.record_feedback("tally", "mechas_created", 1, mech.name)
 	ADD_TRAIT(mech, TRAIT_MECHA_CREATED_NORMALLY, mech)
 	QDEL_NULL(parent)

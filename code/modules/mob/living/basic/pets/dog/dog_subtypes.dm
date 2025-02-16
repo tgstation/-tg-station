@@ -99,7 +99,7 @@
 	held_state = "breaddog"
 	worn_slot_flags = ITEM_SLOT_HEAD
 
-/mob/living/basic/pet/dog/breaddog/CheckParts(list/parts)
+/mob/living/basic/pet/dog/breaddog/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	. = ..()
 	var/obj/item/organ/brain/candidate = locate(/obj/item/organ/brain) in contents
 	if(!candidate || !candidate.brainmob || !candidate.brainmob.mind)

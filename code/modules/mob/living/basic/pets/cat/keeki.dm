@@ -38,7 +38,7 @@
 /mob/living/basic/pet/cat/cak/add_cell_sample()
 	return
 
-/mob/living/basic/pet/cat/cak/CheckParts(list/parts)
+/mob/living/basic/pet/cat/cak/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
 	. = ..()
 	var/obj/item/organ/brain/candidate = locate(/obj/item/organ/brain) in contents
 	if(isnull(candidate?.brainmob?.mind))

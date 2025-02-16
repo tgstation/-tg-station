@@ -1,5 +1,6 @@
 /obj/item/food/meat
 	custom_materials = list(/datum/material/meat = SHEET_MATERIAL_AMOUNT * 4)
+	material_flags = parent_type::material_flags & ~(MATERIAL_ADD_PREFIX|MATERIAL_COLOR) //avoid extra redness, redundancy and texture
 	w_class = WEIGHT_CLASS_SMALL
 	icon = 'icons/obj/food/meat.dmi'
 	var/subjectname = ""

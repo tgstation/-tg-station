@@ -72,8 +72,6 @@
 		/obj/item/stock_parts/power_store/cell = 1,
 	)
 	parts = list(
-		/obj/item/stock_parts/servo = 2,
-		/obj/item/stock_parts/capacitor = 1,
 		/obj/item/stock_parts/power_store/cell = 1,
 	)
 	tool_behaviors = list(TOOL_WELDER, TOOL_SCREWDRIVER, TOOL_WRENCH)
@@ -86,9 +84,6 @@
 	reqs = list(
 		/obj/item/stack/sheet/iron = 5,
 		/obj/item/assembly/igniter/condenser = 1,
-		/obj/item/electronics/airlock = 1,
-	)
-	parts = list(
 		/obj/item/electronics/airlock = 1,
 	)
 	time = 5 SECONDS
@@ -110,9 +105,6 @@
 	result = /obj/structure/closet/secure_closet
 	reqs = list(
 		/obj/item/stack/sheet/iron = 5,
-		/obj/item/electronics/airlock = 1,
-	)
-	parts = list(
 		/obj/item/electronics/airlock = 1,
 	)
 	time = 5 SECONDS

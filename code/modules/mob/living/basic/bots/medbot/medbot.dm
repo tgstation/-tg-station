@@ -162,6 +162,15 @@
 	if(!CONFIG_GET(flag/no_default_techweb_link) && !linked_techweb)
 		CONNECT_TO_RND_SERVER_ROUNDSTART(linked_techweb, src)
 
+/mob/living/basic/bot/medbot/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	. = ..()
+	var/obj/item/storage/medkit/medkit = locate() in contents
+	medkit_type = medkit
+	health_analyzer = locate(/obj/item/healthanalyzer) in contents
+	skin = medkit.get_medbot_skin()
+	damage_type_healer = initial(medkit.damagetype_healed) ? initial(medkit.damagetype_healed) : BRUTE
+	update_appearance()
+
 /mob/living/basic/bot/medbot/update_icon_state()
 	. = ..()
 

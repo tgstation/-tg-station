@@ -30,6 +30,16 @@ Buildable meters
 	///Initial direction of the created pipe (either made from the RPD or after unwrenching the pipe)
 	var/p_init_dir = SOUTH
 
+/obj/item/pipe/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	. = ..()
+	if(!istype(current_recipe, /datum/crafting_recipe/spec_pipe))
+		return
+	var/datum/crafting_recipe/spec_pipe/pipe_recipe = current_recipe
+	pipe_type = pipe_recipe.pipe_type
+	pipe_color = COLOR_VERY_LIGHT_GRAY
+	setDir(crafter.dir)
+	update()
+
 /obj/item/pipe/directional
 	RPD_type = PIPE_UNARY
 /obj/item/pipe/directional/he_junction

@@ -231,3 +231,7 @@
 /// Orders cameras by their `c_tag` ascending
 /proc/cmp_camera_ctag_asc(obj/machinery/camera/a, obj/machinery/camera/b)
 	return sorttext(b.c_tag, a.c_tag)
+
+/// Orders incoming custom materials by their composition in get_material_effects_list)
+/proc/cmp_mat_composition(list/a, list/b)
+	return cmp_numeric_dsc(a[MATERIAL_LIST_OPTIMAL_AMOUNT], b[MATERIAL_LIST_OPTIMAL_AMOUNT])

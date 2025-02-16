@@ -58,12 +58,9 @@
 			update_icon(UPDATE_OVERLAYS)
 	return ..()
 
-/obj/item/reagent_containers/cup/glass/bottle/CheckParts(list/parts_list)
+/obj/item/reagent_containers/cup/glass/bottle/used_in_craft(atom/result, datum/crafting_recipe/current_recipe)
 	. = ..()
-	var/obj/item/reagent_containers/cup/glass/bottle/bottle = locate() in contents
-	if(bottle.message_in_a_bottle)
-		message_in_a_bottle = bottle.message_in_a_bottle
-		bottle.message_in_a_bottle.forceMove(src)
+	message_in_a_bottle?.forceMove(drop_location())
 
 /obj/item/reagent_containers/cup/glass/bottle/examine(mob/user)
 	. = ..()
@@ -916,16 +913,16 @@
 		/datum/reagent/toxin/spore_burning,
 	)
 
-/obj/item/reagent_containers/cup/glass/bottle/molotov/CheckParts(list/parts_list)
-	. = ..()
-	var/obj/item/reagent_containers/cup/glass/bottle/bottle = locate() in contents
+/obj/item/reagent_containers/cup/glass/bottle/molotov/on_craft_completion(list/components, datum/crafting_recipe/current_recipe, atom/crafter)
+	var/obj/item/reagent_containers/cup/glass/bottle/bottle = locate() in components
 	if(!bottle)
-		return
+		return ..()
 	icon_state = bottle.icon_state
 	bottle.reagents.copy_to(src, 100)
 	if(istype(bottle, /obj/item/reagent_containers/cup/glass/bottle/juice))
 		desc += " You're not sure if making this out of a carton was the brightest idea."
 		isGlass = FALSE
+	return ..()
 
 /obj/item/reagent_containers/cup/glass/bottle/molotov/throw_impact(atom/hit_atom, datum/thrownthing/throwingdatum, do_splash = FALSE)
 	..(hit_atom, throwingdatum, do_splash = FALSE)

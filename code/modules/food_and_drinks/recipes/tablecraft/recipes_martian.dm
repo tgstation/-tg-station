@@ -755,6 +755,7 @@
 		/datum/reagent/consumable/orangejuice = 2,
 		/datum/reagent/consumable/grenadine = 2,
 	)
+	requirements_mats_blacklist = list(/obj/item/stack/rods)
 	result = /obj/item/food/kebab/kasei_dango
 	category = CAT_MARTIAN
 
@@ -860,6 +861,7 @@
 		/datum/reagent/consumable/nutriment/soup/teriyaki = 2,
 		/obj/item/stack/rods = 1,
 	)
+	requirements_mats_blacklist = list(/obj/item/stack/rods)
 	result = /obj/item/food/kebab/raw_ballpark_tsukune
 	category = CAT_MARTIAN
 

@@ -508,7 +508,7 @@
 
 /obj/item/food/bread/root/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, /obj/item/food/bread/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 8)
+	AddComponent(/datum/component/ingredients_holder, /obj/item/food/bread/empty, CUSTOM_INGREDIENT_ICON_FILL, max_ingredients = 8)
 
 /obj/item/food/breadslice/root
 	name = "rootbread slice"
@@ -522,7 +522,7 @@
 
 /obj/item/food/breadslice/root/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_STACK)
 
 //Pizza Dishes
 /obj/item/food/pizza/flatbread

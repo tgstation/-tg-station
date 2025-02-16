@@ -60,6 +60,8 @@
 #define MATERIAL_GREYSCALE (1<<4)
 /// Materials like plasteel and alien alloy won't apply slowdowns.
 #define MATERIAL_NO_SLOWDOWN (1<<5)
+/// This item is not affected by food-related effects of materials like meat and pizza
+#define MATERIAL_NO_EDIBILITY (1<<6)
 
 //Special return values of [/datum/component/material_container/insert_item]
 /// No material was found inside them item

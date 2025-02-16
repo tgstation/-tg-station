@@ -37,6 +37,8 @@
 		make_edible(source, mat_amount)
 
 /datum/material/pizza/proc/make_edible(atom/source, mat_amount)
+	if(source.material_flags & MATERIAL_NO_EDIBILITY)
+		return
 	var/nutriment_count = 3 * (mat_amount / SHEET_MATERIAL_AMOUNT)
 	var/oil_count = 2 * (mat_amount / SHEET_MATERIAL_AMOUNT)
 	source.AddComponent(/datum/component/edible, \
@@ -47,5 +49,6 @@
 
 /datum/material/pizza/on_main_removed(atom/source, mat_amount, multiplier)
 	. = ..()
-	qdel(source.GetComponent(/datum/component/edible))
+	if(!(source.material_flags & MATERIAL_NO_EDIBILITY))
+		qdel(source.GetComponent(/datum/component/edible))
 	REMOVE_TRAIT(source, TRAIT_ROD_REMOVE_FISHING_DUD, REF(src))

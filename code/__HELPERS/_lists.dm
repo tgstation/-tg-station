@@ -275,6 +275,15 @@
 			return !zebra || list_to_check[type] // Subtypes must come first in zebra lists.
 	return FALSE
 
+///Works like is_type_in_list(), but instead of returning TRUE/FALSE (or the assoc value), it returns the matched typepath.
+/proc/find_type_match_in_list(datum/type_to_check, list/list_to_check)
+	if(!LAZYLEN(list_to_check) || !type_to_check)
+		return FALSE
+	for(var/type in list_to_check)
+		if(istype(type_to_check, type))
+			return type
+	return null
+
 /**
  * Checks for specific paths in a list.
  *

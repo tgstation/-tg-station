@@ -43,7 +43,7 @@
 
 /obj/item/food/spaghetti/boiledspaghetti/Initialize(mapload)
 	. = ..()
-	AddComponent(/datum/component/customizable_reagent_holder, null, CUSTOM_INGREDIENT_ICON_SCATTER, max_ingredients = 6)
+	AddComponent(/datum/component/ingredients_holder, null, CUSTOM_INGREDIENT_ICON_SCATTER, max_ingredients = 6)
 
 /obj/item/food/spaghetti/pastatomato
 	name = "spaghetti"

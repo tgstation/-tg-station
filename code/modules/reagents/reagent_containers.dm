@@ -296,3 +296,9 @@
 	. = ..()
 	if(!initial && (slot & ITEM_SLOT_HANDS) && reagent_container_liquid_sound && reagents.total_volume > 0)
 		playsound(src, reagent_container_liquid_sound, LIQUID_SLOSHING_SOUND_VOLUME, vary = TRUE, ignore_walls = FALSE)
+
+/obj/item/reagent_containers/used_in_craft(atom/result, datum/crafting_recipe/current_recipe)
+	. = ..()
+	// If consumed in crafting, we should dump contents out before qdeling them.
+	if(!is_type_in_list(src, current_recipe.parts))
+		reagents.expose(loc, TOUCH)

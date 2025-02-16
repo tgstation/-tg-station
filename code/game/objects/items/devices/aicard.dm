@@ -160,3 +160,13 @@
 			AI.updatehealth()
 			sleep(0.5 SECONDS)
 		flush = FALSE
+
+/obj/item/aicard/used_in_craft(atom/result, datum/crafting_recipe/current_recipe)
+	. = ..()
+	if(!AI || !istype(result, /obj/item/aicard))
+		return
+	var/obj/item/aicard/new_card = result
+	AI.forceMove(new_card)
+	new_card.AI = AI
+	new_card.update_appearance()
+	AI = null

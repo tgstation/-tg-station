@@ -136,6 +136,7 @@
 #include "confusion.dm"
 #include "connect_loc.dm"
 #include "container_sanity.dm"
+#include "crafting.dm"
 #include "crayons.dm"
 #include "create_and_destroy.dm"
 #include "damp_rag.dm"

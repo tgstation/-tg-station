@@ -319,8 +319,7 @@
 	servo = new /obj/item/stock_parts/servo(src)
 	update_part_values()
 
-/obj/vehicle/sealed/mecha/CheckParts(list/parts_list)
-	. = ..()
+/obj/vehicle/sealed/mecha/proc/locate_parts()
 	cell = locate(/obj/item/stock_parts/power_store) in contents
 	diag_hud_set_mechcell()
 	scanmod = locate(/obj/item/stock_parts/scanning_module) in contents

@@ -90,14 +90,8 @@
 	if(LAZYLEN(mats_per_unit))
 		initialize_materials(mats_per_unit, materials_mult)
 
-	if(merge)
-		for(var/obj/item/stack/item_stack in loc)
-			if(item_stack == src)
-				continue
-			if(can_merge(item_stack))
-				INVOKE_ASYNC(src, PROC_REF(merge_without_del), item_stack)
-				if(is_zero_amount(delete_if_zero = FALSE))
-					return INITIALIZE_HINT_QDEL
+	if(merge && merge_with_stacks_on_same_loc())
+		return INITIALIZE_HINT_QDEL
 
 	recipes = get_main_recipes().Copy()
 	if(material_type)
@@ -118,6 +112,18 @@
 
 	if(is_path_in_list(merge_type, GLOB.golem_stack_food_directory))
 		AddComponent(/datum/component/golem_food, golem_food_key = merge_type)
+
+///the stack will loop through every stack in the loc and try to merge with them, and delete itself when the amount reaches zero.
+/obj/item/stack/proc/merge_with_stacks_on_same_loc()
+	for(var/obj/item/stack/item_stack in loc)
+		if(item_stack == src)
+			continue
+		if(!can_merge(item_stack))
+			continue
+		INVOKE_ASYNC(src, PROC_REF(merge_without_del), item_stack)
+		if(is_zero_amount(delete_if_zero = FALSE))
+			return TRUE
+	return FALSE
 
 ///Called to lazily update the materials of the item whenever the used or if more is added
 /obj/item/stack/proc/update_custom_materials()
