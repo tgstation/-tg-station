@@ -55,7 +55,6 @@
 	transfer_reactions(target_holder)
 
 	var/list/cached_reagents = reagent_list
-	var/list/reagents_to_remove = list()
 	var/transfer_amount
 	var/transfered_amount
 	var/total_transfered_amount = 0
@@ -93,23 +92,18 @@
 		transfered_amount = target_holder.add_reagent(reagent.type, transfer_amount, copy_data(reagent), chem_temp, reagent.purity, reagent.ph, no_react = TRUE, ignore_splitting = reagent.chemical_flags & REAGENT_DONOTSPLIT) //we only handle reaction after every reagent has been transferred.
 		if(!transfered_amount)
 			continue
-		reagents_to_remove += list(list("R" = reagent, "T" = transfer_amount))
 		total_transfered_amount += transfered_amount
 		if(round_robin)
 			to_transfer -= transfered_amount
+		reagent.volume -= transfered_amount
 
 		if(!isnull(target_id))
 			break
-
-	//remove chemicals that were added above
-	for(var/list/data as anything in reagents_to_remove)
-		var/datum/reagent/reagent = data["R"]
-		transfer_amount = data["T"]
-		remove_reagent(reagent.type, transfer_amount)
+	update_total()
 
 	//handle reactions
 	target_holder.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 
 	return total_transfered_amount
 
@@ -199,7 +193,6 @@
 	//Set up new reagents to inherit the old ongoing reactions
 	transfer_reactions(target_holder)
 
-	var/list/reagents_to_remove = list()
 	var/working_volume
 	var/catalyst_volume
 	var/transfer_amount
@@ -247,22 +240,17 @@
 		transfered_amount = target_holder.add_reagent(reagent.type, transfer_amount, copy_data(reagent), chem_temp, reagent.purity, reagent.ph, no_react = TRUE, ignore_splitting = reagent.chemical_flags & REAGENT_DONOTSPLIT) //we only handle reaction after every reagent has been transferred.
 		if(!transfered_amount)
 			continue
-		reagents_to_remove += list(list("R" = reagent, "T" = transfer_amount))
 		total_transfered_amount += transfered_amount
 		if(round_robin)
 			to_transfer -= transfered_amount
+		reagent.volume -= transfered_amount
 
 		if(!isnull(target_id))
 			break
-
-	//remove chemicals that were added above
-	for(var/list/data as anything in reagents_to_remove)
-		var/datum/reagent/reagent = data["R"]
-		transfer_amount = data["T"]
-		remove_reagent(reagent.type, transfer_amount)
+	update_total()
 
 	//handle reactions
 	target_holder.handle_reactions()
-	src.handle_reactions()
+	handle_reactions()
 
 	return total_transfered_amount

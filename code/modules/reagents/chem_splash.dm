@@ -43,11 +43,11 @@
 		tmp_holder = FALSE
 		original_max_volume = holder.maximum_volume
 		if(threatscale < 1)
-			holder.multiply_reagents(threatscale)
+			holder.multiply(threatscale)
 			holder.maximum_volume = maximum_reagents * threatscale
 		else
 			holder.maximum_volume = maximum_reagents * threatscale
-			holder.multiply_reagents(threatscale)
+			holder.multiply(threatscale)
 
 	for(var/datum/reagents/reactant as anything in reactants)
 		reactant.trans_to(holder, reactant.total_volume, threatscale, no_react = TRUE)

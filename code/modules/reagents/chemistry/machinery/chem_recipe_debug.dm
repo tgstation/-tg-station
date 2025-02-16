@@ -172,7 +172,7 @@
 
 	var/target_temperature = decode_target_temperature()
 	if(!isnull(target_temperature))
-		target_reagents.adjust_thermal_energy((target_temperature - target_reagents.chem_temp) * 0.45 * seconds_per_tick * target_reagents.heat_capacity())
+		target_reagents.adjust_thermal_energy((target_temperature - target_reagents.chem_temp) * 0.4 * seconds_per_tick * target_reagents.heat_capacity())
 
 	if(use_forced_purity)
 		target_reagents.set_all_reagents_purity(forced_purity)
