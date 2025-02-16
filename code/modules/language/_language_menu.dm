@@ -33,6 +33,8 @@
 		lang_data["desc"] = initial(language.desc)
 		lang_data["key"] = initial(language.key)
 		lang_data["is_default"] = (language == language_holder.selected_language)
+		lang_data["icon"] = initial(language.icon)
+		lang_data["icon_state"] = initial(language.icon_state)
 		if(speaker)
 			lang_data["can_speak"] = speaker.can_speak_language(language)
 			lang_data["can_understand"] = speaker.has_language(language)
@@ -51,6 +53,8 @@
 			lang_data["name"] = initial(language.name)
 			lang_data["desc"] = initial(language.desc)
 			lang_data["key"] = initial(language.key)
+			lang_data["icon"] = initial(language.icon)
+			lang_data["icon_state"] = initial(language.icon_state)
 
 			UNTYPED_LIST_ADD(data["unknown_languages"], lang_data)
 
