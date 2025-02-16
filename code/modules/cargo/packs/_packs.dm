@@ -37,10 +37,12 @@
 	var/special_pod
 	/// Was this spawned through an admin proc?
 	var/admin_spawned = FALSE
-	/// Goodies can only be purchased by private accounts and can have coupons apply to them. They also come in a lockbox instead of a full crate, so the 700 min doesn't apply
+	/// Goodies can only be purchased by private accounts and can have coupons apply to them. They also come in a lockbox instead of a full crate, so the crate price min doesn't apply
 	var/goody = FALSE
 	/// Can coupons target this pack? If so, how rarely?
 	var/discountable = SUPPLY_PACK_NOT_DISCOUNTABLE
+	/// Is this supply pack considered maleable, ie. are the costs extremely variable for the purposes of testing? Examples include the stock market, or miner supply crates.
+	var/abstract = FALSE
 
 /datum/supply_pack/New()
 	id = type
@@ -121,6 +123,7 @@
 	hidden = TRUE
 	crate_name = "shaft mining delivery crate"
 	access = ACCESS_MINING
+	abstract = TRUE
 
 /datum/supply_pack/custom/New(purchaser, cost, list/contains)
 	. = ..()

@@ -76,6 +76,7 @@
 	hidden = TRUE
 	crate_name = "bitrunning delivery crate"
 	access = list(ACCESS_BIT_DEN)
+	abstract = TRUE
 
 /datum/supply_pack/bitrunning/New(purchaser, cost, list/contains)
 	. = ..()
