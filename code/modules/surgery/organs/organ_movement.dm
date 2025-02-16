@@ -287,3 +287,7 @@
 /obj/item/organ/proc/on_surgical_insertion(mob/living/user, mob/living/carbon/new_owner, target_zone, obj/item/tool)
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_ORGAN_SURGICALLY_INSERTED, user, new_owner, target_zone, tool)
+
+/// Proc that gets called when someone starts surgically inserting the organ
+/obj/item/organ/proc/pre_surgical_insertion(mob/living/user, mob/living/carbon/new_owner, target_zone)
+	return TRUE

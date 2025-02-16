@@ -32,7 +32,6 @@
 		var/atom/new_item = new typepath(src)
 		items_list += WEAKREF(new_item)
 
-	update_appearance()
 	SetSlotFromZone()
 
 /obj/item/organ/cyberimp/arm/Destroy()
@@ -57,28 +56,19 @@
 			slot = right_arm_organ_slot
 		else
 			CRASH("Invalid zone for [type]")
-
-/obj/item/organ/cyberimp/arm/update_icon()
-	. = ..()
-	transform = (zone == BODY_ZONE_R_ARM) ? null : matrix(-1, 0, 0, 0, 1, 0)
-
-/obj/item/organ/cyberimp/arm/examine(mob/user)
-	. = ..()
-	if(IS_ROBOTIC_ORGAN(src))
-		. += span_info("[src] is assembled in the [zone == BODY_ZONE_R_ARM ? "right" : "left"] arm configuration. You can use a screwdriver to reassemble it.")
-
-/obj/item/organ/cyberimp/arm/screwdriver_act(mob/living/user, obj/item/screwtool)
-	. = ..()
-	if(.)
-		return TRUE
-	screwtool.play_tool_sound(src)
-	if(zone == BODY_ZONE_R_ARM)
-		zone = BODY_ZONE_L_ARM
-	else
-		zone = BODY_ZONE_R_ARM
-	SetSlotFromZone()
-	to_chat(user, span_notice("You modify [src] to be installed on the [zone == BODY_ZONE_R_ARM ? "right" : "left"] arm."))
 	update_appearance()
+
+/obj/item/organ/cyberimp/arm/pre_surgical_insertion(mob/living/user, mob/living/carbon/new_owner, target_zone)
+	// Ensure that in case we're somehow placed elsewhere (HARS-esque bs) we don't break our zone
+	if (target_zone != BODY_ZONE_R_ARM && target_zone != BODY_ZONE_L_ARM)
+		return FALSE
+
+	zone = target_zone
+	SetSlotFromZone()
+	return ..()
+
+/obj/item/organ/cyberimp/arm/zones_tip()
+	return span_notice("It should be inserted in the [parse_zone(right_arm_organ_slot)] or [parse_zone(left_arm_organ_slot)].")
 
 /obj/item/organ/cyberimp/arm/on_mob_insert(mob/living/carbon/arm_owner)
 	. = ..()
