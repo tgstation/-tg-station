@@ -405,9 +405,14 @@
 		/obj/item/knife/combat/cyborg,
 	)
 
+#define DOAFTER_SOURCE_STRONGARM_INTERACTION "strongarm interaction"
+
+// Strong-Arm Implant //
+
 /obj/item/organ/cyberimp/arm/strongarm
 	name = "\proper Strong-Arm empowered musculature implant"
-	desc = "When implanted, this cybernetic implant will enhance the muscles of the arm to deliver more power-per-action."
+	desc = "When implanted, this cybernetic implant will enhance the muscles of the arm to deliver more power-per-action. Install one in each arm \
+		to pry open doors with your bare hands!"
 	icon_state = "muscle_implant"
 
 	zone = BODY_ZONE_R_ARM
@@ -440,6 +445,10 @@
 
 /obj/item/organ/cyberimp/arm/strongarm/l
 	zone = BODY_ZONE_L_ARM
+
+/obj/item/organ/cyberimp/arm/strongarm/Initialize(mapload)
+	. = ..()
+	AddElement(/datum/element/organ_set_bonus, /datum/status_effect/organ_set_bonus/strongarm)
 
 /obj/item/organ/cyberimp/arm/strongarm/on_mob_insert(mob/living/carbon/arm_owner)
 	. = ..()
@@ -534,3 +543,21 @@
 	COOLDOWN_START(src, slam_cooldown, slam_cooldown_duration)
 
 	return COMPONENT_CANCEL_ATTACK_CHAIN
+
+/datum/status_effect/organ_set_bonus/strongarm
+	id = "organ_set_bonus_strongarm"
+	organs_needed = 2
+	bonus_activate_text = span_notice("Your improved arms allow you to open airlocks by force with your bare hands!")
+	bonus_deactivate_text = span_notice("You can no longer force open airlocks with your bare hands.")
+
+/datum/status_effect/organ_set_bonus/strongarm/enable_bonus()
+	. = ..()
+	if(!.)
+		return
+	owner.AddElement(/datum/element/door_pryer, pry_time = 6 SECONDS, interaction_key = DOAFTER_SOURCE_STRONGARM_INTERACTION)
+
+/datum/status_effect/organ_set_bonus/strongarm/disable_bonus()
+	. = ..()
+	owner.RemoveElement(/datum/element/door_pryer)
+
+#undef DOAFTER_SOURCE_STRONGARM_INTERACTION
