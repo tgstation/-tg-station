@@ -83,7 +83,7 @@
 
 /obj/item/circuit_component/compare/access/ui_data(mob/user)
 	var/list/data = list()
-	data["accesses"] = required_accesses.value
+	data["accesses"] = required_accesses.value || list()
 	data["oneAccess"] = check_any.value
 	return data
 
