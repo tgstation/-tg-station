@@ -28,3 +28,12 @@
 /obj/item/clothing/shoes/sandal/beach
 	name = "flip-flops"
 	desc = "A very fashionable pair of flip-flops."
+
+/obj/item/clothing/shoes/sandal/laced
+	name = "laced sandals"
+	desc = "A pair of wooden sandals that have been 'upgraded' with shoelaces in order to comply with corporate uniform policy."
+	can_be_tied = TRUE
+
+/obj/item/clothing/shoes/sandal/alt/laced
+	desc = "A pair of shiny black sandals that have been 'upgraded' with shoelaces in order to comply with corporate uniform policy."
+	can_be_tied = TRUE

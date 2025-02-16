@@ -8,6 +8,17 @@
 	. = ..()
 	ADD_TRAIT(src, TRAIT_CONTRABAND, INNATE_TRAIT)
 
+/// Creates a random poster designed for a certain audience
+/obj/item/poster/random_contraband/pinup
+	name = "random pinup poster"
+	icon_state = "rolled_poster"
+	/// List of posters which make you feel a certain type of way
+	var/static/list/pinup_posters = list(/obj/structure/sign/poster/contraband/lizard, /obj/structure/sign/poster/contraband/lusty_xenomorph)
+
+/obj/item/poster/random_contraband/pinup/Initialize(mapload, obj/structure/sign/poster/new_poster_structure)
+	poster_type = pick(pinup_posters)
+	return ..()
+
 /obj/structure/sign/poster/contraband
 	poster_item_name = "contraband poster"
 	poster_item_desc = "This poster comes with its own automatic adhesive mechanism, for easy pinning to any vertical surface. Its vulgar themes have marked it as contraband aboard Nanotrasen space facilities."

@@ -91,12 +91,6 @@
 	. = ..()
 	. += emissive_appearance('icons/obj/clothing/shoes.dmi', "glow_shoes_emissive", offset_spokesman = src, alpha = src.alpha)
 
-/obj/item/clothing/shoes/jackbros
-	name = "frosty boots"
-	desc = "For when you're stepping on up to the plate."
-	icon_state = "JackFrostShoes"
-	inhand_icon_state = null
-
 /obj/item/clothing/shoes/saints
 	name = "saints sneakers"
 	desc = "Officially branded Saints sneakers. Incredibly valuable!"

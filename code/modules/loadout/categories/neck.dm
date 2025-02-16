@@ -34,3 +34,7 @@
 /datum/loadout_item/neck/necktie_loose
 	name = "Necktie (Loose)"
 	item_path = /obj/item/clothing/neck/tie/detective
+
+/datum/loadout_item/neck/bowtie
+	name = "Bowtie"
+	item_path = /obj/item/clothing/neck/bowtie

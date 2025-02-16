@@ -106,3 +106,13 @@
 	armor_type = /datum/armor/shoes_combat
 	has_spurs = TRUE
 	body_parts_covered = FEET|LEGS
+
+// Laced variants for loadout
+/obj/item/clothing/shoes/cowboy/laced
+	can_be_tied = TRUE
+
+/obj/item/clothing/shoes/cowboy/white/laced
+	can_be_tied = TRUE
+
+/obj/item/clothing/shoes/cowboy/black/laced
+	can_be_tied = TRUE
