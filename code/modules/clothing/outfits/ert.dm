@@ -172,10 +172,10 @@
 	if(visuals_only)
 		return
 
-	var/obj/item/modular_computer/pda/heads/pda = H.r_store
-	pda.imprint_id(H.real_name, "CentCom Official")
-
 	var/obj/item/card/id/W = H.wear_id
+	var/obj/item/modular_computer/pda/heads/pda = H.r_store
+	pda.imprint_id(H.real_name, "CentCom Official", W)
+
 	W.registered_name = H.real_name
 	W.update_label()
 	W.update_icon()

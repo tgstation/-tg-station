@@ -426,7 +426,7 @@
 	var/obj/item/modular_computer/pda/pda = equipped.get_item_by_slot(pda_slot)
 
 	if(istype(pda))
-		pda.imprint_id(equipped.real_name, equipped_job.title)
+		pda.imprint_id(equipped.real_name, equipped_job.title, card)
 		pda.update_ringtone(equipped_job.job_tone)
 		pda.UpdateDisplay()
 

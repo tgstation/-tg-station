@@ -21,6 +21,9 @@ export type NTOSData = {
   light_on: BooleanLike;
   login: Login;
   pai: string | null;
+  alert_style: number;
+  alert_color: string;
+  alert_name: string;
   PC_batteryicon: string | null;
   PC_batterypercent: string | null;
   PC_device_theme: string;
