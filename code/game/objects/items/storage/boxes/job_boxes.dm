@@ -14,6 +14,10 @@
 	var/medipen_type = /obj/item/reagent_containers/hypospray/medipen
 	/// Are we crafted?
 	var/crafted = FALSE
+	/// Should we contain an escape hook on maps with z-levels?
+	var/give_hook = TRUE
+	/// Do we get to benefit from Nanotrasen's largesse?
+	var/give_premium_goods = TRUE
 
 /obj/item/storage/box/survival/Initialize(mapload)
 	. = ..()
@@ -36,14 +40,14 @@
 	if(!isnull(medipen_type))
 		new medipen_type(src)
 
-	if(HAS_TRAIT(SSstation, STATION_TRAIT_PREMIUM_INTERNALS))
+	if(give_premium_goods && HAS_TRAIT(SSstation, STATION_TRAIT_PREMIUM_INTERNALS))
 		new /obj/item/flashlight/flare(src)
 		new /obj/item/radio/off(src)
 
 	if(HAS_TRAIT(SSstation, STATION_TRAIT_RADIOACTIVE_NEBULA))
 		new /obj/item/storage/pill_bottle/potassiodide(src)
 
-	if(length(SSmapping.levels_by_trait(ZTRAIT_STATION)) > 1)
+	if(give_hook && length(SSmapping.levels_by_trait(ZTRAIT_STATION)) > 1)
 		new /obj/item/climbing_hook/emergency(src)
 
 /obj/item/storage/box/survival/radio/PopulateContents()
@@ -58,6 +62,11 @@
 	new /obj/item/tank/internals/plasmaman/belt(src)
 	qdel(mask) // Get rid of the items that shouldn't be
 	qdel(internals)
+
+// Prisoners don't get an escape hook
+/obj/item/storage/box/survival/prisoner
+	give_hook = FALSE
+	give_premium_goods = FALSE
 
 // Mining survival box
 /obj/item/storage/box/survival/mining
