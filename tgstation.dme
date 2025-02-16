@@ -1988,6 +1988,7 @@
 #include "code\datums\wires\airlock.dm"
 #include "code\datums\wires\apc.dm"
 #include "code\datums\wires\autolathe.dm"
+#include "code\datums\wires\big_manipulator.dm"
 #include "code\datums\wires\collar_bomb.dm"
 #include "code\datums\wires\conveyor.dm"
 #include "code\datums\wires\ecto_sniffer.dm"
